@@ -77,9 +77,17 @@ module top(
       ce_pix <= old_clk & ~clk_12;
    end
 
-sharpx1 sharpx1(
+sharpx1 sharpx1
+(
    .clk_sys(clk_12),
 	.reset(reset),
+
+	.ioctl_download(ioctl_download),
+	.ioctl_index(ioctl_index),
+	.ioctl_wr(ioctl_wr),
+	.ioctl_addr(ioctl_addr),
+	.ioctl_dout(ioctl_data),
+
 	.HBlank(VGA_HB),
 	.HSync(VGA_HS),
 	.VBlank(VGA_VB),

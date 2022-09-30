@@ -7,6 +7,12 @@ module sharpx1
 	input         pal,
 	input         scandouble,
 
+	input wire         ioctl_download,
+	input wire   [7:0] ioctl_index,
+	input wire         ioctl_wr,
+	input       [24:0] ioctl_addr,
+	input        [7:0] ioctl_dout,
+
 	output reg    ce_pix,
 
 	output reg    HBlank,

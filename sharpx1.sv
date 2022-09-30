@@ -236,6 +236,12 @@ wire   [1:0] buttons;
 wire [127:0] status;
 wire  [10:0] ps2_key;
 
+wire        ioctl_download;
+wire  [7:0] ioctl_index;
+wire        ioctl_wr;
+wire [24:0] ioctl_addr;
+wire  [7:0] ioctl_data;
+
 hps_io #(.CONF_STR(CONF_STR)) hps_io
 (
 	.clk_sys(clk_sys),
@@ -244,6 +250,13 @@ hps_io #(.CONF_STR(CONF_STR)) hps_io
 	.gamma_bus(),
 
 	.forced_scandoubler(forced_scandoubler),
+
+	//ioctl
+	.ioctl_download(ioctl_download),
+	.ioctl_index(ioctl_index),
+	.ioctl_wr(ioctl_wr),
+	.ioctl_addr(ioctl_addr),
+	.ioctl_dout(ioctl_data),
 
 	.buttons(buttons),
 	.status(status),
@@ -276,15 +289,20 @@ wire VSync;
 wire ce_pix;
 wire [7:0] video;
 
-mycore mycore
+sharpx1 sharpx1
 (
-	.clk(clk_sys),
+	.clk_sys(clk_sys),
 	.reset(reset),
-	
-	.pal(status[2]),
-	.scandouble(forced_scandoubler),
 
-	.ce_pix(ce_pix),
+	//.pal(status[2]),
+	//.scandouble(forced_scandoubler),
+	//.ce_pix(ce_pix),
+
+	.ioctl_download(ioctl_download),
+	.ioctl_index(ioctl_index),
+	.ioctl_wr(ioctl_wr),
+	.ioctl_addr(ioctl_addr),
+	.ioctl_dout(ioctl_data),
 
 	.HBlank(HBlank),
 	.HSync(HSync),
