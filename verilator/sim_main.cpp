@@ -315,6 +315,21 @@ int main(int argc, char** argv, char** env) {
 		//ImGui::Begin("PGROM Editor");
 		//mem_edit.DrawContents(top->top__DOT__uut__DOT__rom__DOT__mem, 32768, 0);
 		//ImGui::End();
+		//ImGui::Begin("ROM");
+		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__Rom_StudioII__DOT__d, 2048, 0);
+		//ImGui::End();		
+		ImGui::Begin("DPRAM");
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d, 4096, 0);
+		ImGui::End();	
+
+		// Debug ioctl
+		ImGui::Begin("ioctl");
+		ImGui::Text("ioctl_download: 0x%02X", top->top__DOT__sharpx1__DOT__ioctl_download);	
+		ImGui::Text("ioctl_wr:       0x%02X", top->top__DOT__sharpx1__DOT__ioctl_wr);
+		ImGui::Text("ioctl_addr:     0x%04X", top->top__DOT__sharpx1__DOT__ioctl_addr);
+		ImGui::Text("ioctl_dout:     0x%02X", top->top__DOT__sharpx1__DOT__ioctl_dout);		
+		ImGui::Spacing();														
+		ImGui::End();
 
 		// Trace/VCD window
 		ImGui::Begin(windowTitle_Trace);

@@ -6,3 +6,5 @@ verilator \
 -Wno-fatal \
 --top-module top sim.v \
 ../rtl/sharpx1.v \
+../rtl/dpram.sv \
+../rtl/rom.v

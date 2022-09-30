@@ -1,3 +1,5 @@
 set_global_assignment -name SYSTEMVERILOG_FILE rtl/sharpx1.v
 set_global_assignment -name SDC_FILE sharpx1.sdc
 set_global_assignment -name SYSTEMVERILOG_FILE sharpx1.sv
+set_global_assignment -name SYSTEMVERILOG_FILE rtl/dpram.sv
+set_global_assignment -name VERILOG_FILE rtl/rom.v

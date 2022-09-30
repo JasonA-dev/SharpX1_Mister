@@ -54,7 +54,9 @@ CC_OPT = -O
 
 V_SRC = \
 	sim.v \
-	$(RTL)/sharpx1.v
+	$(RTL)/sharpx1.v \
+	$(RTL)/dpram.sv \
+	$(RTL)/rom.v
 
 C_SRC = \
 	sim_main.cpp  \
