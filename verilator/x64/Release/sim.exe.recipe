@@ -2,10 +2,17 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\NoSync\MiSTer\Verilator_Template\verilator\x64\Release\sim.exe</FullPath>
+      <FullPath>C:\NoSync\MiSTer\MyCores\SharpX1_Mister\verilator\x64\Release\sim.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\NoSync\MiSTer\MyCores\SharpX1_Mister\verilator\font.hex</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\NoSync\MiSTer\MyCores\SharpX1_Mister\verilator\rom.hex</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>
