@@ -1,0 +1,380 @@
+;
+;mr16 assembler macro for AASM 3.71 develop version 2007.3.30
+;
+;2007. 3.30 change LDMW,LDMB,STMW,STMB to LDW,LDB,STW,STB
+;2007. 1.31 support check_pass for AASM3.71
+;2007. 1.16 support auto immidate size for AASM3.70
+;           support relocate output
+;2005. 4.15 fix stmw macro
+;
+;AASMはからなずVer.3.71以降を使用して、-Tオプションをつけてください。
+;-Tオプションをつけないと、サイズ無指定のimmidateは、すべて16bit長になります。
+;
+;register set
+;const	SP		= r15
+const	_RS		= r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,r15
+;const	_RL		= r0l,r1l,r2l,r3l,r4l,r5l,r6l,r7l,r8l,r9l,r10l,r11l,r12l,r13l,r14l,r15l
+;const	_RH		= r0h,r1h,r2h,r3h,r4h,r5h,r6h,r7h,r8h,r9h,r10h,r11h,r12h,r13h,r14h,r15h
+
+const	_R14		= r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14
+const	_RF		= r0,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11,r12,r13,r14,FLAG
+const   _SIN            = cf,r
+
+;instruction
+;const	JZ		= JE
+;const	JNZ		= JNE
+;const	JC		= JG
+;const	JNC		= JLE
+;
+;const	_LDM            = LDM
+;const	_STM            = STM
+const	_LDM_PFX        = LDW,LDB
+const	_STM_PFX        = STW,STB
+;
+const	_BCC	        = BLO,BEQ,BVS,BMI,BLS,BLT,BLE,__GAP__,BHS,BNE,BVC,BPL,BHI,BGE,BGT,BRA,BCS,__GAP__,__GAP__,__GAP__,__GAP__,__GAP__,__GAP__,__GAP__,BCC
+const	_JCC	        = JLO,JEQ,JVS,JMI,JLS,JLT,JLE,__GAP__,JHS,JNE,JVC,JPL,JHI,JGE,JGT,JMP,JCS,__GAP__,__GAP__,__GAP__,__GAP__,__GAP__,__GAP__,__GAP__,JCC
+;
+const	_FLAG		= __GAP__,__GAP__,CLC,STC,CLZ,STZ,__GAP__,__GAP__,CLI,STI
+const	_IFLAG		= CLI,STI
+;
+const	_ALU		= __GAP__,__GAP__,__GAP__,__GAP__,AND,OR,XOR,MOV,ADD,SUB,ADC,SBC,TST,CMP,MLT,MLH
+;
+;const	_LOGIC		= AND,OR,XOR,MOV
+;const   _ARITH          = ADD,SUB,ADC,SBC
+;const   _TEST           = ADD,SUB,ADC,SBC,TST,CMP,MLT,MLH
+
+;バージョン（機能）チェック
+.ifndef	max_pass
+  error "マルチパス未対応のAASMには未対応です。\nAASM Ver.3.71以降が必要です。\n"
+.else
+  .if max_pass < 3
+   error "マルチパスオプションが未指定です。\nイミデートサイズは自動圧縮されません。\n"
+.endif
+
+;ライブラリ関連で使用する変数定義
+.ifndef	_rel
+;デフォルトでリロケートさせる
+var	_rel = 1
+.endif
+;
+;以後の処理をリロケートさせる
+macro	REL_ON
+	_rel = 1
+endm
+;
+;以後の処理をリロケートさせない
+macro	REL_OFF
+	_rel = 0
+endm
+
+;address macro
+macro	ORG NUMBER
+	$ = #0
+endm
+
+macro	DS NUMBER
+	$ = $+#0
+endm
+
+macro	DEFS NUMBER
+	$ = $+#0
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0000|      RA       |     RB        |  DISP[4:1]    |LDM  RB,(RA,DISP:4)  |
+;| 0001|      RA       |     RB        |  DISP[4:1]    |STM  (RA,DISP:4),RB  |
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+
+;+-------------+-----+-------+-----+---+---+---+---+------------------------+
+;|     PFX     |15:12|b11:b8 |b7-b4|b3 |b2 |b1 |b0 |opcode                  |
+;+-------------+-----+-------+-----+---+---+---+---+------------------------+
+;|1|DISP[0,8:4]| 0000|  RA   |  RB |   DISP[4:1]   |LDMB RB,(RA,DISP11)     |
+;|1|DISP[0,8:4]| 0001|  RA   |  RB |   DISP[4:1]   |STMB (RA,DISP11),RB     |
+;|0|DISP[0,8:4]| 0000|  RA   |  RB |   DISP[4:1]   |LDMW RB,(RA,DISP11)     |
+;|0|DISP[0,8:4]| 0001|  RA   |  RB |   DISP[4:1]   |STMW (RA,DISP11),RB     |
+;+-------------+-----+-------+-----+---+---+---+---+------------------------+
+
+;_MEM_DISP4 base,rega,regb,disp4
+macro	_MEM_DISP4 NUMBER,NUMBER,NUMBER,NUMBER
+ IALIGN
+.if asm_pass == 2
+ .if (#3>=32) || (#3<0)
+  error	"Too large DISP4\n"
+ .endif
+ .if (#3&1)
+  error	"ODD value to DISP4\n"
+ .endif
+.endif
+
+	DW	#0|(#1<<8)|(#2<<4)|(REL #3>>1)
+endm
+
+;_MEM_DISP11 base,rega,regb,disp11,is8bit
+macro	_MEM_DISP11 NUMBER,NUMBER,NUMBER,NUMBER,NUMBER
+ IALIGN
+.if asm_pass == 2
+ .if (#3>=1024) || (#3<-1024)
+  error	"Too large DISP11\n"
+ .endif
+ .if #4 && ((#3&1)==0) && (#3<32)
+  error	"can minimize to use LDM\n"
+ .endif
+.endif
+	DW	2700h|((#4)<<7) | ((#3&1)<<6) | ((#3 & 07e0h)>>5)
+	DW	#0|(#1<<12)|(#2<<8)|((#3 & 01eh)>>1)
+endm
+
+macro	LDM    _RS,(_RS)
+  _MEM_DISP4 0000h,#1,#0,0
+endm
+
+macro	LDM _RS,(_RS,#NUMBER)
+  _MEM_DISP4 0000h,#1,#0,#2
+endm
+
+macro	STM    (_RS),_RS
+  _MEM_DISP4 1000h,#0,#1,0
+endm
+
+macro	STM (_RS,#NUMBER),_RS
+  _MEM_DISP4 1000h,#0,#2,#1
+endm
+
+macro	_LDM_PFX _RS,(_RS)
+  _MEM_DISP11 0000h,#2,#1,0,#0
+endm
+
+macro	_LDM_PFX _RS,(_RS,#NUMBER)
+  _MEM_DISP11 0000h,#2,#1,#3,#0
+endm
+
+macro	_STM_PFX (_RS),_RS
+  _MEM_DISP11 1000h,#1,#2,0,#0
+endm
+
+macro	_STM_PFX (_RS,#NUMBER),_RS
+  _MEM_DISP11 1000h,#1,#3,#2,#0
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0010|    <-cc->     |             rel8              |Bcc pc+(rel8*2)      |
+;| 0010| 1 | 1 | 1 | 1 | imm16[15:8] /{M8,DISP[0,10:5]}|prefix               |
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+
+macro	_BCC    NUMBER
+ IALIGN
+.if check_pass == 1
+  .if (($-#1)&1)
+    error  "Can't jump ODD address\n"
+  .endif
+  .if ((#1-$)<-256) || ((#1-$)>=256)
+    error  "Too far relative branch\n"
+  .endif
+.endif
+	DW	2000h|((#0&15)<<8)|(((#1-$)>>1)&255)
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0000| 1 | 1 | 1 | 1 | x |IFL|CFL|FD | 0 | 0 | 0 | 0 |RET [CLx/STx]        |
+;| 0000| 1 | 1 | 1 | 1 |     RB        | 0 | 0 | 0 | 1 |POP RB               |
+;| 0001| 1 | 1 | 1 | 1 |     RB        |  FL   |FD | 0 |PUSH RB [CLx/STx]    |
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+
+macro	RET
+ IALIGN
+	DW	0f00h
+endm
+
+macro	RET    _FLAG
+ IALIGN
+	DW	0f00h|(#0<<4)
+endm
+
+macro	POP    _RF
+ IALIGN
+	DW	0f01h|(#0<<4)
+endm
+
+macro	PUSH   _RF
+ IALIGN
+	DW	1f01h|(#0<<4)
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0011| 1 | 1 | 1 | 1 |IFL|ZFL|CFL|FD | 0 | 0 | 0 | 0 |NOP / CLx / STx      |
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+macro	NOP
+ IALIGN
+	DW	3f00h
+endm
+
+macro	_FLAG
+ IALIGN
+	DW	3f00h|(#0<<4)
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0011|      RA       |    SMOD       | 0 | 0 | 0 | 1 |SHIFT                |
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+macro	_SHIFT  _RS
+ IALIGN
+	DW	3001h|(#1<<8)|(#0<<4)
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0011|    <-cc->     |     RB        | 0 | 0 | 1 | 0 |Jcc  RB              |
+;| 0011| 1 | 1 | 1 | 1 |     RB        | 0 | 0 | 1 | 1 |JSR  RB         (SBC)|
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+
+macro	_JCC _RS
+ IALIGN
+	DW	3002h|((#0&15)<<8)|(#1<<4)
+endm
+
+macro	JSR    _RS
+ IALIGN
+	DW	3f03h|(#0<<4)
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0011|      RA       |     RB        | 0 | 1 | LMOD  |AND/OR/XOR/MOV       |
+;| 0011|      RA       |     RB        | 1 | 0 | AMOD  |ADD/SUB/ADC/SBC      |
+;| 0011|      RA       |     RB        | 1 | 1 | 0 | 0 |TST             (AND)|
+;| 0011|      RA       |     RB        | 1 | 1 | 0 | 1 |CMP             (SUB)|
+;| 0011|      RA       |     RB        | 1 | 1 | 1 | 0 |MLT                  |
+;| 0011|      RA       |     RB        | 1 | 1 | 1 | 1 |MLTH                 |
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+macro	_ALU    _RS,_RS
+ IALIGN
+	DW	3000h|(#1<<8)|(#2<<4)|(#0)
+endm
+
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;| 0100|      RA       |             imm[7:0]          |AND/OR/XOR/MOV imm:8 |
+;| 1000|      RA       |             imm[7:0]          |ADD/SUB/ADC/SBC imm:8|
+;| 1100|      RA       |             imm[7:0]          |TST imm:8       (AND)|
+;| 1101|      RA       |             imm[7:0]          |CMP imm:8       (SUB)|
+;| 1110|      RA       |             imm[7:0]          |MLT(*1) imm:8        |
+;| 1111|      RA       |             imm[7:0]          |MLTH(*1)(*2) imm:8   |
+;+-----+---+---+---+---+---+---+---+---+---+---+---+---+---------------------+
+;+--------+-----+-------+-----+---+---+---+---+------------------------+
+;|imm16[H]| 0100|  RA   |   imm16[7:0]        |AND/OR/XOR/MOV imm:16   |
+;|imm16[H]| 1000|  RA   |   imm16[7:0]        |ADD/SUB/ADC/SBC imm:16  |
+;|imm16[H]| 1100|  RA   |   imm16[7:0]        |TST imm      (AND)   |
+;|imm16[H]| 1101|  RA   |   imm16[7:0]        |CMP imm      (SUB)   |
+;|imm16[H]| 1110|  RA   |   imm16[7:0]        |MLT imm (*1)         |
+;|imm16[H]| 1111|  RA   |   imm16[7:0]        |MLTH imm (*1)(*2)    |
+;+--------+-----+-------+-----+---+---+---+---+------------------------+
+
+macro	_ALU    _RS,#NUMBER:NUMBER
+ IALIGN
+.if (#3==8)
+ .if (asm_pass == 2) && ( ((#2)>=256) || ((#2)<0) )
+    error  "Too large immidate8 value\n"
+ .endif
+	DW	((#0)<<12)|(#1<<8)|(#2&0ffh)
+.else
+ .if (#3==16)
+	DW	2700h|((#2>>8)&0ffh)
+	DW	((#0)<<12)|(#1<<8)|(#2&0ffh)
+ .else
+	error  "illigal immidate size\n"
+ .endif
+.endif
+endm
+
+macro	_ALU    _RS,#NUMBER
+ IALIGN
+;.if (max_pass > 2)
+ .if (asm_pass == 1) || ((#2)>=256) || ((#2)<0)
+;  msg     "16bit immidate size\n"
+	DW	2700h|((#2>>8)&0ffh)
+	DW	((#0)<<12)|(#1<<8)|(#2&0ffh)
+ .else
+;  msg     "8bit auto immidate size\n"
+	DW	((#0)<<12)|(#1<<8)|(#2&0ffh)
+ .endif
+;.else
+; .if (asm_pass == 2) && ((#2)<256) && ((#2)>=0)
+;    msg     "Can minimize immidate8 to use milti pass mode\n"
+; .endif
+;	DW	2700h|((#2>>8)&0ffh)
+;	DW	((#0)<<12)|(#1<<8)|(#2&0ffh)
+;.endif
+endm
+
+;+-------------+-----+-------+-----+---+---+---+---+-------------------------+
+;|  ABS[15:8]  | 0010| <-cc->|     ABS[7:1]    | 0 |Jcc ABS                  |
+;|  ABS[15:8]  | 0010| 1111  |     ABS[7:1]    | 1 |JSR ABS                  |
+;+-------------+-----+-------+-----+---+---+---+---+-------------------------+
+macro	_JCC    NUMBER
+ IALIGN
+.if asm_pass == 2
+  .if (($-#1)&1)
+    error  "Can't jump ODD address\n"
+  .endif
+.endif
+	DW	2700h|((#1>>8)&0ffh)
+	DW	2000h|(#0<<8)|(#1&0feh)
+endm
+
+macro	JSR    NUMBER
+ IALIGN
+.if asm_pass == 2
+  .if (($-#0)&1)
+    error  "Can't call ODD address\n"
+  .endif
+.endif
+	DW	2700h|((#0>>8)&0ffh)
+	DW	2f01h|(#0&0feh)
+endm
+
+
+
+macro	END
+msg ""		; ダミーの処理を入れる
+endm
+
+macro DSEG_CONNECT
+.ifndef _conn
+var	_conn
+.endif
+ _conn = $
+ DSEG
+ $ = _conn
+endm
+
+macro CSEG_CONNECT
+.ifndef _conn
+var	_conn
+.endif
+ _conn = $
+ CSEG
+ $ = _conn
+endm
+
+macro .ALIGN NUMBER
+.if ($ % #0) != 0
+ $ = $+(#0-($ % #0))
+.endif
+endm
+
+macro IALIGN
+.if ($ % 2) != 0
+  error "Can't aloocate instruction to ODD address\n"
+.endif
+endm
+
+macro	shr	_RS,#NUMBER
+.if(#1==0)
+;mlt #0,#1
+	DW	0e000h | (#0<<8)|(1)
+.else
+;mlh #0,# 10000h>>#1
+  .if(#1<=8)
+	DW	2700h  | ((100h>>#1)&0ffh)
+  .endif
+	DW	0f000h | (#0<<8) | ((10000h>>#1) & 0ffh)
+.endif
+endm
+

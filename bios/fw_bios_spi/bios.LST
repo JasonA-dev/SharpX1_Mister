@@ -1,0 +1,1782 @@
+0000                ;----------------------------------------------------------------------------
+0000                ;  bios.s Z80 bios loader & debug monitor for NISE-X1
+0000                ;
+0000                ; version 050412 alpha
+0000                ;
+0000                ;  MONZ80.S - Z80 Debug monitor for use with NoICEZ80
+0000                ;  This file may be assembled with the PROASM assembler
+0000                ;
+0000                ;  Based by MONZ80.S - Z80 Debug monitor for use with NoICEZ80
+0000                ;
+0000                ;  Copyright (c) 2004 by Tatsuyuki Satoh
+0000                ;
+0000                ;  included Z80 Debug monitor for use with NoICEZ80 are
+0000                ;    Monz80.s V3.0
+0000                ;    Copyright (c) 2001 by John Hartman
+0000                ;
+0000                ;  Modification History:
+0000                ;       2008. 5. 2 suport SPI I/F , ori-ge ver.
+0000                ;       2004. 4.12 bugfix FDC handling
+0000                ;                  change to assemple on AASM 3.60(MultiPass)
+0000                ;       2004. 1.14 IPL,clear text before exec
+0000                ;       2004. 1.12 1st alpha release
+0000                ;
+0000                ;============================================================================
+0000                ;
+0000                ;  Hardware definitions
+0000 00 00 00 00    ROM_START       equ     0000H          ;START OF MONITOR CODE
+0000 00 00 40 00    RAM_START       equ     4000H          ;START OF MONITOR RAM
+0000                ;
+0000 00 02 00 00    CFG_TOP			equ		020000H      ;XC2S200+XCF02F  ConfigROM TOP Address
+0000                ;CFG_TOP			equ		02A000H      ;XC2S250E+XCF02F ConfigROM TOP Address
+0000                ;
+0000                ;
+0000 00 00 80 00    SERIAL_DATA	equ	08000h
+0000 00 00 C0 00    SERIAL_STATUS	equ	0c000h
+0000 00 00 00 00    RXRDY		equ	0
+0000 00 00 00 01    DEBUG_ENABLE	equ	1              ; NoICE enable flag
+0000 00 00 00 02    TXRDY		equ	2
+0000 00 00 00 07    RESET_ENTRY	equ	7
+0000                ;
+0000 00 00 C0 00    PAGEIMAGE       equ     0c000h
+0000                ;
+0000                ;
+0000 00 00 18 00    CRTC_REG	equ	01800h
+0000 00 00 19 00    SUBC_REG	equ	01900h
+0000 00 00 1A 03    PIA_MODE	equ	01a03h
+0000                ;
+0000 00 00 00 0E    IPL_BANK	equ	0eh
+0000                ;
+0000                ;===========================================================================
+0000                ;  Reset, RST 0,  or trap vector
+0000                        ORG     0000H
+0000                ;
+0000                ;RESET START WHEN (SERIAL_STATUS),RESET_ENTRY == 1
+0000                ;RST 00 TRAP WHEN (SERIAL_STATUS),RESET_ENTRY == 0
+0000                ;
+0000 32 5F 40       R0:     LD	(REG_A),A
+0003 3E 01                  LD      A,1                     ;STATE = 1 (BREAKPOINT)
+0005                ;	jp	RESET ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0005 C3 00 01               JP      INT_ENTRY
+0008                ;
+0008                	ORG			0008H
+0008                ;
+0008 C3 B5 03       	JP	DISP_STRL
+000B                ;
+000B                ;===========================================================================
+000B                ;  Check serial
+000B                ;
+000B                ;  Return CY=0 if data received
+000B                ;         CY=1 if data not received
+000B                CHKCHAR:
+000B 3A 00 C0       	LD	A,(SERIAL_STATUS)
+000E CB 47          	BIT	RXRDY,A
+0010 28 13          	JR	Z,GC90
+0012 AF             	XOR	A
+0013 C9             	RET
+0014                ;
+0014                ;===========================================================================
+0014                ;  Get a character to A
+0014                ;
+0014                ;  Return A=char, CY=0 if data received
+0014                ;         CY=1 if timeout (0.5 seconds)
+0014                ;
+0014                GETCHAR:
+0014 D9             	EXX
+0015 11 00 00               LD      DE,00000H               ;long timeout
+0018 1B             GC10:   DEC     DE
+0019 7A                     LD      A,D
+001A B3                     OR      E
+001B 28 08                  JR      Z,GC90                  ;exit if timeout
+001D                ;
+001D CB 46          	BIT	RXRDY,(HL)
+001F 28 F7                  JR      Z,GC10                  ;not ready yet.
+0021                ;
+0021                ;  Data received:  return CY=0. data in A
+0021 AF                     XOR     A                       ;CY=0
+0022 0A                     LD	A,(BC)                  ;read data
+0023 D9             	EXX
+0024                RET_MON
+0024 00 00 30 24    RET_USR	EQU	$+3000H
+0024 C9                     RET
+0025                ;
+0025                ;  Timeout:  return CY=1
+0025 37             GC90:   SCF                             ;cy=1
+0026 D9                     EXX
+0027 C9                     RET
+0028                ;
+0028                ;===========================================================================
+0028                ;  Output character in A
+0028                ;
+0028                PUTCHAR:
+0028 D9             	EXX
+0029                PC10:
+0029 CB 56                  BIT     TXRDY,(HL)              ;RX READY ?
+002B 28 FC                  JR      Z,PC10
+002D 02                     LD	(BC),A
+002E D9             	EXX
+002F C9                     RET
+0030                ;
+0030                ;
+0030                ;===========================================================================
+0030                ;
+0030                ;  Non-maskable interrupt:  bash button
+0030                ;  PC is stacked, interrupts disabled, and IFF2 has pre-NMI interrupt state
+0030                ;
+0030                ;  At the user's option, this may vector thru user RAM at USER_CODE+66H,
+0030                ;  or enter the monitor directly.  This will depend on whether or not
+0030                ;  the user wishes to use NMI in the application, or to use it with
+0030                ;  a push button to break into running code.
+0030                        ORG     R0+66H
+0066                NMI_ENTRY:
+0066 32 5F 40       	LD	(REG_A),A
+0069 3E 02                  LD      A,2
+006B C3 00 01               JP      INT_ENTRY
+006E                ;
+006E                ;===========================================================================
+006E                ;  Power on reset or trap
+006E                RESET:
+006E                ;-------------------------------------------------------------------------
+006E                ;  Initialize monitor
+006E 31 50 40       INIT:   LD      SP,MONSTACK
+0071                ;
+0071                ;INIT I/O
+0071 21 0A 07       	LD	HL,CRTC_40
+0074 CD EC 06       	CALL	CRTC_SET
+0077 CD 19 07       	CALL	CLS
+007A 3E 07          	LD	A,7
+007C 32 FF 40       	LD	(COLOR),A
+007F                ;	JP	BIOS ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+007F                ;----- PRE-LOAD INTERNAL IPL IMAGE -----
+007F 3E 0E          	LD	A,IPL_BANK
+0081 32 00 C0       	LD	(PAGEIMAGE),A
+0084                ;BOOT PROGRAM
+0084 21 66 06       	LD	HL,IPL_TOP
+0087 11 00 00       	LD	DE,0000H
+008A 01 EE 00       	LD	BC,IPL_LEN
+008D CD CC 00       	CALL	LDIR_DU
+0090                ;DISK READ ROUTINE
+0090 21 54 07       	LD	HL,DRD_TOP
+0093 11 1A 02       	LD	DE,021AH
+0096 01 A7 00       	LD	BC,DRD_LEN
+0099 CD CC 00       	CALL	LDIR_DU
+009C                ;----- MODE SELECT -----
+009C 3A 00 C0       	LD	A,(SERIAL_STATUS)
+009F CB 4F          	BIT	DEBUG_ENABLE,A
+00A1 CA 1C 04       	JP	Z,BIOS
+00A4                ;----- NO-ICE MODE -----
+00A4 21 E1 00       	LD	HL,B1
+00A7 01 00 30       	LD	BC,3000H
+00AA CD B9 03       	CALL	DISP_STR
+00AD                ;
+00AD                ;	LD	HL,B1
+00AD                ;	CALL	SEND_STR
+00AD                ;
+00AD                ;===========================================================================
+00AD                ;
+00AD                ;  Initialize user registers
+00AD 21 50 40       	LD      HL,TASK_REGS
+00B0 11 51 40       	LD	DE,TASK_REGS+1
+00B3 01 1B 00       	LD	BC,TASK_REGS_SIZE-1
+00B6 36 00          	LD	(HL),0
+00B8 ED B0          	LDIR
+00BA                ;
+00BA AF             	XOR	A
+00BB 32 50 40               LD      (REG_STATE),A           ;set state as "RESET"
+00BE                ;
+00BE                ;  Initialize memory paging variables and hardware (if any)
+00BE 32 51 40               LD      (REG_PAGE),A            ;page 0
+00C1 32 00 C0       	 LD      (PAGEIMAGE),A
+00C4                ;;;     OUT     (PAGELATCH),A           ;set hardware page
+00C4                ;
+00C4                ;  Set function code for "GO".  Then if we reset after being told to
+00C4                ;  GO, we will come back with registers so user can see the crash
+00C4 3E FA                  LD      A,FN_RUN_TARGET
+00C6 32 6C 40               LD      (COMBUF),A
+00C9 C3 48 02               JP      RETURN_REGS             ;DUMP REGS, ENTER MONITOR
+00CC                ;
+00CC                ;===========================================================================
+00CC                ;LDIR DEBUG MEM TO USER MEM
+00CC                LDIR_DU:
+00CC 7E             	LD	A,(HL)
+00CD CD 65 11       	CALL	LD_DE_A
+00D0 23             	INC	HL
+00D1 13             	INC	DE
+00D2 0B             	DEC	BC
+00D3 78             	LD	A,B
+00D4 B1             	OR	C
+00D5 20 F5          	JR	NZ,LDIR_DU
+00D7 C9             	RET
+00D8                ;
+00D8                ;===========================================================================
+00D8                ;  Response string for GET TARGET STATUS request
+00D8                ;  Reply describes target:
+00D8 00             TSTG:   DB      0                       ;2: PROCESSOR TYPE = Z80
+00D9 90                     DB      COMBUF_SIZE             ;3: SIZE OF COMMUNICATIONS BUFFER
+00DA 00                     DB      0                       ;4: NO OPTIONS
+00DB 00 00                  DW      0                       ;5,6: BOTTOM OF PAGED MEM (none)
+00DD FF FF                  DW      0FFFFH                  ;7,8: TOP OF PAGED MEM (none)
+00DF 01                     DB      B1-B0                   ;9 BREAKPOINT INSTRUCTION LENGTH
+00E0 C7             B0:     RST     00H                     ;10+ BREAKPOINT INSTRUCTION
+00E1                B1:
+00E1 4E 6F 49 43            DB      'NoICE monitor V3.0 for NISE-X1',0              ;DESCRIPTION, ZERO
+00E5 45 20 6D 6F
+00E9 6E 69 74 6F
+00ED 72 20 56 33
+00F1 2E 30 20 66
+00F5 6F 72 20 4E
+00F9 49 53 45 2D
+00FD 58 31 00
+0100                
+0100 00 00 00 28    TSTG_SIZE       EQU     $-TSTG          ;SIZE OF STRING
+0100                ;
+0100                ;===========================================================================
+0100                ;  HARDWARE PLATFORM INDEPENDENT EQUATES AND CODE
+0100                ;
+0100                ;  Communications function codes.
+0100 00 00 00 FF    FN_GET_STATUS   EQU     0FFH    ;reply with device info
+0100 00 00 00 FE    FN_READ_MEM     EQU     0FEH    ;reply with data
+0100 00 00 00 FD    FN_WRITE_MEM    EQU     0FDH    ;reply with status (+/-)
+0100 00 00 00 FC    FN_READ_REGS    EQU     0FCH    ;reply with registers
+0100 00 00 00 FB    FN_WRITE_REGS   EQU     0FBH    ;reply with status
+0100 00 00 00 FA    FN_RUN_TARGET   EQU     0FAH    ;reply (delayed) with registers
+0100 00 00 00 F9    FN_SET_BYTES    EQU     0F9H    ;reply with data (truncate if error)
+0100 00 00 00 F8    FN_IN           EQU     0F8H    ;input from port
+0100 00 00 00 F7    FN_OUT          EQU     0F7H    ;output to port
+0100                ;
+0100 00 00 00 F0    FN_MIN          EQU     0F0H    ;MINIMUM RECOGNIZED FUNCTION CODE
+0100 00 00 00 F0    FN_ERROR        EQU     0F0H    ;error reply to unknown op-code
+0100                ;
+0100                ;===========================================================================
+0100                ;  Enter here via RST nn for breakpoint:  AF, PC are stacked.
+0100                ;  Enter with A=interrupt code = processor state
+0100                ;  Interrupt status is not changed from user program and IFF2==IFF1
+0100                INT_ENTRY:
+0100                ;  INT,NMI are hardware masked, so DI,EI operate is ignore
+0100                ;
+0100 32 50 40               LD      (REG_STATE),A   ;save entry state
+0103 3A 5F 40               LD      A,(REG_A)
+0106 ED 73 52 40    	LD	(REG_SP),SP
+010A 31 6C 40       	LD	SP,REG_AFX+2
+010D                ;
+010D 08             	EX	AF,AF'
+010E D9             	EXX
+010F F5             	PUSH	AF
+0110 D5             	PUSH	DE
+0111 C5             	PUSH	BC
+0112 E5             	PUSH	HL
+0113                ;I,IFF
+0113 ED 57          	LD	A,I
+0115 6F             	LD	L,A
+0116 26 00                  LD      H,0
+0118 E2 1C 01               JP      PO,BREAK10
+011B 24                     INC     H
+011C                BREAK10:
+011C E5             	PUSH	HL   ; REG_IFF,REG_I
+011D E5             	PUSH	HL   ; PC , DUMMY
+011E D9             	EXX
+011F 08             	EX	AF,AF'
+0120 F5             	PUSH	AF
+0121 D5             	PUSH	DE
+0122 C5             	PUSH	BC
+0123 E5             	PUSH	HL
+0124 FD E5          	PUSH	IY
+0126 DD E5          	PUSH	IX
+0128                ;setup fixed registers
+0128 31 50 40       	LD	SP,MONSTACK
+012B FD 21 24 00    	LD	IY,RET_MON
+012F D9             	EXX
+0130 21 00 C0       	LD	HL,SERIAL_STATUS
+0133 01 00 80       	LD	BC,SERIAL_DATA
+0136 D9             	EXX
+0137                ;BANK select
+0137 AF             	XOR     A
+0138 32 00 C0               LD      (PAGEIMAGE),A
+013B                ;
+013B                ;POP PC FROM USER STACK
+013B 2A 52 40       	LD	HL,(REG_SP)
+013E CD 68 11       	CALL	LD_A_HL
+0141 23             	INC	HL
+0142 5F             	LD	E,A
+0143 CD 68 11       	CALL	LD_A_HL
+0146 23             	INC	HL
+0147 57             	LD	D,A
+0148 22 52 40       	LD	(REG_SP),HL
+014B                ;
+014B 3A 50 40               LD      A,(REG_STATE)
+014E FE 01                  CP      1
+0150 20 09                  JR      NZ,NOTBP        ;JIF NOT A BREAKPOINT
+0152 1B                     DEC     DE              ;BACK UP PC TO POINT AT BREAKPOINT
+0153                ;
+0153                ;----------- reset entry check ---------
+0153 3A 00 C0       	LD	A,(SERIAL_STATUS)
+0156 CB 7F          	BIT	RESET_ENTRY,A
+0158 C2 6E 00       	JP	NZ,RESET
+015B                ;----------- reset entry check ---------
+015B                ;
+015B ED 53 60 40    NOTBP:	LD	(REG_PC),DE
+015F C3 48 02               JP      RETURN_REGS
+0162                ;
+0162                ;===========================================================================
+0162                ;  user memory access routine
+0162                ;
+0162                ; because opcode JP use normal memory access,
+0162                ; Can't return to monitor with JP opcode.
+0162                ;
+0162 00 00 11 62    LD_A_DE	equ	$+1000H
+0162 1A             	LD	A,(DE)   ;user memory access
+0163 FD E9          	JP 	(IY)     ;JP RET_MON
+0165 00 00 11 65    LD_DE_A	equ	$+1000H
+0165 12             	LD	(DE),A   ;user memory access
+0166 FD E9          	JP 	(IY)     ;JP RET_MON
+0168 00 00 11 68    LD_A_HL	equ	$+1000H
+0168 7E             	LD	A,(HL)   ;user memory access
+0169 FD E9          	JP 	(IY)     ;JP RET_MON
+016B 00 00 11 6B    PUSH_HL	equ	$+1000H
+016B E5             	PUSH	HL	;user memory access
+016C FD E9          	JP 	(IY)	;JP RET_MON
+016E 00 00 11 6E    POP_HL	equ	$+1000H
+016E E1             	POP	HL	;user memory access
+016F FD E9          	JP 	(IY)	;JP RET_MON
+0171                ;
+0171                ;===========================================================================
+0171                ;  Main loop:  wait for command frame from master
+0171 31 50 40       MAIN:   LD      SP,MONSTACK             ;CLEAN STACK IS HAPPY STACK
+0174 21 6C 40               LD      HL,COMBUF               ;BUILD MESSAGE HERE
+0177                ;  First byte is a function code
+0177 CD 14 00               CALL    GETCHAR                 ;GET A FUNCTION (uses 6 bytes of stack)
+017A 38 F5                  JR      C,MAIN                  ;JIF TIMEOUT: RESYNC
+017C FE F0                  CP      FN_MIN
+017E 38 F1                  JR      C,MAIN                  ;JIF TIMEOUT: RESYNC
+0180                ;
+0180 77                     LD      (HL),A                  ;SAVE FUNCTION CODE
+0181 23                     INC     HL
+0182                ;
+0182                ;  Second byte is data byte count (may be zero)
+0182 CD 14 00               CALL    GETCHAR                 ;GET A LENGTH BYTE
+0185 38 EA                  JR      C,MAIN                  ;JIF TIMEOUT: RESYNC
+0187 FE 91                  CP      COMBUF_SIZE+1
+0189 30 E6                  JR      NC,MAIN                 ;JIF TOO LONG: ILLEGAL LENGTH
+018B 77                     LD      (HL),A                  ;SAVE LENGTH
+018C 23                     INC     HL
+018D B7                     OR      A
+018E 28 0A                  JR      Z,MA80                  ;SKIP DATA LOOP IF LENGTH = 0
+0190                ;
+0190                ;  Loop for data
+0190 47                     LD      B,A                     ;SAVE LENGTH FOR LOOP
+0191 CD 14 00       MA10:   CALL    GETCHAR                 ;GET A DATA BYTE
+0194 38 DB                  JR      C,MAIN                  ;JIF TIMEOUT: RESYNC
+0196 77                     LD      (HL),A                  ;SAVE DATA BYTE
+0197 23                     INC     HL
+0198 10 F7                  DJNZ    MA10
+019A                ;
+019A                ;  Get the checksum
+019A CD 14 00       MA80:   CALL    GETCHAR                 ;GET THE CHECKSUM
+019D 38 D2                  JR      C,MAIN                  ;JIF TIMEOUT: RESYNC
+019F 4F                     LD      C,A                     ;SAVE CHECKSUM
+01A0                ;
+01A0                ;  Compare received checksum to that calculated on received buffer
+01A0                ;  (Sum should be 0)
+01A0 CD 21 03               CALL    CHECKSUM
+01A3 81                     ADD     A,C
+01A4 20 CB                  JR      NZ,MAIN                 ;JIF BAD CHECKSUM
+01A6                ;
+01A6                ;  Process the message.
+01A6 3A 6C 40               LD      A,(COMBUF+0)            ;GET THE FUNCTION CODE
+01A9 2F             	CPL
+01AA 87             	ADD	A,A
+01AB C6 BF          	ADD	A,CMD_TBL & 0FFH
+01AD 6F             	LD	L,A
+01AE 26 01          	LD	H,CMD_TBL / 256
+01B0 7E             	LD	A,(HL)
+01B1 23             	INC	HL
+01B2 66             	LD	H,(HL)
+01B3 6F             	LD	L,A
+01B4 E9             	JP	(HL)
+01B5                ;
+01B5                ;  Error: unknown function.  Complain
+01B5                ERR:
+01B5 3E F0                  LD      A,FN_ERROR
+01B7 32 6C 40               LD      (COMBUF+0),A    ;SET FUNCTION AS "ERROR"
+01BA 3E 01                  LD      A,1
+01BC C3 FE 02               JP      SEND_STATUS     ;VALUE IS "ERROR"
+01BF                ;
+01BF                CMD_TBL:
+01BF DF 01          	DW	TARGET_STATUS ;FN_GET_STATUS
+01C1 F0 01          	DW	READ_MEM      ;FN_READ_MEM
+01C3 10 02          	DW	WRITE_MEM    ;FN_WRITE_MEM
+01C5 48 02                  DW	READ_REGS    ;FN_READ_REGS
+01C7 5C 02                  DW	WRITE_REGS   ;FN_WRITE_REGS
+01C9 73 02                  DW	RUN_TARGET   ;FN_RUN_TARGET
+01CB B1 02                  DW	SET_BYTES    ;FN_SET_BYTES
+01CD E8 02                  DW	IN_PORT      ;FN_IN
+01CF F1 02                  DW	OUT_PORT     ;FN_OUT
+01D1 B5 01          	DW	ERR
+01D3 B5 01          	DW	ERR
+01D5 B5 01          	DW	ERR
+01D7 B5 01          	DW	ERR
+01D9 B5 01          	DW	ERR
+01DB B5 01          	DW	ERR
+01DD B5 01          	DW	ERR
+01DF                ;
+01DF                
+01DF                ;===========================================================================
+01DF                ;
+01DF                ;  Target Status:  FN, len
+01DF                ;
+01DF                TARGET_STATUS:
+01DF                ;
+01DF 21 D8 00               LD      HL,TSTG                 ;DATA FOR REPLY
+01E2 11 6D 40               LD      DE,COMBUF+1             ;RETURN BUFFER
+01E5 01 28 00               LD      BC,TSTG_SIZE            ;LENGTH OF REPLY
+01E8 79                     LD      A,C
+01E9 12                     LD      (DE),A                  ;SET SIZE IN REPLY BUFFER
+01EA 13                     INC     DE
+01EB ED B0                  LDIR                            ;MOVE REPLY DATA TO BUFFER
+01ED                ;
+01ED                ;  Compute checksum on buffer, and send to master, then return
+01ED C3 08 03               JP      SEND
+01F0                
+01F0                ;===========================================================================
+01F0                ;
+01F0                ;  Read Memory:  FN, len, page, Alo, Ahi, Nbytes
+01F0                ;
+01F0                READ_MEM:
+01F0                ;
+01F0                ;  Set page
+01F0 3A 6E 40             LD      A,(COMBUF+2)
+01F3 32 00 C0             LD      (PAGEIMAGE),A
+01F6                ;;      LD      BC,PAGELATCH
+01F6                ;;      OUT     (BC),A
+01F6                ;
+01F6                ;  Get address
+01F6 2A 6F 40               LD      HL,(COMBUF+3)
+01F9 3A 71 40               LD      A,(COMBUF+5)            ;NUMBER OF BYTES TO GET
+01FC                ;
+01FC                ;  Prepare return buffer: FN (unchanged), LEN, DATA
+01FC 11 6D 40               LD      DE,COMBUF+1             ;POINTER TO LEN, DATA
+01FF 12                     LD      (DE),A                  ;RETURN LENGTH = REQUESTED DATA
+0200 13                     INC     DE
+0201 B7                     OR      A
+0202 28 09                  JR      Z,GLP90                 ;JIF NO BYTES TO GET
+0204                ;
+0204                ;  Read the requested bytes from local memory
+0204 47                     LD      B,A
+0205                GLP:
+0205                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0205 CD 68 11       	CALL	LD_A_HL
+0208                ;    LD      A,(HL)                  ;GET BYTE TO A
+0208                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0208 12             	LD      (DE),A                  ;STORE TO RETURN BUFFER
+0209 23                     INC     HL
+020A 13                     INC     DE
+020B 10 F8                  DJNZ    GLP
+020D                ;
+020D                ;  Compute checksum on buffer, and send to master, then return
+020D C3 08 03       GLP90:  JP      SEND
+0210                
+0210                ;===========================================================================
+0210                ;
+0210                ;  Write Memory:  FN, len, page, Alo, Ahi, (len-3 bytes of Data)
+0210                ;
+0210                ;  Uses 2 bytes of stack
+0210                ;
+0210                WRITE_MEM:
+0210                ;
+0210                ;  Set page
+0210 3A 6E 40             LD      A,(COMBUF+2)
+0213 32 00 C0             LD      (PAGEIMAGE),A
+0216                ;;      LD      BC,PAGELATCH
+0216                ;;      OUT     (BC),A
+0216                ;
+0216 21 71 40               LD      HL,COMBUF+5             ;POINTER TO SOURCE DATA IN MESSAGE
+0219 ED 5B 6F 40            LD      DE,(COMBUF+3)           ;POINTER TO DESTINATION
+021D 3A 6D 40               LD      A,(COMBUF+1)            ;NUMBER OF BYTES IN MESSAGE
+0220 D6 03                  SUB     3                       ;LESS PAGE, ADDRLO, ADDRHI
+0222 28 1C                  JR      Z,WLP50                 ;EXIT IF NONE REQUESTED
+0224                ;
+0224                ;  Write the specified bytes to local memory
+0224 47                     LD      B,A
+0225 C5                     PUSH    BC                      ;SAVE BYTE COUNTER
+0226 7E             WLP10:  LD      A,(HL)                  ;BYTE FROM HOST
+0227                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0227 CD 65 11       	CALL	LD_DE_A
+022A                ;        LD      (DE),A                  ;WRITE TO TARGET RAM
+022A                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+022A 23                     INC     HL
+022B 13                     INC     DE
+022C 10 F8                  DJNZ    WLP10
+022E                ;
+022E                ;  Compare to see if the write worked
+022E 21 71 40               LD      HL,COMBUF+5             ;POINTER TO SOURCE DATA IN MESSAGE
+0231 ED 5B 6F 40            LD      DE,(COMBUF+3)           ;POINTER TO DESTINATION
+0235 C1                     POP     BC                      ;SIZE AGAIN
+0236                ;
+0236                ;  Compare the specified bytes to local memory
+0236                WLP20:
+0236                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0236 CD 62 11       	CALL	LD_A_DE
+0239 BE             	CP	(HL)
+023A                ;	  LD      A,(DE)                  ;READ BACK WHAT WE WROTE
+023A                ;        CP      (HL)                    ;COMPARE TO HOST DATA
+023A                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+023A 20 07                  JR      NZ,WLP80                ;JIF WRITE FAILED
+023C 23                     INC     HL
+023D 13                     INC     DE
+023E 10 F6                  DJNZ    WLP20
+0240                ;
+0240                ;  Write succeeded:  return status = 0
+0240 AF             WLP50:  XOR     A                       ;RETURN STATUS = 0
+0241 18 02                  JR      WLP90
+0243                ;
+0243                ;  Write failed:  return status = 1
+0243 3E 01          WLP80:  LD      A,1
+0245                ;
+0245                ;  Return OK status
+0245 C3 FE 02       WLP90:  JP      SEND_STATUS
+0248                
+0248                ;===========================================================================
+0248                ;
+0248                ;  Read registers:  FN, len=0
+0248                ;
+0248                READ_REGS:
+0248                ;
+0248                ;  Enter here from int after "RUN" and "STEP" to return task registers
+0248                RETURN_REGS:
+0248 21 50 40               LD      HL,TASK_REGS            ;REGISTER LIVE HERE
+024B 3E 1C                  LD      A,TASK_REGS_SIZE        ;NUMBER OF BYTES
+024D                ;
+024D                ;  Prepare return buffer: FN (unchanged), LEN, DATA
+024D 11 6D 40               LD      DE,COMBUF+1             ;POINTER TO LEN, DATA
+0250 12                     LD      (DE),A                  ;SAVE DATA LENGTH
+0251 13                     INC     DE
+0252                ;
+0252                ;  Copy the registers
+0252 47                     LD      B,A
+0253 7E             GRLP:   LD      A,(HL)                  ;GET BYTE TO A
+0254 12                     LD      (DE),A                  ;STORE TO RETURN BUFFER
+0255 23                     INC     HL
+0256 13                     INC     DE
+0257 10 FA                  DJNZ    GRLP
+0259                ;
+0259                ;  Compute checksum on buffer, and send to master, then return
+0259 C3 08 03               JP      SEND
+025C                
+025C                ;===========================================================================
+025C                ;
+025C                ;  Write registers:  FN, len, (register image)
+025C                ;
+025C                WRITE_REGS:
+025C                ;
+025C 21 6E 40               LD      HL,COMBUF+2             ;POINTER TO DATA
+025F 3A 6D 40               LD      A,(COMBUF+1)            ;NUMBER OF BYTES
+0262 B7                     OR      A
+0263 28 0A                  JR      Z,WRR80                 ;JIF NO REGISTERS
+0265                ;
+0265                ;  Copy the registers
+0265 11 50 40               LD      DE,TASK_REGS            ;OUR REGISTERS LIVE HERE
+0268 47                     LD      B,A
+0269 7E             WRRLP:  LD      A,(HL)                  ;GET BYTE TO A
+026A 12                     LD      (DE),A                  ;STORE TO REGISTER RAM
+026B 23                     INC     HL
+026C 13                     INC     DE
+026D 10 FA                  DJNZ    WRRLP
+026F                ;
+026F                ;  Return OK status
+026F AF             WRR80:  XOR     A
+0270 C3 FE 02               JP      SEND_STATUS
+0273                
+0273                ;===========================================================================
+0273                ;
+0273                ;  Run Target:  FN, len
+0273                ;
+0273                ;  Uses 4 bytes of stack
+0273                ;
+0273                RUN_TARGET:
+0273                ;
+0273                ;reset bank page
+0273 AF             	XOR     A
+0274 32 00 C0               LD      (PAGEIMAGE),A
+0277                ;PUSH PC TO USER STACK
+0277 ED 5B 52 40            LD      DE,(REG_SP)
+027B 1B             	DEC	DE
+027C 3A 61 40               LD      A,(REG_PC+1)
+027F CD 65 11       	CALL	LD_DE_A
+0282 1B             	DEC	DE
+0283 3A 60 40               LD      A,(REG_PC)
+0286 CD 65 11       	CALL	LD_DE_A
+0289 ED 53 52 40    	LD	(REG_SP),DE
+028D                ;
+028D                ;  Restore alternate registers
+028D 31 54 40               LD      SP,REG_IX
+0290 DD E1          	POP	IX
+0292 FD E1          	POP	IY
+0294 E1             	POP	HL
+0295 C1             	POP	BC
+0296 D1             	POP	DE
+0297 F1             	POP	AF
+0298 D9             	EXX
+0299 08             	EX	AF,AF'
+029A F1             	POP	AF   ; PC DUMMY
+029B E1             	POP	HL   ; I,IFF
+029C 7D             	LD	A,L
+029D ED 47          	LD	I,A
+029F 7C             	LD	A,H
+02A0 B7                     OR      A
+02A1 28 01                  JR      Z,RUTT10                ;JIF INTS OFF: LEAVE OFF
+02A3 FB             	EI
+02A4                RUTT10:
+02A4 E1             	POP	HL
+02A5 C1             	POP	BC
+02A6 D1             	POP	DE
+02A7 F1             	POP	AF
+02A8 D9             	EXX
+02A9 08             	EX	AF,AF'
+02AA                ;
+02AA ED 7B 52 40    	LD	SP,(REG_SP)
+02AE                ;GOTO TARGET
+02AE C3 24 30       	JP	RET_USR
+02B1                ;
+02B1                ;===========================================================================
+02B1                ;
+02B1                ;  Set target byte(s):  FN, len { (page, alow, ahigh, data), (...)... }
+02B1                ;
+02B1                ;  Return has FN, len, (data from memory locations)
+02B1                ;
+02B1                ;  If error in insert (memory not writable), abort to return short data
+02B1                ;
+02B1                ;  This function is used primarily to set and clear breakpoints
+02B1                ;
+02B1                ;  Uses 2 bytes of stack
+02B1                ;
+02B1                SET_BYTES:
+02B1                ;
+02B1 21 6D 40               LD      HL,COMBUF+1
+02B4 46                     LD      B,(HL)                  ;LENGTH = 4*NBYTES
+02B5 23                     INC     HL
+02B6 04                     INC     B
+02B7 05                     DEC     B
+02B8 0E 00                  LD      C,0                     ;C GETS COUNT OF INSERTED BYTES
+02BA 28 25                  JR      Z,SB90                  ;JIF NO BYTES (C=0)
+02BC E5                     PUSH    HL
+02BD DD E1                  POP     IX                      ;IX POINTS TO RETURN BUFFER
+02BF                ;
+02BF                ;  Loop on inserting bytes
+02BF 7E             SB10:   LD      A,(HL)                  ;MEMORY PAGE
+02C0 23                     INC     HL
+02C1 32 00 C0               LD      (PAGEIMAGE),A
+02C4                ;;      PUSH    BC
+02C4                ;;      LD      BC,PAGELATCH
+02C4                ;;      OUT     (BC),A                  ;SET PAGE
+02C4                ;;      POP     BC
+02C4 5E                     LD      E,(HL)                  ;ADDRESS TO DE
+02C5 23                     INC     HL
+02C6 56                     LD      D,(HL)
+02C7 23                     INC     HL
+02C8                ;
+02C8                ;  Read current data at byte location
+02C8                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+02C8 CD 62 11       	CALL	LD_A_DE
+02CB                ;        LD      A,(DE)                  ;READ CURRENT DATA
+02CB                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+02CB DD 77 00               LD      (IX),A                  ;SAVE IN RETURN BUFFER
+02CE DD 23                  INC     IX
+02D0                ;
+02D0                ;  Insert new data at byte location
+02D0 7E                     LD      A,(HL)
+02D1                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+02D1 CD 65 11       	CALL	LD_DE_A
+02D4 CD 62 11       	CALL	LD_A_DE
+02D7                ;        LD      (DE),A                  ;SET BYTE
+02D7                ;        LD      A,(DE)                  ;READ CURRENT DATA
+02D7                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+02D7 BE                     CP      (HL)                    ;COMPARE TO DESIRED VALUE
+02D8 20 07                  JR      NZ,SB90                 ;BR IF INSERT FAILED: ABORT
+02DA 23                     INC     HL
+02DB 0C                     INC     C                       ;ELSE COUNT ONE BYTE TO RETURN
+02DC                ;
+02DC 05                     DEC     B
+02DD 05                     DEC     B
+02DE 05                     DEC     B
+02DF 10 DE                  DJNZ    SB10                    ;LOOP FOR ALL BYTES
+02E1                ;
+02E1                ;  Return buffer with data from byte locations
+02E1 79             SB90:   LD      A,C
+02E2 32 6D 40               LD      (COMBUF+1),A            ;SET COUNT OF RETURN BYTES
+02E5                ;
+02E5                ;  Compute checksum on buffer, and send to master, then return
+02E5 C3 08 03               JP      SEND
+02E8                
+02E8                ;===========================================================================
+02E8                ;
+02E8                ;  Input from port:  FN, len, PortAddressLo, PAhi (=0)
+02E8                ;
+02E8                IN_PORT:
+02E8                ;
+02E8                ;  Get port address
+02E8 ED 4B 6E 40            LD      BC,(COMBUF+2)
+02EC                ;
+02EC                ;  Read port value
+02EC ED 78                  IN      A,(C)           ;IN WITH A15-A8 = B; A7-A0 = C
+02EE                ;
+02EE                ;  Return byte read as "status"
+02EE C3 FE 02               JP      SEND_STATUS
+02F1                
+02F1                ;===========================================================================
+02F1                ;
+02F1                ;  Output to port:  FN, len, PortAddressLo, PAhi (=0), data
+02F1                ;
+02F1                OUT_PORT:
+02F1                ;
+02F1                ;  Get port address
+02F1 ED 4B 6E 40            LD      BC,(COMBUF+2)
+02F5                ;
+02F5                ;  Get data
+02F5 3A 70 40               LD      A,(COMBUF+4)
+02F8                ;
+02F8                ;  Write value to port
+02F8 ED 79                  OUT     (C),A           ;OUT WITH A15-A8 = B; A7-A0 = C
+02FA                ;
+02FA                ;  Return status of OK
+02FA AF                     XOR     A
+02FB C3 FE 02               JP      SEND_STATUS
+02FE                ;
+02FE                ;===========================================================================
+02FE                ;  Build status return with value from "A"
+02FE                ;
+02FE                SEND_STATUS:
+02FE 32 6E 40               LD      (COMBUF+2),A            ;SET STATUS
+0301 3E 01                  LD      A,1
+0303 32 6D 40               LD      (COMBUF+1),A            ;SET LENGTH
+0306 18 00                  JR      SEND
+0308                
+0308                ;===========================================================================
+0308                ;  Append checksum to COMBUF and send to master
+0308                ;
+0308                ;  Uses 6 bytes of stack (not including return address: jumped, not called)
+0308                ;
+0308 CD 21 03       SEND:   CALL    CHECKSUM                ;GET A=CHECKSUM, HL->checksum location
+030B ED 44                  NEG
+030D 77                     LD      (HL),A                  ;STORE NEGATIVE OF CHECKSUM
+030E                ;
+030E                ;  Send buffer to master
+030E 21 6C 40               LD      HL,COMBUF               ;POINTER TO DATA
+0311 3A 6D 40               LD      A,(COMBUF+1)            ;LENGTH OF DATA
+0314 C6 03                  ADD     A,3                       ;PLUS FUNCTION, LENGTH, CHECKSUM
+0316 47                     LD      B,A                     ;save count for loop
+0317 7E             SND10:  LD      A,(HL)
+0318 CD 28 00               CALL    PUTCHAR                 ;SEND A BYTE (uses 6 bytes of stack)
+031B 23                     INC     HL
+031C 10 F9                  DJNZ    SND10
+031E C3 71 01               JP      MAIN                    ;BACK TO MAIN LOOP
+0321                
+0321                ;===========================================================================
+0321                ;  Compute checksum on COMBUF.  COMBUF+1 has length of data,
+0321                ;  Also include function byte and length byte
+0321                ;
+0321                ;  Returns:
+0321                ;       A = checksum
+0321                ;       HL = pointer to next byte in buffer (checksum location)
+0321                ;       B is scratched
+0321                ;
+0321                ;  Uses 2 bytes of stack including return address
+0321                ;
+0321                CHECKSUM:
+0321 21 6C 40               LD      HL,COMBUF               ;pointer to buffer
+0324 3A 6D 40               LD      A,(COMBUF+1)            ;length of message
+0327 C6 02                  ADD     A,2                       ;plus function, length
+0329 47                     LD      B,A                     ;save count for loop
+032A AF                     XOR     A                       ;init checksum to 0
+032B 86             CHK10:  ADD     A,(HL)
+032C 23                     INC     HL
+032D 10 FC                  DJNZ    CHK10                   ;loop for all
+032F C9                     RET                             ;return with checksum in A
+0330                ;
+0330                
+0330                
+0330                ;----------------------------------------------------------------------------
+0330                ; X1 BIOS MENU PROGRAM
+0330                ;----------------------------------------------------------------------------
+0330                ;
+0330                ;----------------------------------------------------------------------------
+0330                ;5x address input
+0330                ADR_INP:
+0330 21 23 06       	LD	HL,MSG_IA
+0333                ;	CALL	DISP_STRL
+0333 CF             	RST 08H
+0334 21 00 00       	LD	HL,0
+0337 11 00 05       	LD	DE,0500H
+033A C5             	PUSH	BC
+033B AF             	XOR	A
+033C CD 68 05       	CALL	OUT_HEX5
+033F C1             	POP	BC
+0340                AI1:
+0340 D5             	PUSH	DE
+0341 E5             	PUSH	HL
+0342 16 00          	LD	D,0 ;EDIT VALUE
+0344                AI2:
+0344 3E 0F          	LD	A,0FH
+0346 32 FF 40       	LD	(COLOR),A
+0349 7A             	LD	A,D
+034A CD 79 05       	CALL	OUT_HEX1
+034D 0B             	DEC	BC
+034E CD 91 03       	CALL	GET_SWW
+0351 CB 47          	BIT	0,A
+0353 28 0F          	JR	Z,AI_DEC
+0355 CB 4F          	BIT	1,A
+0357 28 06          	JR	Z,AI_INC
+0359 CB 6F          	BIT	5,A
+035B 28 0E          	JR	Z,AI_SET
+035D 18 E5          	JR	AI2
+035F                ;
+035F                AI_INC:
+035F 14             	INC	D
+0360 CB A2          	RES	4,D
+0362 18 E0          	JR	AI2
+0364                ;
+0364                AI_DEC:
+0364 15             	DEC	D
+0365 7A             	LD	A,D
+0366 E6 0F          	AND	0FH
+0368 57             	LD	D,A
+0369 18 D9          	JR	AI2
+036B                ;
+036B                AI_SET:
+036B 3E 07          	LD	A,07H
+036D 32 FF 40       	LD	(COLOR),A
+0370 7A             	LD	A,D
+0371 CD 79 05       	CALL	OUT_HEX1
+0374                ;DHL = DHL * 16 | A
+0374 7A             	LD	A,D
+0375 E1             	POP	HL
+0376 D1             	POP	DE
+0377 29             	ADD	HL,HL
+0378 CB 13          	RL	E
+037A 29             	ADD	HL,HL
+037B CB 13          	RL	E
+037D 29             	ADD	HL,HL
+037E CB 13          	RL	E
+0380 29             	ADD	HL,HL
+0381 CB 13          	RL	E
+0383 B5             	OR	L
+0384 6F             	LD	L,A
+0385                ;
+0385 15             	DEC	D
+0386 20 B8          	JR	NZ,AI1
+0388 7B             	LD	A,E
+0389 C9             	RET
+038A                ;
+038A                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+038A                ;
+038A                WAIT_SW:
+038A CD 9C 03       	CALL	GET_SW
+038D 3C             	INC	A
+038E 20 FA          	JR	NZ,WAIT_SW
+0390 C9             	RET
+0391                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0391                ;
+0391                GET_SWW:
+0391 CD 8A 03       	CALL	WAIT_SW
+0394                GET_SWW2:
+0394 CD 9C 03       	CALL	GET_SW
+0397 3C             	INC	A
+0398 28 FA          	JR	Z,GET_SWW2
+039A 3D             	DEC	A
+039B C9             	RET
+039C                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+039C                ;
+039C                GET_SW:
+039C C5             	PUSH	BC
+039D 3E 0E          	LD	A,0EH
+039F 06 1C          	LD	B,1CH
+03A1 ED 79          	OUT	(C),A
+03A3 05             	DEC	B
+03A4 ED 78          	IN	A,(C)
+03A6 C1             	POP	BC
+03A7 C9             	RET
+03A8                ;
+03A8                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+03A8                ;
+03A8                DISP_CHR:
+03A8 ED 79          	OUT	(C),A
+03AA CB A0          	RES	4,B
+03AC 3A FF 40       	LD	A,(COLOR)
+03AF ED 79          	OUT	(C),A
+03B1 CB E0          	SET	4,B
+03B3 03             	INC	BC
+03B4 C9             	RET
+03B5                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+03B5                ;
+03B5                DISP_STRL:
+03B5 4E             	LD	C,(HL)
+03B6 23             	INC	HL
+03B7 46             	LD	B,(HL)
+03B8 23             	INC	HL
+03B9                DISP_STR:
+03B9 7E             	LD	A,(HL)
+03BA 23             	INC	HL
+03BB B7             	OR	A
+03BC C8             	RET	Z
+03BD CD A8 03       	CALL	DISP_CHR
+03C0 18 F7          	JR	DISP_STR
+03C2                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+03C2                ; SHOW BIOS MENU
+03C2                ; C = MENU NUMBER
+03C2                DISP_MENU:
+03C2                ;7segment
+03C2 06 19          	LD	B,19H
+03C4 3E F0          	LD	A,0F0H  ;COMMAND
+03C6 ED 79          	OUT	(C),A
+03C8 ED 49          	OUT	(C),C
+03CA AF             	XOR	A
+03CB ED 79          	OUT	(C),A
+03CD                ;
+03CD 21 BF 05       	LD	HL,MSG_CMD
+03D0 06 00          	LD	B,0
+03D2                DM1:
+03D2 C5             	PUSH	BC
+03D3 78             	LD	A,B
+03D4 B9             	CP	C
+03D5 3E 07          	LD	A,07H
+03D7 20 02          	JR	NZ,DM2
+03D9 3E 0F          	LD	A,0FH
+03DB                DM2:
+03DB 32 FF 40       	LD	(COLOR),A
+03DE                ;
+03DE                ;	CALL	DISP_STRL
+03DE CF             	RST 08H
+03DF C1             	POP	BC
+03E0 04             	INC	B
+03E1 78             	LD	A,B
+03E2 FE 06          	CP	MAX_MENU
+03E4 38 EC          	JR	C,DM1
+03E6 3E 07          	LD	A,7
+03E8 32 FF 40       	LD	(COLOR),A
+03EB C9             	RET
+03EC                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+03EC                ; MEMU SUB
+03EC                ;
+03EC                MENU_PREV:
+03EC 0D             	DEC	C
+03ED 79             	LD	A,C
+03EE E6 80          	AND	80H
+03F0 28 3D          	JR	Z,MENU_MAIN
+03F2 0E 05          	LD	C,MAX_MENU-1
+03F4 18 39          	JR	MENU_MAIN
+03F6                MENU_NEXT
+03F6 0C             	INC	C
+03F7 79             	LD	A,C
+03F8 FE 06          	CP	MAX_MENU
+03FA 38 33          	JR	C,MENU_MAIN
+03FC 0E 00          	LD	C,0
+03FE 18 2F          	JR	MENU_MAIN
+0400                MENU_GO:
+0400 21 5C 04       	LD	HL,MENU_RET
+0403 E5             	PUSH	HL
+0404                ;7segment
+0404 06 19          	LD	B,19H
+0406 3E F0          	LD	A,0F0H  ;COMMAND
+0408 ED 79          	OUT	(C),A
+040A ED 49          	OUT	(C),C
+040C 3E 01          	LD	A,1
+040E ED 79          	OUT	(C),A
+0410                ;JUMP TABLE
+0410 79             	LD	A,C
+0411 87             	ADD	A,A
+0412 C6 87          	ADD	A,MENU_TBL
+0414 6F             	LD	L,A
+0415 26 05          	LD	H,MENU_TBL/256
+0417 7E             	LD	A,(HL)
+0418 23             	INC	HL
+0419 66             	LD	H,(HL)
+041A 6F             	LD	L,A
+041B E9             	JP	(HL)
+041C                
+041C                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+041C                ; X1 BIOS MENU
+041C                BIOS:
+041C CD D9 04       	CALL	CFG_LOAD
+041F 30 5C          	JR	NC,CMD_GIPL
+0421                ;
+0421                MENU_ENTER:
+0421 3E 07          	LD	A,07H
+0423 32 FF 40       	LD	(COLOR),A
+0426 CD 19 07       	CALL	CLS
+0429                ;show display
+0429 21 93 05       	LD	HL,MSG_MENU
+042C                ;	CALL	DISP_STRL
+042C CF             	RST 08H
+042D 0E 00          	LD	C,0
+042F                ;---------------------------------------
+042F                MENU_MAIN:
+042F CD 8A 03       	CALL	WAIT_SW
+0432 CD C2 03       	CALL	DISP_MENU
+0435                MENU_SEL:
+0435                ;JOY CHECK
+0435 CD 9C 03       	CALL	GET_SW
+0438 CB 47          	BIT	0,A
+043A 28 B0          	JR	Z,MENU_PREV
+043C CB 4F          	BIT	1,A
+043E 28 B6          	JR	Z,MENU_NEXT
+0440 CB 6F          	BIT	5,A
+0442 28 BC          	JR	Z,MENU_GO
+0444                ;SERIAL COMMAND
+0444 3A 00 C0       	LD	A,(SERIAL_STATUS)
+0447 CB 47          	BIT	RXRDY,A
+0449 28 EA                  JR      Z,MENU_SEL
+044B                ;SERIAL CMD
+044B CD 14 00       	CALL	GETCHAR
+044E D6 30                 	SUB	'0'
+0450 38 E3          	JR	C,MENU_SEL
+0452 FE 06          	CP	MAX_MENU
+0454 30 DF          	JR	NC,MENU_SEL
+0456                ;GO SERIAL CMD
+0456 4F             	LD	C,A
+0457 CD C2 03       	CALL	DISP_MENU
+045A 18 A4          	JR	MENU_GO
+045C                ;
+045C                MENU_RET:
+045C 21 B0 05       	LD	HL,MSG_DONE
+045F                ;	CALL	DISP_STRL
+045F CF             	RST 08H
+0460 CD 91 03       	CALL	GET_SWW
+0463 18 BC          	JR	MENU_ENTER
+0465                ;
+0465                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0465                ;COMMAND HANDLING
+0465                ;
+0465                CMD_L2D0:
+0465 3E 01          	LD	A,01H
+0467 18 09          	JR	DLD_HL0
+0469                ;
+0469                CMD_L2D1:
+0469 3E 07          	LD	A,07H
+046B 21 00 80       	LD	HL,8000H
+046E 18 0A          	JR	DLD
+0470                ;
+0470                CMD_LIPL:
+0470 3E 0E          	LD	A,0EH
+0472                DLD_HL0:
+0472 21 00 00       	LD	HL,0000H
+0475 18 03          	JR	DLD
+0477                ;
+0477                CMD_LADR:
+0477 CD 30 03       	CALL	ADR_INP
+047A                DLD:
+047A C3 98 04       	JP	DOWNLOAD
+047D                ;
+047D                CMD_GIPL:
+047D 3E 0E          	LD	A,0EH
+047F 21 00 00       	LD	HL,0000H
+0482 18 03          	JR	EXEC_GO
+0484                ;
+0484                CMD_GADR:
+0484 CD 30 03       	CALL	ADR_INP
+0487                EXEC_GO:
+0487 B7             	OR	A
+0488 3E 1D          	LD	A,1DH ;IPL SEL
+048A 20 01          	JR	NZ,EXEC1
+048C 3C             	INC	A     ;MEM SEL
+048D                EXEC1:
+048D D3 00          	OUT	(00H),A
+048F 22 60 40       	LD	(REG_PC),HL ;EXEC ADDR
+0492 22 52 40       	LD	(REG_SP),HL
+0495 C3 73 02       	JP	RUN_TARGET
+0498                ;
+0498                ;----------------------------------------------------------------------------
+0498                ;LOAD DATA START
+0498                DOWNLOAD:
+0498 F5             	PUSH	AF
+0499 E5             	PUSH	HL
+049A 21 2C 06       	LD	HL,MSG_SA
+049D                ;	CALL	DISP_STRL
+049D CF             	RST 08H
+049E E1             	POP	HL
+049F F1             	POP	AF
+04A0 F5             	PUSH	AF
+04A1 E5             	PUSH	HL
+04A2 CD 68 05       	CALL	OUT_HEX5
+04A5 E1             	POP	HL
+04A6 F1             	POP	AF
+04A7 4F             	LD	C,A
+04A8 32 00 C0       	LD	(PAGEIMAGE),A
+04AB                ;WAIT FOR RX 1ST BYTE
+04AB                BIN_L2:
+04AB CD 14 00       	CALL	GETCHAR
+04AE 38 FB          	JR	C,BIN_L2
+04B0                BIN_L3:
+04B0 EB             	EX	DE,HL
+04B1 CD 65 11       	CALL	LD_DE_A
+04B4 EB             	EX	DE,HL
+04B5                ;
+04B5 C5             	PUSH	BC
+04B6 01 E0 31       	LD	BC,3000H + 12*40
+04B9 ED 79          	OUT	(C),A
+04BB C1             	POP	BC
+04BC                ;
+04BC 2C             	INC	L
+04BD 20 08          	JR	NZ,BIN_L4
+04BF                ;
+04BF 24             	INC	H
+04C0 20 05          	JR	NZ,BIN_L4
+04C2 0C             	INC	C
+04C3 79             	LD	A,C
+04C4 32 00 C0       	LD	(PAGEIMAGE),A
+04C7                BIN_L4:
+04C7 CD 14 00       	CALL	GETCHAR
+04CA 30 E4          	JR	NC,BIN_L3
+04CC                ;END MESSAGE
+04CC 79             	LD	A,C
+04CD F5             	PUSH	AF
+04CE E5             	PUSH	HL
+04CF 21 35 06       	LD	HL,MSG_EA
+04D2                ;	CALL	DISP_STRL
+04D2 CF             	RST 08H
+04D3 E1             	POP	HL
+04D4 F1             	POP	AF
+04D5 CD 68 05       	CALL	OUT_HEX5
+04D8 C9             	RET
+04D9                ;
+04D9                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+04D9                ; CFG_LOAD
+04D9                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+04D9                CFG_LOAD:
+04D9 01 40 0E       	LD	BC,0E40H ; NOLOAD,CS=00,CNT=0
+04DC ED 79          	OUT	(C),A
+04DE                ;DUMMY 16BIT
+04DE CD 60 05       	CALL	CFG_BYPASS16
+04E1                ;SEARCH 1ST 55H
+04E1 1E 31          	LD	E,48+1
+04E3                CFG_L1:
+04E3 1D             	DEC	E
+04E4 28 6F          	JR	Z,CFG_LERR
+04E6                ;
+04E6 01 51 0E       	LD	BC,0E51H ; NO LOAD,CS=01,CNT=1
+04E9 ED 79          	OUT     (C),A
+04EB ED 78          	IN      A,(C)
+04ED                ;
+04ED FE 55          	CP	055H
+04EF 20 F2          	JR	NZ,CFG_L1
+04F1                ;
+04F1 CD 57 05       	CALL	CFG_GBYTE
+04F4 FE 99          	CP	099H
+04F6 20 5D          	JR	NZ,CFG_LERR
+04F8 CD 57 05       	CALL	CFG_GBYTE
+04FB FE AA          	CP	0AAH
+04FD 20 56          	JR	NZ,CFG_LERR
+04FF CD 57 05       	CALL	CFG_GBYTE
+0502 FE 66          	CP	066H
+0504 20 4F          	JR	NZ,CFG_LERR
+0506                ;
+0506                ;BYPASS CFG DATA
+0506 21 93 05       	LD	HL,MSG_MENU
+0509                ;	CALL	DISP_STRL
+0509 CF             	RST 08H
+050A 21 3E 06       	LD	HL,MSG_CBP
+050D                ;	CALL	DISP_STRL
+050D CF             	RST 08H
+050E                ;readed SYNC data == 8bytes
+050E                ;
+050E 00 00 FF FC    BYPASS_CNT	EQU	 ((CFG_TOP-8)/2)
+050E                ;
+050E 1E FF          	LD	E,0FFH - (BYPASS_CNT/10000H)
+0510 21 04 00       	LD	HL,0   - (BYPASS_CNT&000FFFFH)
+0513                CFG_L3:
+0513 CD 60 05       	CALL CFG_BYPASS16
+0516 2C             	INC	L
+0517 20 FA          	JR	NZ,CFG_L3
+0519                ;
+0519                ;CHECK JOY-IN to BREAK
+0519 CD 9C 03       	CALL	GET_SW
+051C 3C             	INC	A
+051D 37             	SCF
+051E C0             	RET	NZ
+051F                ;
+051F 24             	INC	H
+0520 20 F1          	JR	NZ,CFG_L3
+0522 1C             	INC	E
+0523 20 EE          	JR	NZ,CFG_L3
+0525                ;
+0525                ;LOAD DATA TO FD0 AREA
+0525 21 53 06       	LD	HL,MSG_CLD
+0528                ;	CALL	DISP_STRL
+0528 CF             	RST 08H
+0529                ;
+0529 2E 01          	LD	L,01H   ;  ADDR   = FD0 DATA
+052B 11 00 00       	LD	DE,0000H
+052E 26 02          	LD	H,02H
+0530 01 78 00       	LD	BC,0078H ; LENGTH = 20800H
+0533                ;
+0533 7D             	LD	A,L
+0534 32 00 C0       	LD	(PAGEIMAGE),A
+0537                CFG_L4:
+0537                CFG_L5:
+0537 CD 57 05       	CALL	CFG_GBYTE
+053A CD 65 11       	CALL	LD_DE_A
+053D 1C             	INC	E
+053E 20 08          	JR	NZ,CFG_L6
+0540 14             	INC	D
+0541 20 05          	JR	NZ,CFG_L6
+0543 2C             	INC	L
+0544 7D             	LD	A,L
+0545 32 00 C0       	LD	(PAGEIMAGE),A
+0548                CFG_L6:
+0548 78             	LD	A,B
+0549 B1             	OR	C
+054A 20 04          	JR	NZ,CFG_L7
+054C B4             	OR	H
+054D 28 04          	JR	Z,CFG_OK
+054F 25             	DEC	H
+0550                CFG_L7:
+0550 0B             	DEC	BC
+0551 18 E4          	JR	CFG_L4
+0553                CFG_OK:
+0553 AF             	XOR	A
+0554 C9             	RET
+0555                CFG_LERR:
+0555 37             	SCF
+0556 C9             	RET
+0557                ;
+0557                CFG_GBYTE:
+0557 3E 0E          	LD	A,0EH
+0559 D3 58          	OUT	(058H),A ; NO LOAD,CS=01,CNT=8
+055B 3E 0E          	LD	A,0EH
+055D DB 00          	IN	A,(000H)
+055F C9             	RET
+0560                ;
+0560                CFG_BYPASS16:
+0560 3E 0E          	LD	A,0EH
+0562 D3 58          	OUT	(058H),A ; NO LOAD,CS=01,CNT=8
+0564 00             	NOP
+0565 D3 58          	OUT	(058H),A ; NO LOAD,CS=01,CNT=8
+0567 C9             	RET
+0568                ;
+0568                ;---------------------------------------------------------------------------
+0568                OUT_HEX5:
+0568 CD 79 05       	CALL	OUT_HEX1
+056B 7C             	LD	A,H
+056C CD 70 05       	CALL	OUT_HEX2
+056F 7D             	LD	A,L
+0570                OUT_HEX2:
+0570 F5             	PUSH	AF
+0571 0F             	RRCA
+0572 0F             	RRCA
+0573 0F             	RRCA
+0574 0F             	RRCA
+0575 CD 79 05       	CALL	OUT_HEX1
+0578 F1             	POP	AF
+0579                OUT_HEX1:
+0579 E6 0F          	AND	0FH
+057B C6 30          	ADD	A,'0'
+057D FE 3A          	CP	'9'+1
+057F DA 84 05       	JP	C,OH11
+0582 C6 07          	ADD	A,'A'-'0'-10
+0584                OH11:
+0584 C3 A8 03       	JP	DISP_CHR
+0587                ;
+0587                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0587                MENU_TBL:
+0587 65 04          	DW	CMD_L2D0
+0589 69 04          	DW	CMD_L2D1
+058B 70 04          	DW	CMD_LIPL
+058D 77 04          	DW	CMD_LADR
+058F 7D 04          	DW	CMD_GIPL
+0591 84 04          	DW	CMD_gADR
+0593                ;
+0593 00 00 00 06    MAX_MENU	EQU	($-MENU_TBL)/2
+0593                ;
+0593                ;FIXED MENU MESSAGE
+0593                MSG_MENU:
+0593 04 30          	DW	3000H+0*40+4
+0595 4E 49 53 45    	DB	'NISE-X1 SnapShot.2009.3.16',0
+0599 2D 58 31 20
+059D 53 6E 61 70
+05A1 53 68 6F 74
+05A5 2E 32 30 30
+05A9 39 2E 33 2E
+05AD 31 36 00
+05B0                MSG_DONE:
+05B0 20 33          	DW	3000H+20*40+0
+05B2 50 55 53 48    	DB	'PUSH TRIGGER',0
+05B6 20 54 52 49
+05BA 47 47 45 52
+05BE 00
+05BF                ;
+05BF                MSG_CMD:
+05BF 58 30          	DW	3000H+2*40+8
+05C1 4C 4F 41 44    	DB	'LOAD FD-0 IMG(.D88/.2D)',0
+05C5 20 46 44 2D
+05C9 30 20 49 4D
+05CD 47 28 2E 44
+05D1 38 38 2F 2E
+05D5 32 44 29 00
+05D9 80 30          	DW	3000H+3*40+8
+05DB 4C 4F 41 44    	DB	'LOAD FD-1 IMG(.D88/.2D)',0
+05DF 20 46 44 2D
+05E3 31 20 49 4D
+05E7 47 28 2E 44
+05EB 38 38 2F 2E
+05EF 32 44 29 00
+05F3 A8 30          	DW	3000H+4*40+8
+05F5 4C 4F 41 44    	DB	'LOAD IPL-ROM',0
+05F9 20 49 50 4C
+05FD 2D 52 4F 4D
+0601 00
+0602 D0 30          	DW	3000H+5*40+8
+0604 4C 4F 41 44    	DB	'LOAD Address',0
+0608 20 41 64 64
+060C 72 65 73 73
+0610 00
+0611 F8 30          	DW	3000H+6*40+8
+0613 49 50 4C 2D    	DB	'IPL-BOOT',0
+0617 42 4F 4F 54
+061B 00
+061C 48 31          	DW	3000H+8*40+8
+061E 47 4F 54 4F    	DB	'GOTO',0
+0622 00
+0623                ;
+0623                ;ADDRESS EDIT
+0623                MSG_IA:
+0623 68 31          	DW 3000H +  9*40
+0625 41 44 44 52    	DB 'ADDR  ',0
+0629 20 20 00
+062C                MSG_SA:
+062C 90 31          	DW 3000H + 10*40
+062E 53 54 41 52    	DB 'START ',0
+0632 54 20 00
+0635                MSG_EA:
+0635 B8 31          	DW 3000H + 11*40
+0637 45 4E 44 20    	DB 'END   ',0
+063B 20 20 00
+063E                ;
+063E                MSG_CBP:
+063E 50 30          	DW 3000H + 2*40
+0640 42 79 70 61    	DB 'Bypass Config Data',0
+0644 73 73 20 43
+0648 6F 6E 66 69
+064C 67 20 44 61
+0650 74 61 00
+0653                MSG_CLD:
+0653 78 30          	DW 3000H + 3*40
+0655 4C 6F 61 64    	DB 'Loading FD Image',0
+0659 69 6E 67 20
+065D 46 44 20 49
+0661 6D 61 67 65
+0665 00
+0666                ;
+0666                ;----------------------------------------------------------------------------
+0666                ; X1 internal IPL
+0666                ;----------------------------------------------------------------------------
+0666                
+0666                ;----------------------------------------------------------------------------
+0666                ;IPL:0000 : BOOT
+0666                ;IPL:0003 : TIMER SET
+0666                ;----------------------------------------------------------------------------
+0666                ;
+0666 00 00 02 1A    DISK_RD EQU	021AH
+0666 00 00 FE 00    FCB	EQU	0FE00H
+0666                ;
+0666                ;SUBROUTINE OFFSET
+0666 FF FF F9 9A    IPL_OFFS EQU	0000H-$
+0666                ;
+0666                IPL_TOP:
+0666 C3 07 00       	JP	IPL_ENT+IPL_OFFS
+0669 C3 06 00       	JP	TMR_ENT+IPL_OFFS
+066C                ;----------------------------------------------------------------------------
+066C                TMR_ENT:
+066C C9             	RET
+066D                ;----------------------------------------------------------------------------
+066D                IPL_ENT:
+066D F3             	DI
+066E 31 00 00       	LD	SP,0000H
+0671                ;INIT CRTC
+0671 21 A4 00       	LD	HL,CRTC_40+IPL_OFFS
+0674 CD 86 00       	CALL	CRTC_SET+IPL_OFFS
+0677                ;INIT BOOT DRIVE
+0677 AF             	XOR  A
+0678 32 87 FF       	LD  (0FF87H),A
+067B                ;LOADING MSG
+067B CD B3 00       	CALL	CLS+IPL_OFFS
+067E 21 D4 00       	LD	HL,IPL_MSG1
+0681 01 00 30       	LD	BC,3000H
+0684 CD CB 00       	CALL	PRINT
+0687                ;IPL BOOT SECTOR LOAD
+0687 3E 01          	LD	A,1
+0689 21 00 FE       	LD	HL,FCB
+068C 11 00 00       	LD	DE,0000H
+068F CD 1A 02       	CALL	DISK_RD
+0692 38 4D          	JR	C,IPL_ERR
+0694                ;file mode == BIN check
+0694 21 00 FE       	LD	HL,FCB
+0697 7E             	LD	A,(HL)
+0698 E6 07          	AND	07H
+069A 3D             	DEC	A
+069B 20 44          	JR	NZ,IPL_ERR
+069D                ;file type == "Sys" check
+069D                
+069D                ;show file name
+069D 23             	INC	HL
+069E AF             	XOR	A
+069F 32 0E FE       	LD	(FCB+0EH),A ;ASCII-EOF
+06A2 01 0A 30       	LD	BC,300AH
+06A5 CD CB 00       	CALL	PRINT
+06A8                ;show loading msg
+06A8 21 DE 00       	LD	HL,IPL_MSG2
+06AB 01 28 30       	LD	BC,3028H
+06AE CD CB 00       	CALL	PRINT
+06B1                ;GET FILE INFO
+06B1 2A 16 FE       	LD	HL,(FCB+16H)
+06B4 E5             	PUSH HL              ;EXEC ADDRESS
+06B5 ED 4B 12 FE    	LD	BC,(FCB+12H)
+06B9 2A 14 FE       	LD	HL,(FCB+14H)
+06BC ED 5B 1E FE    	LD	DE,(FCB+01EH)
+06C0 79             	LD	A,C
+06C1 A1             	AND	C
+06C2 78             	LD	A,B
+06C3 28 01          	JR	Z,IPL_2
+06C5 3C             	INC	A
+06C6                IPL_2:
+06C6                ;LOAD BODY
+06C6 CD 1A 02       	CALL	DISK_RD
+06C9 38 16          	JR	C,IPL_ERR
+06CB                ;execute BODY
+06CB CD B3 00       	CALL	CLS+IPL_OFFS
+06CE                ;
+06CE 3E C9          	LD	A,0C9H   ; RET
+06D0 32 F2 FF       	LD	(0FFF2H),A
+06D3 21 D3 00       	LD	HL,00D3H ; OUT (0),A
+06D6 22 F0 FF       	LD	(0FFF0H),HL
+06D9                ;
+06D9 2A 16 FE       	LD	HL,(FCB+16H)
+06DC 3E 1E          	LD	A,1EH
+06DE C3 F0 FF       	JP	0FFF0H ; OUT (0),A , JP (HL)
+06E1                ;-----
+06E1                IPL_ERR:
+06E1 21 E8 00       	LD	HL,IPL_MSGE
+06E4 01 28 30       	LD	BC,3028H
+06E7 CD CB 00       	CALL	PRINT
+06EA                IPL_LOCK:
+06EA 18 FE          	JR	IPL_LOCK
+06EC                ;
+06EC                ;----------------------------------------------------------------------------
+06EC                ;----- initialize CRTC -----------
+06EC                ;HL = CRTC_DATA
+06EC                CRTC_SET:
+06EC 01 03 1A       	LD	BC,PIA_MODE
+06EF 3E 82          	LD	A,082H
+06F1 ED 79          	OUT	(C),A
+06F3 0D             	DEC	C
+06F4 7E             	LD	A,(HL)
+06F5 23             	INC	HL
+06F6 ED 79          	OUT	(C),A   ; WIDTH VALUE
+06F8                ;
+06F8 01 00 18       	LD	BC,CRTC_REG
+06FB AF             	XOR	A
+06FC                CRTC_L1:
+06FC ED 79          	OUT	(C),A
+06FE 0C             	INC	C
+06FF 5E             	LD	E,(HL)
+0700 ED 59          	OUT	(C),E
+0702 23             	INC	HL
+0703 0D             	DEC	C
+0704 3C             	INC	A
+0705 FE 0E          	CP	14
+0707 38 F3          	JR	C,CRTC_L1
+0709 C9             	RET
+070A                ;----- DISPLAY MESSAGE -----
+070A                CRTC_40:
+070A 70             	DB	70H ;8255 port data
+070B 37             	DB	55  ;0
+070C 28             	DB	40  ;1
+070D 2D             	DB	45  ;2
+070E 34             	DB	52  ;3
+070F 1F             	DB	31  ;4
+0710 02             	DB	2   ;5
+0711 19             	DB	25  ;6
+0712 1C             	DB	28  ;7
+0713 00             	DB	0   ;8
+0714 07             	DB	7   ;9
+0715 00             	DB	0   ;10
+0716 00             	DB	0   ;11
+0717 00             	DB	0   ;12
+0718 00             	DB	0   ;13
+0719                ;CRTC_80:
+0719                ;	DB	30H ;8255 port data
+0719                ;	DB	111 ;0
+0719                ;	DB	80  ;1
+0719                ;	DB	89  ;2
+0719                ;	DB	56  ;3
+0719                ;	DB	31  ;4
+0719                ;	DB	2   ;5
+0719                ;	DB	25  ;6
+0719                ;	DB	28  ;7
+0719                ;	DB	0   ;8
+0719                ;	DB	7   ;9
+0719                ;	DB	0   ;10
+0719                ;	DB	0   ;11
+0719                ;	DB	0   ;12
+0719                ;	DB	0   ;13
+0719                ;
+0719                ;----- CLEAR DISPLAY -----
+0719                CLS:
+0719 C5             	PUSH	BC
+071A D5             	PUSH	DE
+071B 01 00 30       	LD	BC,3000H
+071E 11 07 20       	LD	DE,2007H
+0721                C1:
+0721 ED 51          	OUT	(C),D
+0723 CB A0          	RES	4,B
+0725 ED 59          	OUT	(C),E
+0727 CB E0          	SET	4,B
+0729 03             	INC	BC
+072A CB 58          	BIT	3,B
+072C 28 F3          	JR	Z,C1
+072E D1             	POP	DE
+072F C1             	POP	BC
+0730 C9             	RET
+0731                ;----------------------------------------------------------------------------
+0731 00 00 00 CB    PRINT	EQU	$+IPL_OFFS
+0731                PR1:
+0731 7E             	LD	A,(HL)
+0732 23             	INC	HL
+0733 B7             	OR	A
+0734 C8             	RET	Z
+0735 ED 79          	OUT	(C),A
+0737 03             	INC	BC
+0738 18 F7          	JR	PR1
+073A                ;----------------------------------------------------------------------------
+073A 00 00 00 D4    IPL_MSG1 EQU	$+IPL_OFFS
+073A 4E 49 53 45    	DB	'NISE-IPL ',0
+073E 2D 49 50 4C
+0742 20 00
+0744 00 00 00 DE    IPL_MSG2 EQU	$+IPL_OFFS
+0744 4C 4F 41 44    	DB	'LOADING  ',0
+0748 49 4E 47 20
+074C 20 00
+074E 00 00 00 E8    IPL_MSGE EQU	$+IPL_OFFS
+074E 45 52 52 4F    	DB	'ERROR',0
+0752 52 00
+0754                ;
+0754 00 00 00 EE    IPL_LEN EQU $-IPL_TOP
+0754                
+0754                ;----------------------------------------------------------------------------
+0754                ;IPL:021A : DISK READ
+0754                ;IN:
+0754                ;   A      = recoard size
+0754                ;   DE     = start sector
+0754                ;   HL     = start address
+0754                ;   (FF87) = drive no.
+0754                ;OUT:
+0754                ;   CF     = error flag
+0754                ;   (HL-)  = read data
+0754                ;break
+0754                ;(FF88) = STACK SAVE (original only)
+0754                ;(FF8A) = ERROR RETURN ADDESS  (original only)
+0754                ;----------------------------------------------------------------------------
+0754                ;	ORG	021AH
+0754                ;
+0754                ;SUBROUTINE OFFSET
+0754 FF FF FA C6    DR_OFFS	EQU	021AH-$
+0754                ;
+0754                DRD_TOP:
+0754 F5             	PUSH	AF
+0755 D5             	PUSH	DE
+0756                ;MOTOR ON
+0756 CD 9A 02       	CALL	MOTOR_ON
+0759 38 54          	JR	C,DR_E2
+075B                ;RESTORE
+075B 3E 02          	LD	A,02H
+075D CD 86 02       	CALL	TYPE1
+0760 D1             	POP	DE
+0761 F1             	POP	AF
+0762                ;
+0762                DR1:
+0762 F5             	PUSH	AF
+0763 D5             	PUSH	DE
+0764                ;-- D=TRACK
+0764 7B             	LD	A,E
+0765 07             	RLCA
+0766 CB 12          	RL  D
+0768 07             	RLCA
+0769 CB 12          	RL  D
+076B 07             	RLCA
+076C CB 12          	RL  D
+076E                ;-- SIDE SET
+076E 07             	RLCA
+076F 3A 87 FF       	LD	A,(0FF87H)
+0772 CB A7          	RES	4,A
+0774 30 02          	JR	NC,DR2
+0776 F6 10          	OR	10H
+0778                DR2:
+0778 32 87 FF       	LD	(0FF87H),A
+077B                ;-- E=SECTOR
+077B 7B             	LD	A,E
+077C E6 0F          	AND	0FH
+077E 3C               INC A
+077F 5F             	LD	E,A
+0780                ;SEEK
+0780 CD 7C 02       	CALL	SEEK
+0783                ;SIDE SEL
+0783 CD 9A 02       	CALL	MOTOR_ON
+0786 38 27          	JR	C,DR_E2
+0788                ;READ
+0788 3E 80          	LD	A,80H
+078A CD 8F 02       	CALL	FDC_CMD
+078D 01 FB 0F       	LD	BC,0FFBH
+0790                DR3:
+0790 78             	LD	A,B
+0791 DB F8          	IN	A,(0F8H)
+0793 0F             	RRCA
+0794 30 09          	JR	NC,DR4
+0796 0F             	RRCA
+0797 30 F7          	JR	NC,DR3
+0799 ED 78          	IN	A,(C)
+079B 77             	LD	(HL),A
+079C 23             	INC	HL
+079D 18 F1          	JR	DR3
+079F                DR4:
+079F 07             	RLCA
+07A0 E6 1E          	AND	1EH
+07A2 20 0B          	JR	NZ,DR_E2
+07A4                ;
+07A4 D1             	POP	DE
+07A5 F1             	POP	AF
+07A6 13             	INC	DE
+07A7 3D             	DEC	A
+07A8 20 B8          	JR	NZ,DR1
+07AA                ;ok return
+07AA CD B3 02       	CALL	MOTOR_OFF
+07AD AF             	XOR	A
+07AE C9             	RET
+07AF                ;error return
+07AF                DR_E2:
+07AF D1             	POP	DE
+07B0 F1             	POP	AF
+07B1 CD B3 02       	CALL	MOTOR_OFF
+07B4 37             	SCF
+07B5 C9             	RET
+07B6                ;----------------------------------------
+07B6 00 00 02 7C    SEEK EQU $+DR_OFFS
+07B6 01 FA 0F       	LD	BC,0FFAH
+07B9 ED 59          	OUT	(C),E
+07BB 0C             	INC	C
+07BC ED 51          	OUT	(C),D
+07BE 3E 1E          	LD	A,01EH
+07C0 00 00 02 86    TYPE1 EQU $+DR_OFFS
+07C0 CD 8F 02       	CALL	FDC_CMD
+07C3                SEEK_1:
+07C3 ED 78          	IN	A,(C)
+07C5 0F             	RRCA
+07C6 38 FB          	JR	C,SEEK_1
+07C8 C9             	RET
+07C9                ;----------------------------------------
+07C9 00 00 02 8F    FDC_CMD EQU $+DR_OFFS
+07C9 01 F8 0F       	LD	BC,0FF8H
+07CC ED 79          	OUT	(C),A
+07CE 3E 10          	LD	A,10H
+07D0                FC1:
+07D0 3D             	DEC	A
+07D1 20 FD          	JR	NZ,FC1
+07D3 C9             	RET
+07D4                ;----------------------------------------
+07D4 00 00 02 9A    MOTOR_ON EQU $+DR_OFFS
+07D4 1E 80          	LD	E,80H
+07D6 CD B5 02       	CALL	MOTOR
+07D9                ;READY CHECK
+07D9 06 03          	LD	B,3
+07DB 11 00 00       	LD	DE,0
+07DE                MON1:
+07DE 3E 0F          	LD	A,0FH
+07E0 DB F8          	IN	A,(0F8H)
+07E2 07             	RLCA
+07E3 D0             	RET	NC
+07E4 1B             	DEC	DE
+07E5 7A             	LD	A,D
+07E6 B3             	OR	E
+07E7 20 F5          	JR	NZ,MON1
+07E9 10 F3          	DJNZ	MON1
+07EB 37             	SCF
+07EC C9             	RET
+07ED                ;----------------------------------------
+07ED 00 00 02 B3    MOTOR_OFF EQU $+DR_OFFS
+07ED 1E 00          	LD	E,00H
+07EF 00 00 02 B5    MOTOR EQU $+DR_OFFS
+07EF 3A 87 FF       	LD	A,(0FF87H)
+07F2 E6 1F          	AND	1FH
+07F4 B3             	OR	E
+07F5 01 FC 0F       	LD	BC,0FFCH
+07F8 ED 79          	OUT	(C),A
+07FA C9             	RET
+07FB                ;----------------------------------------
+07FB                ;SUBROUTINE SIZE
+07FB 00 00 00 A7    DRD_LEN	EQU	$-DRD_TOP
+07FB                ;
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                
+07FB                ;============================================================================
+07FB                ;  RAM definitions:  top 1K
+07FB                ;        ABS
+07FB                        ORG     RAM_START               ; Monitor RAM
+4000                ;
+4000                ;  Initial user stack
+4000                ;  (Size and location is user option)
+4000                        DS      64
+4040                INITSTACK:
+4040                ;
+4040                ;  Monitor stack
+4040                ;  (Calculated use is at most 6 bytes.  Leave plenty of spare)
+4040                        DS      16
+4050                MONSTACK:
+4050                ;
+4050                ;  Target registers:  order must match that in TRGZ80.C
+4050                TASK_REGS:
+4050                REG_STATE:     DS      1
+4051                REG_PAGE:      DS      1
+4052                REG_SP:        DS      2
+4054                REG_IX:        DS      2
+4056                REG_IY:        DS      2
+4058                REG_HL:        DS      2
+405A                REG_BC:        DS      2
+405C                REG_DE:        DS      2
+405E                REG_AF:                        ;LABEL ON FLAGS, A AS A WORD
+405E                REG_FLAGS:     DS      1
+405F                REG_A:         DS      1
+4060                REG_PC:        DS      2
+4062                REG_I:         DS      1
+4063                REG_IFF:       DS      1
+4064                 ;
+4064                REG_HLX:       DS      2       ;ALTERNATE REGISTER SET
+4066                REG_BCX:       DS      2
+4068                REG_DEX:       DS      2
+406A                REG_AFX:                       ;LABEL ON FLAGS, A AS A WORD
+406A                REG_FLAGSX:    DS      1
+406B                REG_AX:        DS      1
+406C 00 00 00 1C    TASK_REGS_SIZE  EQU     $-TASK_REGS
+406C                ;
+406C                ; !!! Caution:  don't put parenthesis around the above in ASM180:
+406C                ; !!! The parenthesis in ($-TASK_REGS) are "remembered", such that
+406C                ; !!! LD BC,TASK_REGS_SIZE is the same as LD BC,(TASK_REGS_SIZE)
+406C                ; !!! It is OK to use parenthesis around the difference if the difference
+406C                ; !!! is to be divided - just not around the entire expression!!!!!
+406C                ;
+406C                ;  Communications buffer
+406C                ;  (Must be at least as long as TASK_REG_SIZE.  Larger values may improve
+406C                ;  speed of NoICE memory load and dump commands)
+406C 00 00 00 90    COMBUF_SIZE     EQU     144              ;DATA SIZE FOR COMM BUFFER
+406C                COMBUF:         DS      2+COMBUF_SIZE+1 ;BUFFER ALSO HAS FN, LEN, AND CHECK
+40FF                ;
+40FF                ;
+40FF                ;-------------------------------------------------------------------
+40FF 01             COLOR	DB	1
+4100                ;
+4100 00 00 41 00    RAM_END         EQU     $               ;ADDRESS OF TOP+1 OF RAM
+4100                ;

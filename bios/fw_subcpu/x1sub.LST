@@ -1,0 +1,4334 @@
+0000                ;******************************************************************************
+0000                ;   X1 NISE-SUBCPU firmware for mr16
+0000                ;
+0000                ; 2005. 3.19 trnasrated from MRISC
+0000                ;
+0000                ;******************************************************************************
+0000                ;
+0000                ;DMA_TEST equ 1
+0000                ;
+0000                ;7seg display optopn
+0000                ;SHOW_INIT equ 1
+0000                ;SHOW_HOST_W equ 1
+0000                ;SHOW_HOST_R equ 1 
+0000                ;SHOW_PS2_RAW equ 1 ;ps/2 RX code
+0000                ;SHOW_KEYCODE equ 1  ;ascii & ctrl code
+0000                ;
+0000                ;
+0000                ;minimize option
+0000                ;GRAPH_ASCII equ 1
+0000                ;KANA_ASCII equ 1
+0000                ;F_GAME_KEY equ 1
+0000 00 00 00 01    Z80DMA	equ 1
+0000                ;
+0000                ;******************************************************************************
+0000                ; memory map
+0000                ;******************************************************************************
+0000                	include "mr16.inc"
+0000                ;MR16 for X1 HW assign
+0000                ;
+0000                ;-------------------------------
+0000 00 00 20 00    GPIO	equ	2000h
+0000                ;-------------------------------
+0000 00 00 20 00    PORT0	equ	GPIO+0
+0000 00 00 20 02    PORT1	equ	GPIO+2
+0000 00 00 20 04    PORT2	equ	GPIO+4
+0000 00 00 20 06    PORT3	equ	GPIO+6
+0000 00 00 20 08    PORT4	equ	GPIO+8
+0000 00 00 20 0A    PORT5	equ	GPIO+10
+0000 00 00 20 0C    PORT6	equ	GPIO+12
+0000 00 00 20 0E    PORT7	equ	GPIO+14
+0000 00 00 20 10    PORT8	equ	GPIO+16
+0000 00 00 20 12    PORT9	equ	GPIO+18
+0000 00 00 20 14    PORTA	equ	GPIO+20
+0000 00 00 20 16    PORTB	equ	GPIO+22
+0000                ;
+0000                ;-------------------------------
+0000 00 00 20 18    TIMER	equ	2018h
+0000                ;-------------------------------
+0000 00 00 20 18    TMR_CNT	equ	TIMER+0
+0000 00 00 20 18    TMR_INT	equ	TIMER+0
+0000 00 00 20 1A    TMR_CTR	equ	TIMER+2
+0000                ;
+0000 00 00 00 01    TC_IRQ	equ	 0001h
+0000 00 00 00 02    TC_RUN	equ	 0002h
+0000 00 00 00 04    TC_IEN	equ	 0004h
+0000 00 00 00 08    TC_RST	equ	 0008h
+0000                ;
+0000                ;******************************************************************************
+0000                ; register map
+0000                ;******************************************************************************
+0000                ;
+0000 00 00 00 20    CPU_MHZ	equ	32
+0000                ;
+0000                ;r14 GPIO/TIMER
+0000                ;r13 X1 SUB CPU
+0000                ;r12 PS/2
+0000                ;r11 Memory Mapped I/O
+0000                ;r10 FDC/FDD
+0000                ;r9  OS next event counter
+0000                ;r8  16usTimerCounter
+0000                ;
+0000 00 00 00 00    ROM_TOP	equ	0000h
+0000 00 00 10 00    ROM_END	equ	1000h
+0000                ;
+0000 00 00 10 00    RAM_TOP		equ	1000h
+0000 00 00 10 80    WORK_TOP	equ	1080h
+0000 00 00 18 00    STACK_END	 equ	1800h
+0000 00 00 18 00    RAM_END		equ	1800h
+0000                ;
+0000 00 00 00 10    TIME_TICK	equ	 16  ; 16us OS time ticker
+0000                ;
+0000                ;---------- OS(task switch) Timer Step ----------
+0000 00 00 7A 12    T500MS	equ	 500000/TIME_TICK
+0000 00 00 30 D4    T200MS	equ	 200000/TIME_TICK
+0000 00 00 18 6A    T100MS	equ	 100000/TIME_TICK
+0000 00 00 04 E2    T20MS	equ	  20000/TIME_TICK
+0000 00 00 00 FA    T4MS	equ	   4000/TIME_TICK
+0000 00 00 00 32    T800US	equ	    800/TIME_TICK
+0000 00 00 00 19    T160US	equ	    400/TIME_TICK
+0000                ;
+0000                ;---------- PS/2 Timeout Timer Step ----------
+0000 00 00 00 40    PS2_TICK equ	64
+0000                
+0000                ;-----------------------------------------------------
+0000                ;Memoy Mapped Direct I/O
+0000                ;-----------------------------------------------------
+0000                ;-------------------------------
+0000 00 00 10 00    MEM_IO		equ	1000h ; memory mapped direct I/O
+0000 00 00 10 00    R11_BASE	equ	MEM_IO
+0000                ;-------------------------------
+0000 00 00 10 00    HOST_RD equ	MEM_IO+00h
+0000 00 00 10 02    HOST_WD equ	MEM_IO+02h
+0000                ;
+0000 00 00 10 04    DMA_RD  equ	MEM_IO+04h
+0000 00 00 10 06    DMA_WD  equ	MEM_IO+06h
+0000                ;
+0000 00 00 10 08    DMAM_DO equ	MEM_IO+08h
+0000 00 00 10 0A    DMAM_DI equ	MEM_IO+0ah
+0000                ;
+0000 00 00 10 10    FDC_CMD equ	MEM_IO+10h
+0000 00 00 10 12    FDC_TRK equ	MEM_IO+12h
+0000 00 00 10 14    FDC_SEC equ	MEM_IO+14h
+0000 00 00 10 16    FDC_DAT equ	MEM_IO+16h
+0000                ;
+0000 00 00 10 18    FDC_MOT equ	MEM_IO+18h
+0000                ;
+0000 00 00 10 1F    IO_TRP	equ	MEM_IO+1fh ;I/O TRAP PORT
+0000                ;
+0000                ;-----------------------------------------------------
+0000                ;GPOUT I/O assign
+0000                ;-----------------------------------------------------
+0000 00 00 20 00    R14_BASE	equ	GPIO
+0000                ;
+0000 00 00 20 00    DMA_DATA	equ	PORT0     ; R/W to SRAM in RFSH cycle for FDD data accesss
+0000                ;
+0000 00 00 20 02    HOST_STS	equ	PORT1     ; IN  host/sub communication status
+0000 00 00 20 02    HOST_CTRL	equ	PORT1     ; OUT host/sub communication controll
+0000 00 00 20 04    PS2_STS 	equ	PORT2     ; PS2 status
+0000 00 00 20 04    PS2_CTRL	equ	PORT2     ; PS2 controll
+0000                ;
+0000 00 00 20 06    FDC_STS		equ	PORT3     ; FDC status (R/W)
+0000 00 00 20 06    FDC_IN		equ	PORT3     ; FDC IN
+0000                ;
+0000 00 00 20 08    FDD_PORT	equ	PORT4     ; FDD emulation port
+0000                ;FREE PORT5
+0000                ;
+0000 00 00 20 0C    JOY_PORT	equ	PORT6
+0000 00 00 20 0E    SEG7_NUM	equ	PORT7
+0000                ;
+0000 00 00 20 10    FDM_AL		equ	PORT8     ;DMA ADDRESS port
+0000 00 00 20 12    FDM_AH		equ	PORT9     ;DMA BANK & CONTROLL
+0000 00 00 20 14    DMA_RDY		equ	PORTA     ;DMA RDY controll
+0000                ;
+0000 00 00 20 16    PCM_DATA	equ	PORTB     ; PCM 8bit out
+0000                ;
+0000                ;----- DUMMY ACK inport ----------
+0000 00 00 20 08    HRD_SET		equ	PORT4     ; HRD clear (dummy read)
+0000 00 00 20 0A    HWD_CLR		equ	PORT5     ; HRD clear (dummy read)
+0000 00 00 20 0C    FDC_DRQ_SET	equ	PORT6     ; FDC DRQ set
+0000 00 00 20 0E    FDC_DRQ_CLR	equ	PORT7     ; FDC DRQ clear
+0000                ;
+0000                ;
+0000                ;DMA_DATA bit mask
+0000 00 00 04 00    DMAM_RDY	equ	0400h ;DMA RDY signal(IRQ)
+0000 00 00 02 00    DMAM_BUSY	equ	0200h ;in RFSH access cycle
+0000 00 00 01 00    DMAM_BUSAK	equ	0100h ;Z80 BUSAK signal
+0000                ;
+0000                ;FDM_AH
+0000 00 00 80 00    DMAM_WR		equ	8000h
+0000 00 00 40 00    DMAM_RD		equ	4000h
+0000 00 00 20 00    DMAM_IORQ	equ	2000h
+0000 00 00 10 00    DMAM_MREQ	equ	1000h
+0000 00 00 08 00    DMAM_BUSRQ	equ	0800h
+0000 00 00 01 00    DMAM_RFSH_REQ	equ	0100h
+0000                ;
+0000                ;HOST_STS / HOST_CTRL bit assign
+0000 00 00 00 10    CLK_1HZ	equ	10h     ;read/write
+0000 00 00 00 08    PIO_IRQ	equ	08h     ;read/write
+0000 00 00 00 04    PIO_BRK	equ	04h	;read/write
+0000 00 00 00 02    HWD_FUL	equ	02h     ;read only
+0000 00 00 00 01    HRD_FUL	equ	01h     ;read only
+0000                ;
+0000                ;PS2_STS / PS2_CTRL bit assign
+0000 00 00 00 01    PS2_DT	equ	01h
+0000 00 00 00 02    PS2_CT	equ	02h
+0000                ;
+0000                ;--------------------------------------
+0000                	include "KEYCODE.INC"
+0000 00 00 00 58    KC_MAX EQU	058H
+0000 00 00 00 00    KC_NOMAP EQU	000H ;KC_NOMAP
+0000 00 00 00 01    KC_A EQU	001H ;KC_A
+0000 00 00 00 02    KC_B EQU	002H ;KC_B
+0000 00 00 00 03    KC_C EQU	003H ;KC_C
+0000 00 00 00 04    KC_D EQU	004H ;KC_D
+0000 00 00 00 05    KC_E EQU	005H ;KC_E
+0000 00 00 00 06    KC_F EQU	006H ;KC_F
+0000 00 00 00 07    KC_G EQU	007H ;KC_G
+0000 00 00 00 08    KC_H EQU	008H ;KC_H
+0000 00 00 00 09    KC_I EQU	009H ;KC_I
+0000 00 00 00 0A    KC_J EQU	00AH ;KC_J
+0000 00 00 00 0B    KC_K EQU	00BH ;KC_K
+0000 00 00 00 0C    KC_L EQU	00CH ;KC_L
+0000 00 00 00 0D    KC_M EQU	00DH ;KC_M
+0000 00 00 00 0E    KC_N EQU	00EH ;KC_N
+0000 00 00 00 0F    KC_O EQU	00FH ;KC_O
+0000 00 00 00 10    KC_P EQU	010H ;KC_P
+0000 00 00 00 11    KC_Q EQU	011H ;KC_Q
+0000 00 00 00 12    KC_R EQU	012H ;KC_R
+0000 00 00 00 13    KC_S EQU	013H ;KC_S
+0000 00 00 00 14    KC_T EQU	014H ;KC_T
+0000 00 00 00 15    KC_U EQU	015H ;KC_U
+0000 00 00 00 16    KC_V EQU	016H ;KC_V
+0000 00 00 00 17    KC_W EQU	017H ;KC_W
+0000 00 00 00 18    KC_X EQU	018H ;KC_X
+0000 00 00 00 19    KC_Y EQU	019H ;KC_Y
+0000 00 00 00 1A    KC_Z EQU	01AH ;KC_Z
+0000 00 00 00 1B    KC_1 EQU	01BH ;KC_1
+0000 00 00 00 1C    KC_2 EQU	01CH ;KC_2
+0000 00 00 00 1D    KC_3 EQU	01DH ;KC_3
+0000 00 00 00 1E    KC_4 EQU	01EH ;KC_4
+0000 00 00 00 1F    KC_5 EQU	01FH ;KC_5
+0000 00 00 00 20    KC_6 EQU	020H ;KC_6
+0000 00 00 00 21    KC_7 EQU	021H ;KC_7
+0000 00 00 00 22    KC_8 EQU	022H ;KC_8
+0000 00 00 00 23    KC_9 EQU	023H ;KC_9
+0000 00 00 00 24    KC_0 EQU	024H ;KC_0
+0000 00 00 00 25    KC_MIN EQU	025H ;KC_MIN
+0000 00 00 00 26    KC_EQU EQU	026H ;KC_EQU
+0000 00 00 00 27    KC_BKSL EQU	027H ;KC_BKSL
+0000 00 00 00 28    KC_AT EQU	028H ;KC_AT
+0000 00 00 00 29    KC_K_ED EQU	029H ;KC_K_ED
+0000 00 00 00 2A    KC_YEN EQU	02AH ;KC_YEN
+0000 00 00 00 2B    KC_SEMICOL EQU	02BH ;KC_SEMICOL
+0000 00 00 00 2C    KC_CORON EQU	02CH ;KC_CORON
+0000 00 00 00 2D    KC_KAMMA EQU	02DH ;KC_KAMMA
+0000 00 00 00 2E    KC_DOT EQU	02EH ;KC_DOT
+0000 00 00 00 2F    KC_DIV EQU	02FH ;KC_DIV
+0000 00 00 00 30    KC_UNDER EQU	030H ;KC_UNDER
+0000 00 00 00 31    KC_ENTER EQU	031H ;KC_ENTER
+0000 00 00 00 32    KC_BS EQU	032H ;KC_BS
+0000 00 00 00 33    KC_SPACE EQU	033H ;KC_SPACE
+0000 00 00 00 34    KC_TAB EQU	034H ;KC_TAB
+0000 00 00 00 35    KC_HANZEN EQU	035H ;KC_HANZEN
+0000 00 00 00 36    KC_ESC EQU	036H ;KC_ESC
+0000 00 00 00 37    KC_XFER EQU	037H ;KC_XFER
+0000 00 00 00 38    KC_SCROLL EQU	038H ;KC_SCROLL
+0000 00 00 00 39    KC_F1 EQU	039H ;KC_F1
+0000 00 00 00 3A    KC_F2 EQU	03AH ;KC_F2
+0000 00 00 00 3B    KC_F3 EQU	03BH ;KC_F3
+0000 00 00 00 3C    KC_F4 EQU	03CH ;KC_F4
+0000 00 00 00 3D    KC_F5 EQU	03DH ;KC_F5
+0000 00 00 00 3E    KC_INSERT EQU	03EH ;KC_INSERT
+0000 00 00 00 3F    KC_DELETE EQU	03FH ;KC_DELETE
+0000 00 00 00 40    KC_PG_UP EQU	040H ;KC_PG_UP
+0000 00 00 00 41    KC_PG_DN EQU	041H ;KC_PG_DN
+0000 00 00 00 42    KC_HOME EQU	042H ;KC_HOME
+0000 00 00 00 43    KC_U_ARROW EQU	043H ;KC_U_ARROW
+0000 00 00 00 44    KC_L_ARROW EQU	044H ;KC_L_ARROW
+0000 00 00 00 45    KC_D_ARROW EQU	045H ;KC_D_ARROW
+0000 00 00 00 46    KC_R_ARROW EQU	046H ;KC_R_ARROW
+0000 00 00 00 47    KC_NUM EQU	047H ;KC_NUM
+0000 00 00 00 48    KC_KP_DIV EQU	048H ;KC_KP_DIV
+0000 00 00 00 49    KC_KP_MUL EQU	049H ;KC_KP_MUL
+0000 00 00 00 4A    KC_KP_MIN EQU	04AH ;KC_KP_MIN
+0000 00 00 00 4B    KC_KP_PUL EQU	04BH ;KC_KP_PUL
+0000 00 00 00 4C    KC_KP_ENTER EQU	04CH ;KC_KP_ENTER
+0000 00 00 00 4D    KC_KP_DOT EQU	04DH ;KC_KP_DOT
+0000 00 00 00 4E    KC_KP_0 EQU	04EH ;KC_KP_0
+0000 00 00 00 4F    KC_KP_1 EQU	04FH ;KC_KP_1
+0000 00 00 00 50    KC_KP_2 EQU	050H ;KC_KP_2
+0000 00 00 00 51    KC_KP_3 EQU	051H ;KC_KP_3
+0000 00 00 00 52    KC_KP_4 EQU	052H ;KC_KP_4
+0000 00 00 00 53    KC_KP_5 EQU	053H ;KC_KP_5
+0000 00 00 00 54    KC_KP_6 EQU	054H ;KC_KP_6
+0000 00 00 00 55    KC_KP_7 EQU	055H ;KC_KP_7
+0000 00 00 00 56    KC_KP_8 EQU	056H ;KC_KP_8
+0000 00 00 00 57    KC_KP_9 EQU	057H ;KC_KP_9
+0000                
+0000                ;SHIFT KEY GROUP
+0000 00 00 00 80    KC_L_CTRL EQU	080H ;KC_L_CTRL
+0000 00 00 00 81    KC_L_SHFT EQU	081H ;KC_L_SHFT
+0000 00 00 00 82    KC_KANA EQU	082H ;KC_KANA
+0000 00 00 00 83    KC_CAPS EQU	083H ;KC_CAPS
+0000 00 00 00 84    KC_L_ALT EQU	084H ;KC_L_ALT
+0000 00 00 00 88    KC_R_CTRL EQU	088H ;KC_R_CTRL
+0000 00 00 00 89    KC_R_SHFT EQU	089H ;KC_R_SHFT
+0000 00 00 00 8C    KC_R_ALT EQU	08CH ;KC_R_ALT
+0000                ;
+0000 00 00 00 FF    KC_JOY_EMU EQU 0FFH
+0000                ;--------------------------------------
+0000                	include "x1sub.inc"
+0000                ;
+0000                ;X1 subcpu I/O define
+0000                ;
+0000                ;------ cmt controll value -----
+0000 00 00 00 00    CMT_EJECT	equ	0
+0000 00 00 00 01    CMT_STOP	equ	1
+0000 00 00 00 02    CMT_PLAY	equ	2
+0000 00 00 00 03    CMT_FF		equ	3
+0000 00 00 00 04    CMT_REW		equ	4
+0000 00 00 00 05    CMT_APSS_F	equ	5
+0000 00 00 00 06    CMT_APSS_R	equ	6
+0000 00 00 00 0A    CMT_REC		equ	10
+0000                ;
+0000                ;
+0000                ;------ cmt sense bitmask -----
+0000                ;CMTS_		equ	080h
+0000                ;CMTS_		equ	001h
+0000                ;CMTS_		equ	002h
+0000                ;
+0000                ;--------------------------------------
+0000                	include "rtos.inc"
+0000                ;
+0000                ;----------------------------------------------------------------------------
+0000                ;customize switches
+0000                ;----------------------------------------------------------------------------
+0000                ;
+0000 00 00 00 02    MAX_TASK equ	2
+0000                ;
+0000                ;----------------------------------------------------------------------------
+0000                ;TCB struct
+0000                ;----------------------------------------------------------------------------
+0000 00 00 00 00    OS_TCB_SP	equ	0 ; current stack pointer
+0000 00 00 00 02    OS_TCB_TMR	equ	2 ; sleep time , bit15 = suspend flag
+0000 00 00 00 04    OS_TCB_SIZE	equ	4 ; size of TCB
+0000                ;
+0000                ;----------------------------------------------------------------------------
+0000                ;TASK STATUS
+0000                ;----------------------------------------------------------------------------
+0000 00 00 FF FF    OS_NEVER equ 0ffffh
+0000 00 00 00 00    OS_RUN	 equ 00000h
+0000                
+0000                ;----------------------------------------------------------------------------
+0000                ;OFFSET of register's in stack
+0000                ;----------------------------------------------------------------------------
+0000 00 00 00 00    TCB_SP_PC	equ 0
+0000 00 00 00 02    TCB_SP_FLAG	equ 2
+0000 00 00 00 04    TCB_SP_R0	equ 4
+0000 00 00 00 06    TCB_SP_R1	equ 6
+0000 00 00 00 08    TCB_SP_R2	equ 8
+0000 00 00 00 0A    TCB_SP_R3	equ 10
+0000 00 00 00 0C    TCB_SP_R4	equ 12
+0000 00 00 00 0E    TCB_SP_R5	equ 14
+0000 00 00 00 10    TCB_SP_R6	equ 16
+0000 00 00 00 12    TCB_SP_R7	equ 18
+0000                ;
+0000                ;--------------------------------------
+0000                
+0000                ;PS2 INDICATOR BIT ASSIGN
+0000                ;
+0000 00 00 00 01    IND_SCRL equ	01h
+0000 00 00 00 02    IND_NUM  equ	02h
+0000 00 00 00 04    IND_CAPS equ	04h
+0000                
+0000                ;******************************************************************************
+0000                	DSEG
+0000                	org	WORK_TOP
+1080                ;
+1080                ;----------- HOST I/F work ------------
+1080 00 00 10 80    X1_WORK_BASE	equ	$
+1080                ;---------------------------------------
+1080                host_cmd	ds	2
+1082                key_wp		ds	2 ;key buffer write pointer
+1084                key_rp		ds	2 ;key buffer read pointer
+1086                irq_vct		ds	2 ;IRQ vector
+1088                ;
+1088                cmt_ctrl	ds	2 ;CMT controll / state
+108A                cmt_sens	ds	2
+108C                ;
+108C                fdc_cnt		ds	2 ;FDC task counter
+108E                fdc_sp		ds	2 ;FDC task stack pointer
+1090                main_sp		ds	2 ;main task stack pointer
+1092                ;
+1092                ;----------- KEY / PS2 work ------------
+1092 00 00 10 92    R12_BASE	equ	$
+1092                ;---------------------------------------
+1092                ps2_flag:	ds	2	;
+1094                ;
+1094 00 00 00 01    JOY_EN		equ	001h  ;JOY-EMU enable
+1094 00 00 00 02    IND_REQ		equ	002h  ;LED controll rdsest
+1094 00 00 00 80    RCV_F0		equ	080h  ;break(f0) receice
+1094 00 00 00 40    RCV_E0		equ	040h  ;esc(e0) receive
+1094                ;
+1094                sft_key		ds	2     ;L-SHIFT / R-SHIFT
+1096                ;
+1096 00 00 10 00    SFT_R_GRPH	equ	1000h
+1096 00 00 02 00    SFT_R_SHIFT	equ	0200h
+1096 00 00 01 00    SFT_R_CTRL	equ	0100h
+1096 00 00 00 80    SFT_TENKEY	equ	80h
+1096 00 00 00 40    SFT_KEYIN	equ	40h     ; preset key IN 
+1096 00 00 00 20    SFT_REP		equ	20h
+1096 00 00 00 10    SFT_L_GRPH	equ	10h
+1096 00 00 00 08    SFT_CAPS	equ	08h
+1096 00 00 00 04    SFT_KANA	equ	04h
+1096 00 00 00 02    SFT_L_SHIFT	equ	02h
+1096 00 00 00 01    SFT_L_CTRL	equ	01h
+1096                ;
+1096                cur_ascii       ds      2 ; current key-on ascii code
+1098                joy_data        ds      2 ; joystick emulation data
+109A                ;
+109A                ps2_sreg	ds	2 ; PS2 serial register
+109C                ps2_scnt	ds	2 ; PS2 serial counter / timeout counter
+109E 00 00 00 80    PS2_TXM1	equ	80h ; break PSC
+109E 00 00 00 40    PS2_TXM2	equ	40h ; transmit bit
+109E                ps2_tout	ds	2 ; PS2 timeout counter
+10A0                ;
+10A0                oc_500ms	ds	2 ; output capture for 1sec clock/calender
+10A2                ;
+10A2                ;----------- subcpu work ------------
+10A2                tv_ctrl		ds	2 ;TV last controll
+10A4                tmr_dmy		ds	6
+10AA                calender	ds	3+1
+10AE                time		ds	3+1
+10B2                game_key	ds	3+1
+10B6                seg7_val	ds	2
+10B8                ;
+10B8                ;----------- key buffer ------------
+10B8                key_buf		ds	16*2 ;ASCII + CTRL x 16
+10D8                key_buf_e
+10D8                ;
+10D8                
+10D8                ;---------------------------------------
+10D8 00 00 10 D8    R10_BASE	equ	$
+10D8                ;---------------------------------------
+10D8                ;----------- FDC emulation ----------
+10D8                fdc_ip		ds	2 ;IndexPulse counter
+10DA                fdc_slen	ds	2 ;sector length counter
+10DC                ;
+10DC                ;----------- FDD emiulation ------------
+10DC                ;for FDC contact
+10DC                fdd_trk:	ds	2 ;track data top position
+10DE                fdd_num_sec	ds	2 ;data
+10E0                fdd_c		ds	2 ;C
+10E2                fdd_h		ds	2 ;H
+10E4                fdd_r		ds	2 ;R
+10E6                fdd_n		ds	2 ;N
+10E8                ;
+10E8                fdd_sts		ds	2 ;status
+10EA                ;
+10EA                fdd_sec_ptr	ds	2 ;sector pointer
+10EC                ;
+10EC                fdd_meml	ds	2 ;FDD sector data memory point
+10EE                fdd_memh	ds	2 ;FDD sector data memory point
+10F0                fdd_len		ds	2 ;FDD sector data counter
+10F2                ;
+10F2                ;FD Drive Data
+10F2                fdd_ptr		ds	2 ;pointer of FD physical data
+10F4                ;
+10F4                ;Drive0 Phisical Status
+10F4                fd_phy0:
+10F4                fd_phy_trk	ds	2 ;track , status(insert,type,etc)
+10F6                fd_phy_ml:	ds	2 ;FD Image Base address L
+10F8                fd_phy_mh:	ds	2 ;FD Image Base address H
+10FA 00 00 00 06    fd_phy_size	equ	$-fd_phy0
+10FA                ;Drive1 Phisical Status
+10FA                fd_phy1:
+10FA                		ds	fd_phy_size
+1100                ;
+1100                PCM_S	ds	2
+1102                PCM_E	ds	2
+1104                ;
+1104                ;******************************************************************************
+1104                ;vector
+1104                ;******************************************************************************
+1104                	CSEG
+0000                	org	0000h
+0000                ;
+0000                ;----------------------------------------------------------------------------
+0000                ; vector
+0000                ;----------------------------------------------------------------------------
+0000 12 01          	dw	reset
+0002 14 00          	dw	tmr_isr
+0004 A0 00          	dw	ps2_isr
+0006 24 06          	dw	fdc_isr ;command trap
+0008 16 0B          	dw	dma_isr ;command trap
+000A                ;
+000A                ;----------------------------------------------------------------------------
+000A                ; isr end 
+000A                ;----------------------------------------------------------------------------
+000A                isr_r2_r:
+000A 21 0F          	pop	r2
+000C                isr_r1_r:
+000C 11 0F          	pop	r1
+000E                isr_r0_r:
+000E 01 0F          	pop	r0
+0010                isr_f_r:
+0010 F1 0F          	pop	flag
+0012 90 0F          	ret	sti
+0014                
+0014                ;----------------------------------------------------------------------------
+0014                ; interval timer ISR
+0014                ;----------------------------------------------------------------------------
+0014                ;8us interval == 256clock cycle
+0014                tmr_isr:
+0014 F1 1F          	push	flag
+0016 01 88          	add	r8,#1:8
+0018 01 C8          	tst	r8,#1:8
+001A 05 27 F2 29    	jne	OS_Timer_isr ;xxxxxxxxxxxxxxx1 : 16us TASK switch timer
+001E                ;
+001E 02 C8          	tst	r8,#2:8
+0020 07 21          	beq	isr_500ms ;xxxxxxxxxxxxxx00 : 32us 500ms timer
+0022                ;
+0022 04 C8          	tst	r8,#4:8
+0024 10 21          	beq	isr_ps2   ;xxxxxxxxxxxxx010 : 64us ps2 timeout
+0026                ;
+0026 08 C8          	tst	r8,#8:8
+0028 2A 21          	beq	isr_pcm   ;xxxxxxxxxxxx0110 : 128us PCM PLAY
+002A                ;
+002A F1 0F          	pop	flag
+002C 90 0F          	ret	sti
+002E                ;
+002E                ;---- for 1sec counter -----
+002E                isr_500ms:
+002E 01 1F          	push	r0
+0030 07 0C          	ldm	r0,(r12,#oc_500ms-R12_BASE)
+0032 8D 30          	cmp	r0,r8
+0034 ED 29          	bne	isr_r0_r
+0036 F4 27 24 80    	add	r0,#500000/8  ;next 500ms
+003A 07 1C          	stm	(r12,#oc_500ms-R12_BASE),r0
+003C                ;1Hz text Blink Timer
+003C 01 0E          	ldm	r0,(r14,#HOST_CTRL-R14_BASE)
+003E 10 60          	xor	r0,#CLK_1HZ:8
+0040 01 1E          	stm	(r14,#HOST_CTRL-R14_BASE),r0
+0042                ;1Hz interval timer for clock
+0042                ;	tst	r0,#CLK_1HZ:8
+0042                ;	beq	clk_1sec
+0042                ;
+0042 E6 2F          	bra	isr_r0_r
+0044                ;
+0044                ;---- PS/2 timeout isr -----
+0044                isr_ps2:
+0044 01 1F          	push	r0
+0046 06 0C          	ldm	r0,(r12,#ps2_tout-R12_BASE)
+0048 01 90          	sub	r0,#1:8
+004A E2 23          	bmi	isr_r0_r ;timer stopped
+004C                ;decrement timer
+004C 06 1C          	stm	(r12,#ps2_tout-R12_BASE),r0
+004E E0 29          	bne	isr_r0_r
+0050                ;timeout event
+0050 05 0C          	ldm	r0,(r12,#ps2_scnt-R12_BASE)
+0052 80 C0          	tst	r0,#PS2_TXM1:8
+0054 07 29          	bne	ps2_tmr_tx1     ;TX request -> waiting TX
+0056 40 C0          	tst	r0,#PS2_TXM2:8
+0058 0C 29          	bne	ps2_tmr_tx2     ;waiting TX timeout
+005A                ;
+005A                ;---------- recevice timeout error ----------
+005A                ps2_tmr_rx:
+005A 11 1F          	push	r1
+005C                ;	mov	r0,#0ffh:8  ;reset command
+005C                ;	jsr	ps2_tx
+005C 04 27 53 2F    	jsr	ps2_rx_en
+0060 D6 2F          	bra	isr_r1_r
+0062                ;
+0062                ;---------- release transmit break ----------
+0062                ps2_tmr_tx1:
+0062 02 70          	mov	r0,#PS2_CT:8                 ; DAT=L,CLK=Z
+0064 02 1E          	stm	(r14,#PS2_CTRL-R14_BASE),r0
+0066                ;----- change TX mode & set timeout -----
+0066 EA 70          	mov	r0,#15000/PS2_TICK:8          ;15ms
+0068 06 1C          	stm	(r12,#ps2_tout-R12_BASE),r0
+006A                ;
+006A 40 70          	mov	r0,#PS2_TXM2:8                ;TX2 mode
+006C 05 1C          	stm	(r12,#ps2_scnt-R12_BASE),r0
+006E D0 2F          	bra	isr_r0_r
+0070                ;
+0070                ;---------- transmit timeout error ----------
+0070                ps2_tmr_tx2:
+0070 03 70          	mov	r0,#PS2_CT | PS2_DT:8         ; DAT=Z , CLK=Z
+0072 02 1E          	stm	(r14,#PS2_CTRL-R14_BASE),r0
+0074                ;
+0074 11 1F          	push	r1
+0076                ;	mov	r0,#0ffh:8  ;reset command
+0076                ;	jsr	ps2_tx
+0076 04 27 53 2F    	jsr	ps2_rx_en
+007A C9 2F          	bra	isr_r1_r
+007C                ;
+007C                ;-------------------------------------
+007C                ;PCM isr
+007C                ;-------------------------------------
+007C                ;32us * 4 = 128us = 7.8125KHz
+007C                isr_pcm:
+007C 01 1F          	push	r0
+007E 11 1F          	push	r1
+0080 21 1F          	push	r2
+0082 11 27 00 72    	mov	r2,#PCM_S
+0086 00 02          	ldm	r0,(r2,#PCM_S-PCM_S)
+0088 11 02          	ldm	r1,(r2,#PCM_E-PCM_S)
+008A 1D 30          	cmp	r0,r1
+008C BF 28          	bhs	isr_r2_r
+008E 10 00          	ldm	r1,(r0)
+0090 01 C2          	tst	r2,#1:8
+0092 03 21          	beq	isr_pcm_1
+0094 01 27 00 F1    	mlh	r1,#100h
+0098                isr_pcm_1:
+0098 1B 1E          	stm	(r14,#PCM_DATA-R14_BASE),r1
+009A 01 80          	add	r0,#1:8
+009C 00 12          	stm	(r2,#PCM_S-PCM_S),r0
+009E B6 2F          	bra	isr_r2_r
+00A0                ;
+00A0                ;----------------------------------------------------------------------------
+00A0                ; PS2 CLK fall ISR
+00A0                ;----------------------------------------------------------------------------
+00A0                ps2_isr:
+00A0 F1 1F          	push	flag
+00A2 01 1F          	push	r0
+00A4 11 1F          	push	r1
+00A6                ;
+00A6 05 0C          	ldm	r0,(r12,#ps2_scnt-R12_BASE)
+00A8 C0 C0          	tst	r0,#PS2_TXM1 | PS2_TXM2:8
+00AA 23 29          	bne	ps2_tx_isr
+00AC                ;RX mode
+00AC 04 0C          	ldm	r0,(r12,#ps2_sreg-R12_BASE)
+00AE 80 27 00 F0    	mlh	r0,#8000h                   ;right shift
+00B2                ;bit shift in
+00B2 12 0E          	ldm	r1,(r14,#PS2_STS-R14_BASE)
+00B4 01 41          	and	r1,#PS2_DT:8
+00B6 03 21          	beq	ps2_isr2
+00B8 80 27 00 50    	or	r0,#8000h                   ;set bit
+00BC                ps2_isr2:
+00BC 04 1C          	stm	(r12,#ps2_sreg-R12_BASE),r0
+00BE                ;count down & RX finish?
+00BE 05 0C          	ldm	r0,(r12,#ps2_scnt-R12_BASE)
+00C0 01 90          	sub	r0,#1:8
+00C2 05 1C          	stm	(r12,#ps2_scnt-R12_BASE),r0
+00C4 04 21          	beq	ps2_isr_in
+00C6                ;set timeout
+00C6 0F 70          	mov	r0,#1000/PS2_TICK:8              ;1ms timeout
+00C8 06 1C          	stm	(r12,#ps2_tout-R12_BASE),r0
+00CA 0F 2F          	bra	ps2_isr_e
+00CC                ;
+00CC                ;byte received
+00CC                ps2_isr_in:
+00CC                ;stop receiver
+00CC 21 1F          	push	r2
+00CE 31 1F          	push	r3
+00D0 41 1F          	push	r4
+00D2 51 1F          	push	r5
+00D4 61 1F          	push	r6
+00D6 71 1F          	push	r7
+00D8 02 27 D7 2F    	jsr	ps2_rx
+00DC 71 0F          	pop	r7
+00DE 61 0F          	pop	r6
+00E0 51 0F          	pop	r5
+00E2 41 0F          	pop	r4
+00E4 31 0F          	pop	r3
+00E6 21 0F          	pop	r2
+00E8                ps2_isr_e:
+00E8 11 0F          	pop	r1
+00EA 01 0F          	pop	r0
+00EC F1 0F          	pop	flag
+00EE 90 0F          	ret	sti
+00F0                ;
+00F0                ps2_tx_isr:
+00F0 80 C0          	tst	r0,#PS2_TXM1:8
+00F2 FB 29          	bne	ps2_isr_e
+00F4                ;
+00F4 04 0C          	ldm	r0,(r12,#ps2_sreg-R12_BASE)
+00F6                ;-- output next DATA bit
+00F6 02 71          	mov	r1,#PS2_CT:8  ; DAT = L
+00F8 01 C0          	tst	r0,#1:8
+00FA 02 21          	beq	ps2_tx_i2
+00FC 01 51          	or	r1,#PS2_DT:8                     ; DAT = Z
+00FE                ps2_tx_i2:
+00FE 12 1E          	stm	(r14,#PS2_CTRL-R14_BASE),r1
+0100                ;-- input DAT line for ACK check --
+0100 12 0E          	ldm	r1,(r14,#PS2_STS-R14_BASE)
+0102                ;-- next bit select & loop
+0102 80 27 00 F0    	mlh	r0,#8000h  ;right shift
+0106 04 29          	bne	ps2_tx_i3
+0108                ;finish TX
+0108 17 30          	mov	r0,r1          ;save ACK bit
+010A 04 27 53 2F    	jsr	ps2_rx_en
+010E                ps2_tx_i3:
+010E 04 1C          	stm	(r12,#ps2_sreg-R12_BASE),r0
+0110 EC 2F          	bra	ps2_isr_e
+0112                ;
+0112                ;----------------------------------------------------------------------------
+0112                ; RESET entry
+0112                ;----------------------------------------------------------------------------
+0112                reset:
+0112                ;----- fixed registers -----
+0112 18 27 00 7F    	mov	r15,#STACK_END
+0116 20 27 00 7E    	mov	r14,#R14_BASE ; GPIO / TIMER
+011A 10 27 80 7D    	mov	r13,#X1_WORK_BASE ; X1 SUB CPU work
+011E 10 27 92 7C    	mov	r12,#R12_BASE ; PS/2 work
+0122 10 27 00 7B    	mov	r11,#R11_BASE ; Memory mapped I/O
+0126 10 27 D8 7A    	mov	r10,#R10_BASE ; FDC / FDD emulation
+012A 00 78          	mov	r8,#0:8       ; 16us Timer Counter
+012C                ;
+012C                .ifdef SHOW_INIT
+012C                	mov	r0,#1000h
+012C                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+012C                .endif
+012C                .ifdef DMA_TEST
+012C                ;dump 10000H to TEXT 
+012C                	mov	r1,#0000h
+012C                	mov	r2,#3000h
+012C                	mov	r3,#40:8
+012C                dma_tst1:
+012C                	stm	(r14,#FDM_AL-R14_BASE),r1
+012C                	mov	r0,#0001h | DMAM_RFSH_REQ | DMAM_MREQ | DMAM_RD
+012C                	stm	(r14,#FDM_AH-R14_BASE),r0
+012C                dma_tst2:
+012C                	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+012C                	tst	r0,#DMAM_BUSY
+012C                	bne	dma_tst2
+012C                ;
+012C                	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+012C                	stm	(r14,#DMA_DATA-R14_BASE),r0
+012C                	mov	r0,#0:8
+012C                	stm	(r14,#FDM_AH-R14_BASE),r0
+012C                ;
+012C                	stm	(r14,#FDM_AL-R14_BASE),r2
+012C                	mov	r0,#DMAM_RFSH_REQ | DMAM_IORQ | DMAM_WR
+012C                	stm	(r14,#FDM_AH-R14_BASE),r0
+012C                dma_tst3:
+012C                	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+012C                	tst	r0,#DMAM_BUSY
+012C                	bne	dma_tst3
+012C                	mov	r0,#0:8
+012C                	stm	(r14,#FDM_AH-R14_BASE),r0
+012C                ;
+012C                	mov	r0,#DMAM_RFSH_REQ | DMAM_MREQ | DMAM_WR
+012C                	stm	(r14,#FDM_AH-R14_BASE),r0
+012C                dma_tst4:
+012C                	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+012C                	tst	r0,#DMAM_BUSY
+012C                	bne	dma_tst4
+012C                	mov	r0,#0:8
+012C                	stm	(r14,#FDM_AH-R14_BASE),r0
+012C                ;
+012C                	add	r1,#1:8
+012C                	add	r2,#1:8
+012C                	sub	r3,#1:8
+012C                	bne	dma_tst1
+012C                .endif
+012C                
+012C                ;----- initialize I/O -----
+012C                ;reset host port
+012C                ;	ldm	r0,(r14,#HRD_SET-R14_BASE)    ;set hrd flag
+012C 05 0E          	ldm	r0,(r14,#HWD_CLR-R14_BASE)    ;set hrd flag
+012E                ;reset PS2 port
+012E 03 70          	mov	r0,#PS2_CT |PS2_DT:8
+0130 02 1E          	stm	(r14,#PS2_CTRL-R14_BASE),r0
+0132                ;IRQ off , break off
+0132 00 70          	mov	r0,#0:8
+0134 01 1E          	stm	(r14,#HOST_CTRL-R14_BASE),r0
+0136                ;Timer Stop
+0136 00 70          	mov	r0,#0:8
+0138 0D 1E          	stm	(r14,#TMR_CTR-R14_BASE),r0
+013A                ;----- initialize internal work -----
+013A                ;----- clear work RAM -----
+013A 10 27 00 70    	mov	r0,#RAM_TOP
+013E 18 27 00 71    	mov	r1,#RAM_END
+0142 00 72          	mov	r2,#0:8
+0144                clr0:
+0144 20 10          	stm	(r0),r2
+0146 02 80          	add	r0,#2:8
+0148 1D 30          	cmp	r0,r1
+014A FD 29          	bne	clr0
+014C                ;----- DMAC -----
+014C                .ifdef Z80DMA
+014C 0E 27 1F 2F    	jsr	dma_init
+0150                .endif
+0150                ;-- START RTOS -----
+0150 01 27 5E 70    	mov	r0,#start ;entry point
+0154 50 71          	mov	r1,#80:8      ;stack size
+0156 18 27 00 72    	mov	r2,#STACK_END
+015A 05 27 7E 2F    	jmp	OS_Init
+015E                ;
+015E                ;----------------------------------------------------------------------------
+015E                ;RTOS entry (base TASK ,X1 subcpu and some handling)
+015E                ;----------------------------------------------------------------------------
+015E                start:
+015E                ;set CAPS ON
+015E FF 27 F7 70    	mov	r0,#0ffffh ^ SFT_CAPS
+0162 01 1C          	stm	(r12,#sft_key-R12_BASE),r0
+0164                ;clear key buf
+0164 10 27 B8 70    	mov	r0,#key_buf
+0168 FF 71          	mov	r1,#0ffh:8                   ; CTRL + ASCII
+016A 01 1D          	stm	(r13,#key_wp-X1_WORK_BASE),r0
+016C 02 1D          	stm	(r13,#key_rp-X1_WORK_BASE),r0
+016E 10 10          	stm	(r0),r1
+0170                ;CMT status
+0170 01 70          	mov	r0,#CMT_STOP:8 ; command
+0172 FF 71          	mov	r1,#0ffh:8     ; sensor
+0174 04 1D          	stm	(r13,#cmt_ctrl-X1_WORK_BASE),r0
+0176 15 1D          	stm	(r13,#cmt_sens-X1_WORK_BASE),r1
+0178                ;----- JOY-KEY default on , LED setup ON  -----
+0178 03 70          	mov	r0,#JOY_EN | IND_REQ:8
+017A 00 1C          	stm	(r12,#ps2_flag-R12_BASE),r0
+017C 02 27 CD 2F    	jsr	joy_clr
+0180                ;
+0180                ;----- start FDC task -----
+0180 06 27 3A 70    	mov	r0,#fdc_entry
+0184 50 71          	mov	r1,#80:8      ;stack size
+0186                ;	mov	r2,#OS_NEVER
+0186 00 72          	mov	r2,#OS_RUN:8
+0188 05 27 8B 2F    	jsr	OS_CreateTask
+018C                ;
+018C                ;----- start timer ------
+018C                ;Timer
+018C 01 27 00 70    	mov	r0,#CPU_MHZ*8                 ; 8usec
+0190 0E 71          	mov	r1,#TC_RUN | TC_IEN | TC_RST:8
+0192 0C 1E          	stm	(r14,#TMR_INT-R14_BASE),r0
+0194 1D 1E          	stm	(r14,#TMR_CTR-R14_BASE),r1
+0196                ;----- PS/2 reset & start -----
+0196                ;	mov	r0,#0edh:8
+0196 FF 70          	mov	r0,#0ffh:8  ;RESET command
+0198 04 27 5D 2F    	jsr	PS2_TX
+019C                ;
+019C 90 3F          	sti
+019E                ;
+019E                ;----------------------------------------------------------------------------
+019E                ; MAIN LOOP 
+019E                ;----------------------------------------------------------------------------
+019E                MAIN:
+019E                ;------ command in check ------
+019E 01 0E          	ldm	r0,(r14,#HOST_STS-R14_BASE)
+01A0 02 C0          	tst	r0,#HWD_FUL:8
+01A2 04 21          	beq	main1
+01A4 01 27 B1 2F    	jsr	cmd_in
+01A8 FB 2F          	bra	MAIN
+01AA                main1:
+01AA 02 27 7F 2F    	jsr	key_irq
+01AE F8 2F          	bra	MAIN
+01B0                ;
+01B0                ;----------------------------------------------------------------------------
+01B0                ; HOST COMMAND handling
+01B0                ;----------------------------------------------------------------------------
+01B0                cmd_in:
+01B0 10 27 80 70    	mov	r0,#host_cmd
+01B4 01 71          	mov	r1,#1:8
+01B6 04 27 A9 2F    	jsr	host_r    ; get CMD byte
+01BA                ;branch cmd
+01BA 00 0D          	ldm	r0,(r13,#host_cmd-X1_WORK_BASE)
+01BC                ;
+01BC F0 D0          	cmp	r0,#0f0h:8 ; F0-FF
+01BE 08 28          	bhs	cmd_fx
+01C0 E0 D0          	cmp	r0,#0e0h:8 ; E0-EF
+01C2 1C 28          	bhs	cmd_ex
+01C4 D8 D0          	cmp	r0,#0d8h:8 ; D8-DF
+01C6 15 28          	bhs	TMR_GET
+01C8 D0 D0          	cmp	r0,#0d0h:8 ; D0-D7
+01CA 0E 28          	bhs	TMR_SET
+01CC                ;00-CF
+01CC                cmd_r:
+01CC 00 0F          	ret
+01CE                ;
+01CE                ;----- CMD F0-FF -----
+01CE                cmd_fx:
+01CE F0 D0          	cmp	r0,#0f0h:8 ; F0 ?
+01D0 02 21          	beq	cmd_f0
+01D2 00 0F          	ret
+01D4                ;f0 : 7SEG LED controll
+01D4                cmd_f0:
+01D4 10 27 B6 70    	mov	r0,#seg7_val
+01D8 02 71          	mov	r1,#2:8
+01DA 04 27 A9 2F    	jsr	host_r
+01DE 02 90          	sub	r0,#2:8
+01E0 00 00          	ldm	r0,(r0)
+01E2 07 1E          	stm	(r14,#SEG7_NUM-R14_BASE),r0
+01E4 00 0F          	ret
+01E6                ;
+01E6                ;----- TIMER SET -----
+01E6                TMR_SET:
+01E6 10 27 A4 70    	mov	r0,#tmr_dmy
+01EA 06 71          	mov	r1,#6:8
+01EC 04 27 A8 2F    	jmp	host_r
+01F0                ;----- TIMER GET -----
+01F0                TMR_GET:
+01F0 10 27 A4 70    	mov	r0,#tmr_dmy
+01F4 06 71          	mov	r1,#6:8
+01F6 04 27 CA 2F    	jmp	host_w
+01FA                ;----- CMD E0-EF -----
+01FA                cmd_ex:
+01FA                .ifdef SHOW_HOST_W
+01FA                	mov	r3,r0
+01FA                	or	r3,#3000h
+01FA                	stm	(r14,#SEG7_NUM-R14_BASE),r3
+01FA                .endif
+01FA 0F 40          	and	r0,#0fh:8
+01FC 04 E0          	mlt	r0,#4:8
+01FE 02 27 0A 80    	add	r0,#cmd_tbl
+0202 20 00          	ldm	r2,(r0,#0) ;entry
+0204 01 00          	ldm	r0,(r0,#2) ;r0 value : pointer
+0206 01 71          	mov	r1,#1:8    ;length default == 1
+0208 22 3F          	jmp	r2
+020A                cmd_tbl:
+020A                ;length.bit15 : pre-receive nBytes
+020A 9E 01 00 00    	dw	MAIN   ,0       ;E0
+020E 9E 01 00 00    	dw	MAIN   ,0       ;E1
+0212 9E 01 00 00    	dw	MAIN   ,0       ;E2
+0216 4A 02 B2 10    	dw	host_w3,game_key;E3 GAME KEY
+021A 50 02 86 10    	dw	CMD_E4 ,irq_vct ;E4
+021E 9E 01 00 00    	dw	MAIN   ,0       ;E5
+0222 5A 02 00 00    	dw	CMD_E6 ,0       ;E6
+0226 62 02 A2 10    	dw	CMD_E7 ,tv_ctrl ;E7 TV CTRL
+022A CA 04 A2 10    	dw	host_w ,tv_ctrl ;E8 TV READ
+022E 68 02 88 10    	dw	CMD_E9 ,cmt_ctrl;E9 CMT CTRL
+0232 CA 04 88 10    	dw	host_w ,cmt_ctrl;EA CMT Status
+0236 CA 04 8A 10    	dw	host_w ,cmt_sens;EB CMT sensor
+023A 6E 02 AA 10    	dw	CMD_EC ,calender;EC calender set
+023E 4A 02 AA 10    	dw	host_w3,calender;ED calender read
+0242 76 02 AE 10    	dw	CMD_EE ,time    ;EE time set
+0246 4A 02 AE 10    	dw	host_w3,time    ;EF time read
+024A                ;
+024A                ;----- 3byte WR -----
+024A                host_w3:
+024A 03 71          	mov	r1,#3:8  ;3byte
+024C 04 27 CA 2F    	jmp	host_w
+0250                ;
+0250                ;----- IRQ VECTOR -----
+0250                CMD_E4:
+0250 04 27 A9 2F    	jsr	host_r
+0254 01 0D          	ldm	r0,(r13,#key_wp-X1_WORK_BASE)
+0256 02 1D          	stm	(r13,#key_rp-X1_WORK_BASE),r0
+0258 00 0F          	ret
+025A                ;
+025A                ;----- KEY READ -----
+025A                CMD_E6:
+025A 02 71          	mov	r1,#2:8
+025C 01 0D          	ldm	r0,(r13,#key_wp-X1_WORK_BASE) ;last key code
+025E 04 27 CA 2F    	jmp	host_w
+0262                ;----- TV control -----
+0262                CMD_E7:
+0262 04 27 A9 2F    	jsr	host_r
+0266 00 0F          	ret
+0268                ;----- CMT control -----
+0268                CMD_E9:
+0268 04 27 A9 2F    	jsr	host_r
+026C 00 0F          	ret
+026E                ;----- calender set -----
+026E                CMD_EC:
+026E 03 71          	mov	r1,#3:8  ;3byte
+0270 04 27 A9 2F    	jsr	host_r
+0274 00 0F          	ret
+0276                ;----- time set -----
+0276                CMD_EE:
+0276 03 71          	mov	r1,#3:8  ;3byte
+0278 04 27 A9 2F    	jsr	host_r
+027C 00 0F          	ret
+027E                ;
+027E                ;----------------------------------------------------------------------------
+027E                ;  KEYBOARD IRQ
+027E                ;----------------------------------------------------------------------------
+027E                key_irq:
+027E 01 0D          	ldm	r0,(r13,#key_wp-X1_WORK_BASE)
+0280 12 0D          	ldm	r1,(r13,#key_rp-X1_WORK_BASE)
+0282 1D 30          	cmp	r0,r1	;key avaiable?
+0284 23 21          	beq	no_irq
+0286                ;CMT not play or rec
+0286 04 0D          	ldm	r0,(r13,#cmt_ctrl-X1_WORK_BASE)
+0288 02 D0          	cmp	r0,#CMT_PLAY:8
+028A 20 21          	beq	no_irq
+028C 0A D0          	cmp	r0,#CMT_REC:8
+028E 1E 21          	beq	no_irq
+0290                ;
+0290                ;and vector != 00h
+0290 03 0D          	ldm	r0,(r13,#irq_vct-X1_WORK_BASE)
+0292 FF 40          	and	r0,#0ffh:8
+0294 1B 21          	beq	no_irq
+0296                ;--------------------
+0296                ;assert key IRQ
+0296                ;--------------------
+0296                ;IRQ enable
+0296 80 3F          	cli
+0298 01 0E          	ldm	r0,(r14,#HOST_CTRL-R14_BASE)
+029A 08 50          	or	r0,#PIO_IRQ:8
+029C 01 1E          	stm	(r14,#HOST_CTRL-R14_BASE),r0
+029E 90 3F          	sti
+02A0                ;TX IRQ vecor
+02A0 10 27 86 70    	mov	r0,#irq_vct
+02A4 01 71          	mov	r1,#1:8
+02A6 04 27 CB 2F    	jsr	host_w
+02AA                ;IRQ disable
+02AA 80 3F          	cli
+02AC 01 0E          	ldm	r0,(r14,#HOST_CTRL-R14_BASE)
+02AE 08 60          	xor	r0,#PIO_IRQ:8
+02B0 01 1E          	stm	(r14,#HOST_CTRL-R14_BASE),r0
+02B2 90 3F          	sti
+02B4                ;update key buffer
+02B4 02 0D          	ldm	r0,(r13,#key_rp-X1_WORK_BASE)
+02B6 02 80          	add	r0,#2:8
+02B8 10 27 D8 D0    	cmp	r0,#key_buf_e
+02BC 03 29          	bne	upd_rp
+02BE 10 27 B8 70    	mov	r0,#key_buf
+02C2                upd_rp:
+02C2 02 1D          	stm	(r13,#key_rp-X1_WORK_BASE),r0
+02C4                ;return key code from key buffer
+02C4 02 71          	mov	r1,#2:8
+02C6 04 27 CA 2F    	jmp	host_w
+02CA                no_irq:
+02CA 00 0F          	ret
+02CC                ;
+02CC                ;----------------------------------------------------------------------------
+02CC                ;  JOY KEY clear
+02CC                ;----------------------------------------------------------------------------
+02CC                joy_clr:
+02CC FF 27 FF 70    	mov	r0,#0ffffh
+02D0 0C 1D          	stm	(r13,#joy_data-X1_WORK_BASE),r0
+02D2 06 1E          	stm	(r14,#JOY_PORT-R14_BASE),r0 ; output port
+02D4 00 0F          	ret
+02D6                ;
+02D6                ;----------------------------------------------------------------------------
+02D6                ; PS2 receive data handling
+02D6                ;----------------------------------------------------------------------------
+02D6                ;r0-r2 work
+02D6                ;
+02D6                ;r5 = work (raw_code / ascii code)
+02D6                ;r6 = work (sft_key)
+02D6                ;r7 = work (ps2_flag)
+02D6                ;
+02D6                ps2_rx:
+02D6 04 0C          	ldm	r0,(r12,#ps2_sreg-R12_BASE) ;get RX reg
+02D8 04 27 53 2F    	jsr	ps2_rx_en                   ;restart RX
+02DC                ;IRQ enable for next receive bit
+02DC 90 3F          	sti
+02DE                ;load fixed data value
+02DE 70 0C          	ldm	r7,(r12,#ps2_flag-R12_BASE)
+02E0 61 0C          	ldm	r6,(r12,#sft_key -R12_BASE)
+02E2                ;receive code handling
+02E2 04 27 00 F0    	mlh	r0,#0400h ;MSB in -> LSB in ,bit8 = parity,bit10 = stop
+02E6                .ifdef SHOW_PS2_RAW
+02E6                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+02E6                .endif
+02E6                ;check stop bit
+02E6 02 27 00 C0    	tst	r0,#200h  ;STOP bit ?
+02EA 2C 21          	beq	ps2_err
+02EC                ;check parity
+02EC 04 27 41 2F    	jsr	ps2_pty
+02F0 01 27 00 C0    	tst	r0,#100h  ;parity ODD ?
+02F4 27 21          	beq	ps2_err
+02F6                ;BYTE CODE
+02F6 FF 40          	and	r0,#0ffh:8  ;PS/2 Receive BYTE
+02F8                ;
+02F8 80 C0          	tst	r0,#80h:8
+02FA 31 21          	beq	ps2_code
+02FC                ;80-FFH ctrl code
+02FC F0 D0          	cmp	r0,#0f0h:8
+02FE 0B 21          	beq	ps2_f0		;F0 release code
+0300 E0 D0          	cmp	r0,#0e0h:8
+0302 0C 21          	beq	ps2_e0		;E0 shift code
+0304 FA D0          	cmp	r0,#0fah:8
+0306 0D 21          	beq	ps2_fa		;E0 shift code
+0308 E1 D0          	cmp	r0,#0e1h:8
+030A 1A 21          	beq	ps2_e1		;E1 shift code for pause key
+030C AA D0          	cmp	r0,#0aah:8
+030E 1A 21          	beq	ps2_aa		;AA reset code
+0310                ;
+0310 04 27 1A 2F    	jmp	ps2_rxe
+0314                ;
+0314                ;---------- F0 release code -----------
+0314                ps2_f0:
+0314 80 57          	or	r7,#RCV_F0:8
+0316 04 27 1A 2F    	jmp	ps2_rxe
+031A                ;---------- E0 shift code -----------
+031A                ps2_e0:
+031A 40 57          	or	r7,#RCV_E0:8
+031C 04 27 1A 2F    	jmp	ps2_rxe
+0320                ;---------- FA ack code -----------
+0320                ps2_fa:
+0320                ;	tst	r7,IND_REQ ; set LED ack?
+0320                ;	bne	ps2_rst    ; unknown ack
+0320 FD 47          	and	r7,#0ffh ^ IND_REQ:8
+0322                ;----- LED IND parameter -----
+0322                ;LED data
+0322 00 70          	mov	r0,#0:8
+0324 04 C6          	tst	r6,#SFT_KANA:8
+0326 02 29          	bne	ps2_l1
+0328 02 50          	or	r0,#IND_NUM:8
+032A                ps2_l1:
+032A 08 C6          	tst	r6,#SFT_CAPS:8
+032C 02 29          	bne	ps2_l2
+032E 04 50          	or	r0,#IND_CAPS:8
+0330                ps2_l2:
+0330 01 C7          	tst	r7,#JOY_EN:8
+0332 02 21          	beq	ps2_l3
+0334 01 50          	or	r0,#IND_SCRL:8
+0336                ps2_l3:
+0336 04 27 5D 2F    	jsr	PS2_TX
+033A 04 27 1A 2F    	jmp	ps2_rxe
+033E                ;
+033E                ;----- E1 shift for pause ----
+033E                ps2_e1		;E1 shift code for pause key
+033E 04 27 1A 2F    	jmp	ps2_rxe
+0342                ;
+0342                ;----- AA RESET ----
+0342                ps2_err:
+0342                ;	jsr	ps2_rx_en        ;format error
+0342                ps2_aa:
+0342 00 75          	mov	r5,#0:8          ; clear raw_key code
+0344                ;
+0344 02 57          	or	r7,#IND_REQ:8    ; LED req on
+0346 04 27 14 2F    	jmp	ps2_led          ; IND transmit & end
+034A                ;
+034A                ;----- F12:JOY-KEY mode change -----
+034A                joy_mode:
+034A 80 C7          	tst	r7,#RCV_F0:8
+034C 04 27 0E 29    	jne	ps2_rxc		; MAKE only
+0350                ;
+0350 01 67          	xor	r7,#JOY_EN:8	; flip JOY EMU mode
+0352 02 57          	or	r7,#IND_REQ:8	; LED controll request
+0354                ;reset JOY KEY
+0354 02 27 CD 2F    	jsr	joy_clr
+0358 04 27 0E 2F    	jmp	ps2_rxc
+035C                ;
+035C                ;----- 00-7F : Key Code -----
+035C                ps2_code:
+035C                ;PS2 scan code to RAW code convert
+035C 40 C7          	tst	r7,#RCV_E0:8
+035E 02 21          	beq	ps2_c1
+0360 80 50          	or	r0,#80h:8         ;E0 shift code -> 80-ff
+0362                ps2_c1:
+0362                ;get raw code from scan code
+0362 0E 27 30 80    	add	r0,#ps2_raw
+0366 05 27 5F 2F    	jsr	ldmb_r0
+036A 07 35          	mov	r5,r0         ; r5 = raw code
+036C 51 21          	beq	ps2_rxc
+036E                ;----- JOY-KEY emulation ------
+036E 01 C7          	tst	r7,#JOY_EN:8
+0370 0D 21          	beq	joy_no_r
+0372                ;
+0372 04 27 E7 2F    	jsr	joy_emu
+0376 05 30          	or	r0,r0
+0378 09 21          	beq	joy_no_r
+037A                ;output to joy port
+037A 1C 0D          	ldm	r1,(r13,#joy_data-X1_WORK_BASE)
+037C 05 31          	or	r1,r0    ;set   GAME bit
+037E 80 C7          	tst	r7,#RCV_F0:8
+0380 02 29          	bne	joy_off
+0382 06 31          	xor	r1,r0    ;reset GAME bit
+0384                joy_off:
+0384 1C 1D          	stm	(r13,#joy_data-X1_WORK_BASE),r1
+0386 16 1E          	stm	(r14,#JOY_PORT-R14_BASE),r1
+0388 43 2F          	bra	ps2_rxc
+038A                ;
+038A                joy_no_r:
+038A                ;----- shift key ?? -----
+038A E0 56          	or	r6,#SFT_KEYIN | SFT_TENKEY | SFT_REP:8 ;preset some CTRL bit
+038C 80 C5          	tst	r5,#80h:8    ;special raw code?
+038E 03 29          	bne	key_special
+0390                ;----- game key sense -----
+0390                .ifdef F_GAME_KEY
+0390                set_gkey:
+0390                	mov	r0,r5
+0390                	add	r0,#raw_x1_gk-1  ;orign 1
+0390                	jsr	ldmb_r0
+0390                	tst	r0,#080h:8
+0390                	bne	set_gkey_e
+0390                ;hit game key
+0390                	mov	r1,r0
+0390                	mlh	r1,#100h     ;offset
+0390                	add	r1,r1        ;x2
+0390                	add	r1,#game_key
+0390                	jsr	bit2mask    ;get bitmask
+0390                	ldm	r2,(r1)     ;LOAD current game key
+0390                	or	r2,r0       ;set   GAME-KEY bit
+0390                	tst	r7,#RCV_F0:8;is release ?
+0390                	beq	set_gk3
+0390                	xor	r2,r0       ;clear GAME-KEY bit
+0390                set_gk3:
+0390                	stm	(r1),r2     ;update current game key
+0390                set_gkey_e:
+0390                	add	r1,#game_key
+0390                ;
+0390                .endif
+0390 40 66          	xor	r6,#SFT_KEYIN:8 ; set ASCII KEY mark
+0392 0E 2F          	bra	key_ascii
+0394                ;
+0394                ;-----------------------------------------------------------
+0394                ;SHIFT / SFR KEY GROUP?
+0394                key_special:
+0394                ;----- Special Function key ckeck -----
+0394 FF D5          	cmp	r5,#KC_JOY_EMU:8
+0396 DA 21          	beq	joy_mode       ; JOY EMULATION on/off
+0398                ;
+0398                ;----- SHIFT KEYS -----
+0398                key_shift:
+0398                ;----- left or right sel -----
+0398 57 30          	mov	r0,r5
+039A 04 27 7D 2F    	jsr	bit2mask
+039E 0C C0          	tst	r0,#SFT_CAPS | SFT_KANA:8 ; altanate group
+03A0 02 29          	bne	sh_toggle
+03A2 05 36          	or	r6,r0        ; when SHIFT,CTRL,GRPH
+03A4                sh_toggle:
+03A4 80 C7          	tst	r7,#RCV_F0:8
+03A6 02 29          	bne	key_sh_e
+03A8 06 36          	xor	r6,r0        ; when press
+03AA                key_sh_e:
+03AA 02 57          	or	r7,#IND_REQ:8 ; LED controll request ON
+03AC                ;----- end of shift handle -----
+03AC                end_sh:
+03AC 00 75          	mov	r5,#00h:8       ; non-ascii code mark
+03AE                ;----- ASCII key group -----
+03AE                key_ascii:
+03AE                ;-------------------------------------
+03AE                ;TENKEY marking
+03AE 39 D5          	cmp	r5,#KC_F1:8
+03B0 02 20          	blo	tenkey_r
+03B2 80 66          	xor	r6,#SFT_TENKEY:8  ; set TENKEY !
+03B4                tenkey_r:
+03B4                ;-------------------------------------
+03B4                ;REPEAT marking
+03B4 40 C6          	tst	r6,#SFT_KEYIN:8
+03B6 05 29          	bne	rep_1          ; SHIFT KEY -> ignore repeat
+03B8 0B 0D          	ldm	r0,(r13,#cur_ascii-X1_WORK_BASE)
+03BA 5D 30          	cmp	r0,r5
+03BC 02 29          	bne	rep_1
+03BE 20 66          	xor	r6,#SFT_REP:8  ; mark REPEAT bit
+03C0                rep_1:
+03C0                ;-------------------------------------
+03C0                ;KEY ON / OFF
+03C0 80 C7          	tst	r7,#RCV_F0:8 ;key off event?
+03C2 08 21          	beq	key_on
+03C4                ;BERAK OFF
+03C4 04 27 35 2F    	jsr	brk_off
+03C8                ;-------------------------------------
+03C8                ;KEY off handling
+03C8 20 C6          	tst	r6,#SFT_REP:8
+03CA 22 29          	bne	ps2_rxc                   ; release OLD pressed key
+03CC                ;last press key is off
+03CC 60 56          	or	r6,#SFT_REP | SFT_KEYIN:8 ; clear repeat & key in bit
+03CE 00 75          	mov	r5,#00h:8                 ; clear keycode (ASCII=00H)
+03D0 5B 1D          	stm	(r13,#cur_ascii-X1_WORK_BASE),r5 ; clear last ASCII-IN key
+03D2                ;save last ASCII press key
+03D2                key_on:
+03D2 40 C6          	tst	r6,#SFT_KEYIN:8
+03D4 02 29          	bne	key_on1
+03D6                ;save last raw key
+03D6 5B 1D          	stm	(r13,#cur_ascii-X1_WORK_BASE),r5 ; save last ASCII-IN key
+03D8                key_on1:
+03D8                ;-------------------------------------
+03D8                ;r1 = multiplex LEFT & RIGHT SHIFT flags
+03D8 67 31          	mov	r1,r6
+03DA 01 27 00 F1    	mlh	r1,#100h
+03DE 64 31          	and	r1,r6
+03E0 FF 41          	and	r1,#0ffh:8
+03E2                ;get ASCII code
+03E2 05 27 1B 2F    	jsr	get_asc ;r1 = ctrl , r0 ascii
+03E6                ;conbine ,ASCII & CTRL
+03E6 01 27 00 E0    	mlt	r0,#100h
+03EA 15 30          	or	r0,r1
+03EC                ;store to key buffer
+03EC 11 0D          	ldm	r1,(r13,#key_wp-X1_WORK_BASE) ;WP
+03EE                ;when no IRQ mode , keep last key only
+03EE 23 0D          	ldm	r2,(r13,#irq_vct-X1_WORK_BASE)
+03F0 25 32          	or	r2,r2
+03F2 0B 21          	beq	key_wb2          ; keep pointer
+03F4                ;next pointer
+03F4 02 81          	add	r1,#2:8
+03F6 10 27 D8 D1    	cmp	r1,#key_buf_e
+03FA 03 29          	bne	key_wb1
+03FC 10 27 B8 71    	mov	r1,#key_buf
+0400                key_wb1:
+0400 22 0D          	ldm	r2,(r13,#key_rp-X1_WORK_BASE)
+0402 1D 32          	cmp	r2,r1
+0404 03 21          	beq	key_wbe	                   ;buffer full?
+0406 11 1D          	stm	(r13,#key_wp-X1_WORK_BASE),r1  ;save new Write point
+0408                key_wb2:
+0408 00 11          	stm	(r1),r0  ;store key data
+040A                key_wbe:
+040A                .ifdef SHOW_KEYCODE
+040A                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+040A                .endif
+040A                ;BREAK port controll
+040A 04 27 21 2F    	jsr	brk_ctrl
+040E                ;----- clear receive status -----
+040E                ps2_rxc:
+040E 3F 47          	and	r7,#0ffh ^ RCV_E0 ^ RCV_F0:8
+0410                ;----- LED controll request -----
+0410 02 C7          	tst	r7,#IND_REQ:8 ; LED req?
+0412 04 21          	beq	ps2_rxe
+0414                ps2_led:
+0414 ED 70          	mov	r0,#0edh:8 ;IND command
+0416 04 27 5D 2F    	jsr	PS2_TX
+041A                ;----- return page 0 -----
+041A                ps2_rxe:
+041A                ;store fixed data value
+041A 70 1C          	stm	(r12,#ps2_flag-R12_BASE),r7
+041C 61 1C          	stm	(r12,#sft_key -R12_BASE),r6
+041E 00 0F          	ret
+0420                ;----- break port controll -----
+0420                ;BREAK PORT check
+0420                ;r0 = ascii code
+0420                brk_ctrl:
+0420 03 D0          	cmp	r0,#03h:8  ;BREAK CODE?
+0422 09 29          	bne	brk_off
+0424                brk_on:
+0424 80 3F          	cli
+0426 01 70          	mov	r0,#CMT_STOP:8
+0428 10 27 88 71    	mov	r1,#cmt_ctrl
+042C 00 11          	stm	(r1),r0   ; CMT STOP!!
+042E                ;
+042E 01 0E          	ldm	r0,(r14,#HOST_CTRL-R14_BASE)
+0430 04 50          	or	r0,#PIO_BRK:8
+0432 04 2F          	bra	brk_sret
+0434                ;
+0434                brk_off:
+0434 80 3F          	cli
+0436 01 0E          	ldm	r0,(r14,#HOST_CTRL-R14_BASE)
+0438 FB 40          	and	r0,#0ffh ^ PIO_BRK:8
+043A                brk_sret:
+043A 01 1E          	stm	(r14,#HOST_CTRL-R14_BASE),r0
+043C 90 3F          	sti
+043E 00 0F          	ret
+0440                ;
+0440                ;----------------------------------------------------------------------------
+0440                ;  PS2 parity bit calcration
+0440                ;----------------------------------------------------------------------------
+0440                ;r0[7:0] = byte code
+0440                ;r0[8]   = parity bit
+0440                ;r1      = broken
+0440                ps2_pty:
+0440 01 71          	mov	r1,#1:8
+0442                ps2_pty1:
+0442 1C 30          	tst	r0,r1
+0444 03 21          	beq	ps2_pty2
+0446 01 27 00 60    	xor	r0,#100h ;flip parity bit
+044A                ps2_pty2:
+044A 18 31          	add	r1,r1
+044C FF 41          	and	r1,#0ffh:8
+044E FA 29          	bne	ps2_pty1
+0450 00 0F          	ret
+0452                ;----------------------------------------------------------------------------
+0452                ;  PS2 enable receiver
+0452                ;----------------------------------------------------------------------------
+0452                ;r1 broken
+0452                ps2_rx_en:
+0452                ;	mov	r1,#0ffffh
+0452                ;	stm	(r12,#ps2_sreg-R12_BASE),r1
+0452 0B 71          	mov	r1,#11:8   ;receive bit
+0454 15 1C          	stm	(r12,#ps2_scnt-R12_BASE),r1
+0456                ;
+0456 00 71          	mov	r1,#0:8
+0458 16 1C          	stm	(r12,#ps2_tout-R12_BASE),r1 ;no timeout
+045A                ;
+045A 00 0F          	ret
+045C                ;
+045C                ;----------------------------------------------------------------------------
+045C                ;  PS2 TX byte
+045C                ;----------------------------------------------------------------------------
+045C                ;r0 = transmit data
+045C                PS2_TX:
+045C                ;----- set TX mode and waiting -----
+045C 00 71          	mov	r1,#0:8
+045E 16 1C          	stm	(r12,#ps2_tout-R12_BASE),r1
+0460 80 71          	mov	r1,#PS2_TXM1:8
+0462 15 1C          	stm	(r12,#ps2_scnt-R12_BASE),r1
+0464                ;----- drive CLK=L
+0464 01 71          	mov	r1,#PS2_DT:8   ; DAT=Z,CLK=L
+0466 12 1E          	stm	(r14,#PS2_CTRL-R14_BASE),r1
+0468                ;----- calcurate parity bit & set transmit word -----
+0468 01 27 00 50    	or	r0,#100h  ; parity ODD
+046C 04 27 41 2F    	jsr	ps2_pty
+0470 06 27 00 50    	or	r0,#600h  ;STOP BIT + ACK BIT
+0474                ;r0 = 11bit TX data(8xdata + 1xparity + 1xstop + 1xack)
+0474 04 1C          	stm	(r12,#ps2_sreg-R12_BASE),r0
+0476                ;----- set timer for start transmit
+0476 05 71          	mov	r1,#280/PS2_TICK+1:8  ;160-320us for TX start
+0478 16 1C          	stm	(r12,#ps2_tout-R12_BASE),r1
+047A                ;continue to ISR
+047A 00 0F          	ret
+047C                ;
+047C                ;----------------------------------------------------------------------------
+047C                ;  bit postion to mask conversion
+047C                ;----------------------------------------------------------------------------
+047C                ;r0 = bit -> mask
+047C                bit2mask:
+047C 0F 40          	and	r0,#0fh:8
+047E 08 30          	add	r0,r0
+0480 04 27 88 80    	add	r0,#mask_data
+0484 00 00          	ldm	r0,(r0)
+0486 00 0F          	ret
+0488                mask_data:
+0488 01 00          	dw	0001h
+048A 02 00          	dw	0002h
+048C 04 00          	dw	0004h
+048E 08 00          	dw	0008h
+0490 10 00          	dw	0010h
+0492 20 00          	dw	0020h
+0494 40 00          	dw	0040h
+0496 80 00          	dw	0080h
+0498 00 01          	dw	0100h
+049A 00 02          	dw	0200h
+049C 00 04          	dw	0400h
+049E 00 08          	dw	0800h
+04A0 00 10          	dw	1000h
+04A2 00 20          	dw	2000h
+04A4 00 40          	dw	4000h
+04A6 00 80          	dw	8000h
+04A8                ;
+04A8                ;----------------------------------------------------------------------------
+04A8                ; read date from host
+04A8                ;----------------------------------------------------------------------------
+04A8                ;r0 = receive pointer
+04A8                ;r1 = receive counter
+04A8                ;r2 = broken
+04A8                host_r:
+04A8                ;wait for data in
+04A8 21 0E          	ldm	r2,(r14,#HOST_STS-R14_BASE)
+04AA 02 C2          	tst	r2,#HWD_FUL:8
+04AC FE 21          	beq	host_r
+04AE                ;data read
+04AE 21 0B          	ldm	r2,(r11,#HOST_WD-R11_BASE)
+04B0                ;store byte
+04B0 01 C0          	tst	r0,#1:8
+04B2 06 21          	beq	hr1
+04B4                ;when high word conbine with memory
+04B4 01 27 00 E2    	mlt	r2,#100h
+04B8 30 00          	ldm	r3,(r0)
+04BA FF 43          	and	r3,#0ffh:8
+04BC 35 32          	or	r2,r3
+04BE                hr1:
+04BE 20 10          	stm	(r0),r2                     ; save receive data
+04C0 25 0E          	ldm	r2,(r14,#HWD_CLR-R14_BASE)  ; clear hwd_full
+04C2                ;next pointer
+04C2 01 80          	add	r0,#1:8
+04C4 01 91          	sub	r1,#1:8
+04C6 F1 29          	bne	host_r
+04C8 00 0F          	ret
+04CA                ;
+04CA                ;----------------------------------------------------------------------------
+04CA                ; write data to host
+04CA                ;----------------------------------------------------------------------------
+04CA                ;r0 = transmit pointer
+04CA                ;r1 = transmit counter
+04CA                ;r2 = broken
+04CA                host_w:
+04CA 20 00          	ldm	r2,(r0) ; read tx data
+04CC 01 C0          	tst	r0,#1:8
+04CE 03 21          	beq	hw1
+04D0 01 27 00 F2    	mlh	r2,#100h ; high word select
+04D4                hw1:
+04D4                .ifdef SHOW_HOST_R
+04D4                	mov	r3,r1
+04D4                	mlt	r3,#100h
+04D4                	or	r3,r2
+04D4                	stm	(r14,#SEG7_NUM-R14_BASE),r3
+04D4                .endif
+04D4 20 1B          	stm	(r11,#HOST_RD-R11_BASE),r2    ;store data
+04D6 24 0E          	ldm	r2,(r14,#HRD_SET-R14_BASE)    ;set hrd flag
+04D8                hw2:
+04D8                ;wait for port free
+04D8 21 0E          	ldm	r2,(r14,#HOST_STS-R14_BASE)
+04DA 01 C2          	tst	r2,#HRD_FUL:8
+04DC FE 29          	bne	hw2
+04DE                ;
+04DE 01 80          	add	r0,#1:8
+04E0 01 91          	sub	r1,#1:8
+04E2 F4 29          	bne	host_w
+04E4 00 0F          	ret
+04E6                ;
+04E6                ;---------- JOY-KEY
+04E6                ;r5 = raw_code
+04E6                ;out
+04E6                ;r0 = joymask
+04E6                joy_emu:
+04E6 01 70          	mov	r0,#1:8
+04E8 04 27 FA 71    	mov	r1,#joy_tbl
+04EC                joy_e1:
+04EC 20 01          	ldm	r2,(r1)
+04EE 5D 32          	cmp	r2,r5
+04F0 04 21          	beq	joy_ok
+04F2 02 81          	add	r1,#2:8
+04F4 08 30          	add	r0,r0
+04F6 FB 29          	bne	joy_e1
+04F8                joy_ok:
+04F8 00 0F          	ret
+04FA                joy_tbl:
+04FA                ;JOYA
+04FA 56 00          	dw	KC_KP_8  ; UP
+04FC 50 00          	dw	KC_KP_2  ; DN
+04FE 52 00          	dw	KC_KP_4  ; LT
+0500 54 00          	dw	KC_KP_6  ; RT
+0502 01 00          	dw	KC_A     ; T4
+0504 1A 00          	dw	KC_Z     ; T1
+0506 18 00          	dw	KC_X     ; T2
+0508 03 00          	dw	KC_C     ; T3
+050A                ;JOYB
+050A 00 00          	dw	0
+050C 00 00          	dw	0
+050E 00 00          	dw	0
+0510 00 00          	dw	0
+0512 00 00          	dw	0
+0514 00 00          	dw	0
+0516 00 00          	dw	0
+0518 00 00          	dw	0
+051A                ;	dw	KC_U_ARROW
+051A                ;	dw	KC_L_ARROW
+051A                ;	dw	KC_D_ARROW
+051A                ;	dw	KC_R_ARROW
+051A                ;	dw	KC_SPACE
+051A                ;	dw	KC_ENTER
+051A                ;	dw	KC_L_CTRL
+051A                ;	dw	KC_L_SHFT
+051A                joy_tbl_e:
+051A                ;
+051A                ;******************************************************************************
+051A                ; GET ASCI CODE from PS2 raw code
+051A                ;******************************************************************************
+051A                ;r1 combined shift keys
+051A                ;
+051A                get_asc:
+051A 57 30          	mov	r0,r5         ; ascii code ?
+051C 1E 21          	beq	get_asc_e
+051E                ;
+051E 01 C1          	tst	r1,#SFT_L_CTRL:8
+0520 0D 21          	beq	asc_ctrl
+0522                
+0522                .ifdef GRAPH_ASCII
+0522                	tst	r1,#SFT_L_GRPH:8
+0522                	beq	asc_graph
+0522                .endif
+0522                .ifdef KANA_ASCII
+0522                	tst	r1,#SFT_KANA:8
+0522                	beq	asc_kana
+0522                .endif
+0522 1B D0          	cmp	r0,#KC_Z+1:8
+0524 10 20          	blo	asc_alpha
+0526                ;
+0526 02 C1          	tst	r1,#SFT_L_SHIFT:8
+0528 05 21          	beq	asc_shift
+052A                ;---------- NORMAL (not alphabet)
+052A 0F 27 15 80    	add	r0,#raw_x1_no-KC_Z-1
+052E 05 27 5E 2F    	jmp	ldmb_r0
+0532                ;---------- SHIFT (not alphabet)
+0532                asc_shift:
+0532 0F 27 53 80    	add	r0,#raw_x1_sh-KC_Z-1
+0536 05 27 5E 2F    	jmp	ldmb_r0
+053A                ;---------- CTRL
+053A                asc_ctrl:
+053A 1B D0          	cmp	r0,#KC_Z+1:8
+053C 04 20          	blo	asc_alpha
+053E                ;not alphabet
+053E 0F 27 91 80    	add	r0,#raw_x1_ct-KC_Z-1 ;+CTRL
+0542 0C 2F          	bra	get_asc_r
+0544                ;
+0544                ;---------- GRAPH
+0544                .ifdef GRAPH_ASCII
+0544                asc_graph:
+0544                	add	r0,#raw_x1_gr-1 ;+CTRL
+0544                	bra	get_asc_r
+0544                .endif
+0544                ;
+0544                .ifdef KANA_ASCII
+0544                asc_kana:
+0544                	tst	r1,#SFT_L_SHIFT:8
+0544                	beq	asc_skana
+0544                ;---------- KANA
+0544                	add	r0,#raw_x1_ka-1
+0544                	bra	get_asc_r
+0544                asc_skana:
+0544                ;---------- SHIFT+KANA
+0544                	add	r0,#raw_x1_sk-1
+0544                	bra	get_asc_r
+0544                .endif
+0544                ;
+0544                asc_alpha:
+0544                ;---------- Alphabet A-Z / a-z
+0544 60 50          	or	r0,#60h:8 ; a-z
+0546 08 C1          	tst	r1,#SFT_CAPS:8
+0548 02 29          	bne	asc_al1
+054A 20 60          	xor	r0,#20h:8 ; A-Z <-> a-z
+054C                asc_al1:
+054C 02 C1          	tst	r1,#SFT_L_SHIFT:8
+054E 02 29          	bne	asc_al2
+0550 20 60          	xor	r0,#20h:8 ; A-Z <-> a-z
+0552                asc_al2:
+0552 01 C1          	tst	r1,#SFT_L_CTRL:8
+0554 02 29          	bne	asc_al3
+0556 1F 40          	and	r0,#1fh:8 ; 00H-1AH
+0558                asc_al3:
+0558                get_asc_e:
+0558 00 0F          	ret
+055A                ;
+055A                get_asc_r:
+055A 05 27 5E 2F    	jmp	ldmb_r0
+055E                ;******************************************************************************
+055E                ; BYTE access
+055E                ;******************************************************************************
+055E                ldmb_r0:
+055E 01 C0          	tst	r0,#1:8
+0560 04 29          	bne	ldmb_r0_o
+0562                ;EVEN
+0562 00 00          	ldm	r0,(r0)
+0564 FF 40          	and	r0,#0ffh:8
+0566 00 0F          	ret
+0568                ;ODD
+0568                ldmb_r0_o:
+0568 00 00          	ldm	r0,(r0)
+056A 01 27 00 F0    	mlh	r0,#100h
+056E 00 0F          	ret
+0570                ;
+0570                ;----------------------------------------------------------------------------
+0570                ; PCM driver
+0570                ;----------------------------------------------------------------------------
+0570                pcm_play:
+0570 21 1F          	push	r2
+0572 11 27 00 72    	mov	r2,#PCM_S
+0576 00 12          	stm	(r2,#PCM_S-PCM_S),r0
+0578 11 12          	stm	(r2,#PCM_E-PCM_S),r1
+057A 21 0F          	pop	r2
+057C 00 0F          	ret
+057E                ;
+057E                ;----------------------------------------------------------------------------
+057E                ; RTOS kernel
+057E                ;----------------------------------------------------------------------------
+057E                	include "rtos.asm"
+057E                ;----------------------------------------------------------------------------
+057E                ;	Dual thread OS もどき for MR16
+057E                ;
+057E                ;	Version 050426
+057E                ;
+057E                ;	Copyright(C) 2005 Tatsuyuki Satoh
+057E                ;
+057E                ;	This software is provided "AS IS", with NO WARRANTY.
+057E                ;	NON-COMMERCIAL USE ONLY
+057E                ;
+057E                ;	Histry:
+057E                ;		2005.4.26 1st release
+057E                ;
+057E                ;	Note:
+057E                ;
+057E                ;----------------------------------------------------------------------------
+057E                ;
+057E                ;SHOW_FDC_TIMER EQU 1
+057E                
+057E                ;----------------------------------------------------------------------------
+057E                ;system routine
+057E                ;----------------------------------------------------------------------------
+057E                	CSEG
+057E                ;
+057E                ;-------------------------------------
+057E                ;Initialise OS (task run)
+057E                ;-------------------------------------
+057E                ;input
+057E                ; r0 : base task entry point (loweest can't sleep task)
+057E                ; r1 : base task stack size   (task + system + isr)
+057E                ; r2 : heap pointer (end of stack point)
+057E                ;output
+057E                ; interrupt disable
+057E                ; return to r0 point , run base task
+057E                ;
+057E                OS_init:
+057E FF 27 FF 71    	mov	r1,#OS_NEVER
+0582 16 1D          	stm	(r13,#fdc_cnt-X1_WORK_BASE),r1
+0584 18 27 00 7F    	mov	r15,#STACK_END
+0588 02 3F          	jmp	r0
+058A                ;
+058A                ;-------------------------------------
+058A                ;CreateTask
+058A                ;-------------------------------------
+058A                ;input
+058A                ; r0 : entry point
+058A                ; r1 : user stack size (byte)
+058A                ; r2 : is suspend
+058A                ;output
+058A                ; r0 : task handle
+058A                OS_CreateTask:
+058A 80 3F          	cli
+058C F1 1F          	push	flag
+058E 01 1F          	push	r0
+0590 11 1F          	push	r1
+0592 21 1F          	push	r2
+0594 31 1F          	push	r3
+0596 41 1F          	push	r4
+0598 51 1F          	push	r5
+059A 61 1F          	push	r6
+059C 71 1F          	push	r7
+059E F8 1D          	stm	(r13,#main_sp-X1_WORK_BASE),r15
+05A0                ;
+05A0 17 27 C0 7F    	mov	r15,#STACK_END-64
+05A4 01 1F          	push	r0       ;entry point
+05A6 01 70          	mov	r0,#1:8
+05A8 04 2F          	bra	OS_Sleep
+05AA                ;
+05AA                ;-------------------------------------
+05AA                ;suspend task
+05AA                ;-------------------------------------
+05AA                ;r0 : task handle
+05AA                OS_Suspend:
+05AA FF 27 FF 70    	mov	r0,#0ffffh
+05AE 01 2F          	bra	OS_Sleep
+05B0                ;
+05B0                ;-------------------------------------
+05B0                ;Sleep
+05B0                ;-------------------------------------
+05B0                ;input
+05B0                ; r0 : sleep counter (0-7fffh)
+05B0                OS_Sleep:
+05B0 80 3F          	cli
+05B2 06 1D          	stm	(r13,#fdc_cnt-X1_WORK_BASE),r0
+05B4 F1 1F          	push	flag
+05B6 01 1F          	push	r0
+05B8 11 1F          	push	r1
+05BA 21 1F          	push	r2
+05BC 31 1F          	push	r3
+05BE 41 1F          	push	r4
+05C0 51 1F          	push	r5
+05C2 61 1F          	push	r6
+05C4 71 1F          	push	r7
+05C6 F7 1D          	stm	(r13,#fdc_sp-X1_WORK_BASE),r15
+05C8                ;
+05C8 F8 0D          	ldm	r15,(r13,#main_sp-X1_WORK_BASE)
+05CA 71 0F          	pop	r7
+05CC 61 0F          	pop	r6
+05CE 51 0F          	pop	r5
+05D0 41 0F          	pop	r4
+05D2 31 0F          	pop	r3
+05D4 21 0F          	pop	r2
+05D6 11 0F          	pop	r1
+05D8 01 0F          	pop	r0
+05DA F1 0F          	pop	flag
+05DC 90 0F          	ret	sti
+05DE                ;
+05DE                ;-------------------------------------
+05DE                ;resume task
+05DE                ;-------------------------------------
+05DE                OS_Resume:
+05DE 80 3F          	cli ;;;;;;;;;;;;;;;;;;;;;;;;
+05E0 06 0D          	ldm	r0,(r13,#fdc_cnt-X1_WORK_BASE)
+05E2 00 D0          	cmp	r0,#0:8
+05E4 02 29          	bne	OS_Resume1
+05E6 90 0F          	ret	sti
+05E8                OS_Resume1:
+05E8 00 70          	mov	r0,#0:8
+05EA 06 1D          	stm	(r13,#fdc_cnt-X1_WORK_BASE),r0
+05EC F1 1F          	push	flag
+05EE 01 1F          	push	r0
+05F0 07 2F          	bra	swap_fdc
+05F2                ;
+05F2                ;-------------------------------------
+05F2                ;OS_Timer_isr
+05F2                ;-------------------------------------
+05F2                ;overhead 14 + TASK*9 + 2 + TASK*7 + 16clock = 94clock
+05F2                ;
+05F2                OS_Timer_isr:
+05F2                ;	push	flag
+05F2 01 1F          	push	r0
+05F4 06 0D          	ldm	r0,(r13,#fdc_cnt-X1_WORK_BASE)
+05F6                .ifdef SHOW_FDC_TIMER
+05F6                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+05F6                .endif
+05F6 01 90          	sub	r0,#1:8
+05F8 13 23          	bmi	no_swap  ;in FDC or suspend
+05FA 06 1D          	stm	(r13,#fdc_cnt-X1_WORK_BASE),r0
+05FC 11 29          	bne	no_swap
+05FE                ;swap to fdc task
+05FE                swap_fdc:
+05FE                ;	push	flag
+05FE                ;	push	r0
+05FE 11 1F          	push	r1
+0600 21 1F          	push	r2
+0602 31 1F          	push	r3
+0604 41 1F          	push	r4
+0606 51 1F          	push	r5
+0608 61 1F          	push	r6
+060A 71 1F          	push	r7
+060C F8 1D          	stm	(r13,#main_sp-X1_WORK_BASE),r15
+060E                ;
+060E F7 0D          	ldm	r15,(r13,#fdc_sp-X1_WORK_BASE)
+0610 71 0F          	pop	r7
+0612 61 0F          	pop	r6
+0614 51 0F          	pop	r5
+0616 41 0F          	pop	r4
+0618 31 0F          	pop	r3
+061A 21 0F          	pop	r2
+061C 11 0F          	pop	r1
+061E                no_swap:
+061E 01 0F          	pop	r0
+0620 F1 0F          	pop	flag
+0622 90 0F          	ret	sti
+0624                ;
+0624                ;----------------------------------------------------------------------------
+0624                ; FDC & FDD Emulator
+0624                ;----------------------------------------------------------------------------
+0624                	include "mb8877a.asm"
+0624                ;******************************************************************************
+0624                ;   FDC(MB8877A) microcode for X1 SUB-CPU (MR16) with FDD enulation
+0624                ;
+0624                ; 2005. 4.12 1st release
+0624                ;
+0624                ; note:
+0624                ;
+0624                ; -TYPE-IIIコマンド、まったく実装してません。
+0624                ; -TYPE-IV適当に扱ってます。
+0624                ; -エミュレーション用なので、現状ではFドライブは繋がりません。
+0624                ; -128usタスク　＆　16us割り込み処理が汚く、動作も不安
+0624                ;  RTOSを辞め、16usタイマにて自前でタスクスイッチすべきだった。
+0624                ;
+0624                ;******************************************************************************
+0624                ;
+0624                ;NO_LOST_DATA equ 1
+0624                ;
+0624                ;-----------------------------------------------------------------
+0624                ;SHOW_TRK equ 1
+0624                ;
+0624                ;fixed register assign
+0624                ;
+0624                ;r7 = current FDC command code
+0624                ;r6 = I/O signal & internal state
+0624                ;
+0624                ;FDC status code
+0624                ;
+0624 00 00 00 80    STS_NOT_RDY		equ	80h
+0624 00 00 00 40    STS_WRITE_PROTECT	equ	40h
+0624 00 00 00 20    STS_HEAD_ENAGAED	equ	20h
+0624 00 00 00 20    STS_RECOARD_TYPE	equ	20h
+0624 00 00 00 20    STS_WRITE_FAULT		equ	20h
+0624 00 00 00 10    STS_SEEK_ERROR		equ	10h
+0624 00 00 00 10    STS_RECOARD_NOT_FOUND	equ	10h
+0624 00 00 00 08    STS_CRC_ERROR		equ	08h
+0624 00 00 00 04    STS_LOST_DATA		equ	04h
+0624 00 00 00 04    STS_TRACK_00		equ	04h 
+0624                ;STS_DATA_REQ		equ	02h
+0624 00 00 00 02    STS_INDEX		equ	02h
+0624 00 00 00 01    STS_BUSY		equ	01h
+0624                ;
+0624 00 00 01 00    IN_HLT 			equ	0100h ; Read Only HLT pin
+0624 00 00 02 00    IN_WPRT			equ	0200h ; Read Only (R/W for EMU)
+0624 00 00 04 00    STS_DATA_REQ		equ	0400h ; Read Only
+0624 00 00 08 00    IN_TRK00		equ	0800h ; Read Only (R/W for EMU)
+0624 00 00 10 00    IN_INDEX		equ	1000h ; Read Only (R/W for EMU)
+0624                ;
+0624                ;FD time count
+0624                ;3xA1,FE,T,S,R,N,CRC,CRC,11xFF,3xA1,FB/F8+DATA = 26bytes
+0624 00 00 00 1A    FDC_ID_WAIT equ	26
+0624                ;
+0624                ;FDC output port
+0624                ;
+0624                ;----------------------------------------------------------------------------
+0624                ; register assign
+0624                ;----------------------------------------------------------------------------
+0624                ; r0-5  :work register
+0624                ; r6    :output signal
+0624                ; r7    :current command
+0624                ; r8-15 :fixed register
+0624                ;
+0624                ;----------------------------------------------------------------------------
+0624                ; I/O address map
+0624                ;----------------------------------------------------------------------------
+0624                ;
+0624 00 00 10 D8    FDC_WORK_BASE	equ	R10_BASE ; 
+0624 00 00 10 00    FDC_REG_BASE	equ	R11_BASE ; FDC I/F register map
+0624                ;FDC_CMD equ	0ff0h
+0624                ;FDC_TRK equ	0ff2h
+0624                ;FDC_SEC equ	0ff4h
+0624                ;FDC_DAT equ	0ff6h
+0624                ;
+0624                ;FDD_MOT equ	0ff8h  ;X1 motor port
+0624                ;FDD_MOT_MON	equ	80h ;motor ON
+0624                ;FDD_MOT_SIDE	equ	10h ;head side
+0624                ;FDD_MOT_DS1	equ	02h ;DriveSelect1
+0624                ;FDD_MOT_DS0	equ	01h ;DriveSelect0
+0624                ;
+0624                ;----------------------------------------------------------------------------
+0624                ; work buffer
+0624                ;----------------------------------------------------------------------------
+0624                	DSEG
+1104                fdc_task ds	2  ;fdc ISRtimer routine
+1106                fdc_mode ds	2  ;FDC mode FM/MFM,etc.
+1108                ;
+1108                fdc_drvp ds	2  ;pointer of drive work
+110A                drv_work ds	4*4
+111A 00 00 00 00    o_ptrk		equ	0
+111A                ;
+111A                ;--------------------------------------------------
+111A                ;OUTPUT PORT PIN (r6)
+111A                ;--------------------------------------------------
+111A 00 00 00 01    TG43	equ	0001h
+111A 00 00 00 08    FDC_HLD	equ	0008h
+111A 00 00 00 10    FDC_DIRC equ	0010h  ;0=STEP OUT(-) , 1=STEP IN(+)
+111A                ;
+111A                	CSEG
+0624                ;
+0624                ;
+0624                ;----------------------------------------------------------------------------
+0624                ; FDC CMD WR TRAP ISR
+0624                ;----------------------------------------------------------------------------
+0624                fdc_isr:
+0624 F1 1F          	push	flag
+0626 01 1F          	push	r0
+0628                ;CMD WR MARK
+0628 08 0B          	ldm	r0,(r11,#FDC_CMD-R11_BASE)
+062A FF 40          	and	r0,#0ffh:8
+062C 08 1B          	stm	(r11,#FDC_CMD-R11_BASE),r0
+062E                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+062E                ;BUSY ON
+062E                ;	ldm	r0,(r14,#FDC_STS-R14_BASE)
+062E                ;	or	r0,#STS_BUSY:8
+062E                ;	stm	(r14,#FDC_STS-R14_BASE),r0
+062E                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+062E                ;FDC task wakeup!
+062E 01 70          	mov	r0,#1:8
+0630 05 27 DF 2F    	jsr	OS_Resume
+0634 01 0F          	pop	r0
+0636 F1 0F          	pop	flag
+0638 90 0F          	ret	sti
+063A                ;
+063A                ;----------------------------------------------------------------------------
+063A                ; FDC MAIN TASK
+063A                ;----------------------------------------------------------------------------
+063A                ;r7 = current command
+063A                ;r6 = FDC output port copy
+063A                fdc_entry:
+063A 00 70          	mov	r0,#0:8 ;clear all status
+063C 03 1E          	stm	(r14,#FDC_STS-R14_BASE),r0
+063E                ;clear DRQ
+063E 07 0E          	ldm	r0,(r14,#FDC_DRQ_CLR-R14_BASE)
+0640                ;FDD emulation init
+0640 0A 27 E3 2F    	jsr	fdd_init
+0644                ;
+0644 80 27 00 70    	mov	r0,#8000h  ; clear command in flag
+0648 08 1B          	stm	(r11,#FDC_CMD-R11_BASE),r0 ;set clear mark
+064A                ;
+064A 00 76          	mov	r6,#0:8      ;default output pins
+064C 00 77          	mov	r7,#0:8      ;clear last command code is TYPE-I
+064E                ;
+064E                fdc_loop:
+064E                ;BUSY clear
+064E 13 0E          	ldm	r1,(r14,#FDC_STS-R14_BASE)
+0650 FE 41          	and	r1,#0ffh ^ STS_BUSY:8
+0652 13 1E          	stm	(r14,#FDC_STS-R14_BASE),r1
+0654                ;----- wait until CMD.WR tarp input -----
+0654                fdc_l1:
+0654                ;CHECK COMMAND IN ?
+0654 08 0B          	ldm	r0,(r11,#FDC_CMD-R11_BASE)
+0656 0C 30          	tst	r0,r0 ;writed ?
+0658 0A 2B          	bpl	fdc_cmd_in
+065A                ;STATUS UPDATE
+065A 08 27 CF 2F    	jsr	fdc_upd_sts
+065E                ;WAIT
+065E 10 70          	mov	r0,#2*8:8    ;short sleep
+0660 05 27 B1 2F    	jsr	OS_Sleep
+0664                ;
+0664 F8 2F          	bra	fdc_l1
+0666                ;
+0666                ;----- command handling ------
+0666                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0666 A0 70          	mov	r0,#16*10:8
+0668                fdc_cmd_w:
+0668 01 90          	sub	r0,#1:8
+066A FF 29          	bne	fdc_cmd_w
+066C                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+066C                fdc_cmd_in:
+066C                ;wait some x 10us
+066C                	
+066C 07 37          	mov	r7,r0      ; new cmd
+066E 80 27 00 70    	mov	r0,#8000h  ; clear flag
+0672 08 1B          	stm	(r11,#FDC_CMD-R11_BASE),r0 ;set clear mark
+0674                ;
+0674 80 C7          	tst	r7,#80h:8
+0676 08 21          	beq	fdc_type1
+0678 40 C7          	tst	r7,#40h:8
+067A 6D 21          	beq	fdc_type2
+067C F0 D7          	cmp	r7,#0f0h:8
+067E 08 27 EE 20    	jlo	fdc_type3
+0682 08 27 FC 2F    	jmp	fdc_type4
+0686                ;
+0686                ;----------------------------------------------------------------------------
+0686                ; TYPE-I entry
+0686                ;----------------------------------------------------------------------------
+0686                fdc_type1:
+0686                ;BSY = 1 & clear status
+0686 03 0E          	ldm	r0,(r14,#FDC_STS-R14_BASE)
+0688 80 40          	and	r0,#STS_NOT_RDY:8
+068A 01 50          	or	r0,#STS_BUSY:8
+068C 03 1E          	stm	(r14,#FDC_STS-R14_BASE),r0
+068E                ;TYPE 2/3 DRQ Clear
+068E 07 0E          	ldm	r0,(r14,#FDC_DRQ_CLR-R14_BASE)
+0690                ;
+0690 08 27 CF 2F    	jsr	fdc_upd_sts
+0694                ;if(CMD.h) HLD = 1 else HLD = 0
+0694 F7 46          	and	r6,#0ffh ^ FDC_HLD:8
+0696 08 C7          	tst	r7,#8:8    ;CMD.h ?
+0698 02 21          	beq	fdc_t11
+069A 08 56          	or	r6,#FDC_HLD:8
+069C                fdc_t11:
+069C                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+069C                ;wait?
+069C BB 70          	mov	r0,#3000/TIME_TICK:8
+069E 05 27 B1 2F    	jsr	OS_Sleep
+06A2                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+06A2                ;
+06A2 40 C7          	tst	r7,#40h:8  ; step in or out ?
+06A4 12 29          	bne	stepin_out
+06A6 20 C7          	tst	r7,#20h:8  ; step ?
+06A8 14 29          	bne	step
+06AA 10 C7          	tst	r7,#10h:8  ; seek ?
+06AC 06 29          	bne	seek
+06AE                ;restore
+06AE                ;TRK = 0xff;
+06AE FF 71          	mov	r1,#0ffh:8
+06B0 19 1B          	stm	(r11,#FDC_TRK-R11_BASE),r1
+06B2 00 71          	mov	r1,#0:8
+06B4 1B 1B          	stm	(r11,#FDC_DAT-R11_BASE),r1
+06B6                ;change command code to SEEK
+06B6 10 57          	or	r7,#10h:8  ;RESTORE -> SEEK
+06B8                seek:
+06B8 10 56          	or	r6,#FDC_DIRC:8   ;DIRC=1
+06BA 0B 0B          	ldm	r0,(r11,#FDC_DAT-R11_BASE)
+06BC 19 0B          	ldm	r1,(r11,#FDC_TRK-R11_BASE)
+06BE 1D 30          	cmp	r0,r1
+06C0 2D 21          	beq	seek_end
+06C2 02 28          	bhs	seek_out
+06C4 10 66          	xor	r6,#FDC_DIRC:8   ;DIRC=0
+06C6                seek_out:
+06C6 07 2F          	bra	fdc_t1u1
+06C8                ;
+06C8                stepin_out:
+06C8 10 56          	or	r6,#FDC_DIRC:8   ;DIRC=1
+06CA 20 C7          	tst	r7,#20h:8
+06CC 02 21          	beq	step         ;step in
+06CE                ;step out
+06CE 10 66          	xor	r6,#FDC_DIRC:8   ;DIRC=0
+06D0                step:
+06D0 10 C7          	tst	r7,#10h:8   ;CMD.u ?
+06D2 07 21          	beq	fdc_t1u0    ;no TRK update
+06D4                ;seek with track update
+06D4                fdc_t1u1:
+06D4                ;update TRK reg
+06D4 09 0B          	ldm	r0,(r11,#FDC_TRK-R11_BASE)
+06D6 01 80          	add	r0,#1:8   ;+1
+06D8 10 C6          	tst	r6,#FDC_DIRC:8
+06DA 02 29          	bne	fdc_trk_set
+06DC 02 90          	sub	r0,#2:8   ;-1
+06DE                fdc_trk_set:
+06DE 09 1B          	stm	(r11,#FDC_TRK-R11_BASE),r0
+06E0                fdc_t1u0:
+06E0                ;if(DIRC==0 & TRACK_00) goto seek_end
+06E0 08 27 CF 2F    	jsr	fdc_upd_sts
+06E4                ;
+06E4 10 C6          	tst	r6,#FDC_DIRC:8
+06E6 07 29          	bne	fdc_no_trk00
+06E8                ;
+06E8 03 0E          	ldm	r0,(r14,#FDC_STS-R14_BASE)
+06EA 04 C0          	tst	r0,#STS_TRACK_00:8
+06EC 04 21          	beq	fdc_no_trk00
+06EE                ;goto seek_end
+06EE 00 70          	mov	r0,#0:8
+06F0 09 1B          	stm	(r11,#FDC_TRK-R11_BASE),r0
+06F2 14 2F          	bra	seek_end
+06F4                fdc_no_trk00:
+06F4                ;-------------------------------------
+06F4                ;OUTPUT SEEK PULSE
+06F4 09 27 31 2F    	jsr	fdd_seek_pulse
+06F8                ;-------------------------------------
+06F8                .ifdef SHOW_TRK
+06F8                	ldm	r1,(r11,#FDC_TRK-R11_BASE)
+06F8                ;	or	r1,#0ee00h
+06F8                	and	r1,#0ffh:8
+06F8                	ldm	r0,(r11,#FDC_TRK-R11_BASE)
+06F8                ;
+06F8                	mov	r0,#fd_phy_trk
+06F8                	ldm	r0,(r0)
+06F8                	mlt	r0,#100h
+06F8                	or	r1,r0
+06F8                
+06F8                	stm	(r14,#SEG7_NUM-R14_BASE),r1
+06F8                .endif
+06F8                ;seek time
+06F8 01 27 77 70    	mov	r0,#6000/TIME_TICK ; 00=6ms/3ms
+06FC 03 C7          	tst	r7,#3:8
+06FE 0A 21          	beq	seek_spd
+0700 08 30          	add	r0,r0              ; 01=12ms/6ms
+0702 02 C7          	tst	r7,#2:8
+0704 07 21          	beq	seek_spd
+0706 04 27 E2 70    	mov	r0,#20000/TIME_TICK ; 10=20ms/10ms
+070A 01 C7          	tst	r7,#1:8
+070C 03 21          	beq	seek_spd
+070E 07 27 53 70    	mov	r0,#30000/TIME_TICK ; 01=30ms/15ms
+0712                seek_spd:
+0712                ;media check
+0712                ; tst r0,#IN_CLK_2M
+0712                ; beq
+0712                ; mlh  r0,#8000h ;2HD 1/2
+0712 05 27 B1 2F    	jsr	OS_Sleep
+0716                ;
+0716 E0 C7          	tst	r7,#0e0h:8 ;seek/restore ?
+0718 D0 21          	beq	seek
+071A                seek_end:
+071A 04 C7          	tst	r7,#004h:8 ;V=1 ?
+071C 0C 21          	beq	type1_e
+071E                ;Verify
+071E 07 27 37 2F    	jsr	fdc_hld15
+0722                ;
+0722 00 70          	mov	r0,#0:8
+0724 00 1A          	stm	(r10,#fdc_ip-r10_BASE),r0
+0726                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0726 08 27 81 2F    	jsr	read_idam
+072A 07 27 34 30    	jcs	type1_e  ;timeout
+072E                ;clear CRC error
+072E 13 0E          	ldm	r1,(r14,#FDC_STS-R14_BASE)
+0730 F7 41          	and	r1,#0ffh ^ STS_CRC_ERROR:8
+0732 13 1E          	stm	(r14,#FDC_STS-R14_BASE),r1
+0734                type1_e:
+0734 8D 2F          	bra	fdc_loop
+0736                ;
+0736                ;----------------------------------------------------------------------------
+0736                ; HLD 15ms wait
+0736                ;----------------------------------------------------------------------------
+0736                fdc_hld15:
+0736 04 C7          	tst	r7,#04h:8  ;V flag ?
+0738 05 21          	beq	fdc_hld0
+073A                ;
+073A 03 27 A9 70    	mov	r0,#15000/TIME_TICK ;15ms wait
+073E 05 27 B1 2F    	jsr	OS_Sleep
+0742                fdc_hld0:
+0742                ;HLD = 1
+0742 08 56          	or	r6,#FDC_HLD:8
+0744                ;
+0744                ;while (HLT=1)
+0744                ;
+0744 00 0F          	ret
+0746                ;
+0746                ;----------------------------------------------------------------------------
+0746                ; TYPE-II not ready
+0746                ;----------------------------------------------------------------------------
+0746                fdc_type2_nrdy:
+0746                ;IRQ = 1
+0746 06 27 4E 2F    	jmp	fdc_loop
+074A                ;;	bra	fdc_loop
+074A                ;----------------------------------------------------------------------------
+074A                ; TYPE-II write protect
+074A                ;----------------------------------------------------------------------------
+074A                fdc_t2_wrt:
+074A 13 0E          	ldm	r1,(r14,#FDC_STS-R14_BASE)
+074C 40 51          	or	r1,#STS_WRITE_PROTECT:8
+074E 13 1E          	stm	(r14,#FDC_STS-R14_BASE),r1
+0750                ;
+0750 06 27 4E 2F    	jmp	fdc_loop
+0754                ;;	bra	fdc_loop
+0754                ;
+0754                ;----------------------------------------------------------------------------
+0754                ; FDC ISR TYPE2
+0754                ;
+0754                ; note:
+0754                ;  HLD not supported
+0754                ;  HLT sampling not supported
+0754                ;  E bit 15ms wait not supported
+0754                ;  WPRT no check
+0754                ;----------------------------------------------------------------------------
+0754                fdc_type2:
+0754                ;BSY = 1 & clear status
+0754 03 0E          	ldm	r0,(r14,#FDC_STS-R14_BASE)
+0756 80 40          	and	r0,#STS_NOT_RDY:8
+0758 01 50          	or	r0,#STS_BUSY:8
+075A 03 1E          	stm	(r14,#FDC_STS-R14_BASE),r0
+075C                ;update FDD status (NOT READY)
+075C 08 27 CF 2F    	jsr	fdc_upd_sts
+0760                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0760                ;wait?
+0760 10 70          	mov	r0,#2*8:8
+0762 05 27 B1 2F    	jsr	OS_Sleep
+0766                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0766                ;not ready check
+0766                ;if(!READY) goto fdc_irq
+0766 03 0E          	ldm	r0,(r14,#FDC_STS-R14_BASE)
+0768 80 C0          	tst	r0,#STS_NOT_RDY:8
+076A EE 29          	bne	fdc_type2_nrdy  ;not ready
+076C                ;HLD=1
+076C 08 56          	or	r6,#FDC_HLD:8
+076E                ;if(E==1) wait(15ms)
+076E 04 C7          	tst	r7,#04h:8  ;E=1 ?
+0770 05 21          	beq	fdc_t21
+0772 03 27 A9 70    	mov	r0,#15000/TIME_TICK  ;15ms
+0776 05 27 B1 2F    	jsr	OS_Sleep
+077A                fdc_t21:
+077A                ;while(HLT!=1);
+077A 08 27 6D 2F    	jsr	wait_hlt
+077E                ;TG43 = TRK>43 ? 1 : 0
+077E FE 46          	and	r6,#0ffh^TG43:8
+0780 09 0B          	ldm	r0,(r11,#FDC_TRK-R11_BASE)
+0782 2C D0          	cmp	r0,#43+1:8
+0784 02 20          	blo	type2_3
+0786 01 56          	or	r6,#TG43:8
+0788                type2_3:
+0788                ;if( WriteData & WPRT=0 goto fdc_irq)
+0788 20 C7          	tst	r7,#20h:8  ;Write data ?
+078A 04 21          	beq	type2_4
+078C 03 0E          	ldm	r0,(r14,#FDC_IN-R14_BASE)
+078E 02 27 00 C0    	tst	r0,#IN_WPRT
+0792                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0792                ;	bne	fdc_t2_wrt
+0792                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0792                type2_4:
+0792 00 70          	mov	r0,#0:8
+0794 00 1A          	stm	(r10,#fdc_ip-r10_BASE),r0
+0796                type2_5:
+0796 08 27 81 2F    	jsr	read_idam
+079A 42 20          	bcs	type2_rnf
+079C                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+079C                ;TYPE-IV break check
+079C 08 0B          	ldm	r0,(r11,#FDC_CMD-R11_BASE)
+079E 0C 30          	tst	r0,r0
+07A0 06 27 6C 2B    	jpl	fdc_cmd_in
+07A4                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+07A4                ;compare target and readed-ID
+07A4 02 C7          	tst	r7,#02h:8  ; C=1?
+07A6 07 21          	beq	type2_7
+07A8                ;S == H?
+07A8 05 0A          	ldm	r0,(r10,#fdd_H-R10_BASE)
+07AA 08 C7          	tst	r7,#08h:8  ; S=1?
+07AC 02 21          	beq	type2_6
+07AE 01 60          	xor	r0,#01h:8
+07B0                type2_6:
+07B0 01 C0          	tst	r0,#01h:8
+07B2 F2 29          	bne	type2_5
+07B4                type2_7:
+07B4                ;R == R
+07B4 06 0A          	ldm	r0,(r10,#fdd_R-R10_BASE)
+07B6 1A 0B          	ldm	r1,(r11,#FDC_SEC-R11_BASE)
+07B8 1D 30          	cmp	r0,r1
+07BA EE 29          	bne	type2_5
+07BC                ;ID CRC check
+07BC 08 0A          	ldm	r0,(r10,#fdd_sts-R10_BASE)
+07BE 08 C0          	tst	r0,#STS_CRC_ERROR:8
+07C0 05 21          	beq	id_no_crc_err
+07C2                ;
+07C2 03 0E          	ldm	r0,(r14,#FDC_STS-R14_BASE)
+07C4 08 50          	or	r0,#STS_CRC_ERROR:8
+07C6 03 1E          	stm	(r14,#FDC_STS-R14_BASE),r0
+07C8 E7 2F          	bra	type2_5
+07CA                id_no_crc_err:
+07CA 03 0E          	ldm	r0,(r14,#FDC_STS-R14_BASE)
+07CC F7 40          	and	r0,#0ffh ^ STS_CRC_ERROR:8
+07CE 03 1E          	stm	(r14,#FDC_STS-R14_BASE),r0
+07D0                ;Write / Read branch
+07D0 20 C7          	tst	r7,#20h:8  ;Write data ?
+07D2 28 29          	bne	fdc_type2_wr
+07D4                ;----------
+07D4                ;read sector
+07D4 1A 0A          	ldm	r1,(R10,#fdd_meml-R10_BASE)
+07D6 2B 0A          	ldm	r2,(R10,#fdd_memH-R10_BASE)
+07D8 51 27 00 52    	or	r2,#DMAM_RFSH_REQ | DMAM_MREQ | DMAM_RD
+07DC 31 0A          	ldm	r3,(r10,#fdc_slen-R10_BASE)
+07DE                ;
+07DE                fdc_rd_drq:
+07DE 02 70          	mov	r0,#32/TIME_TICK:8
+07E0 05 27 B1 2F    	jsr	OS_Sleep
+07E4                .ifdef NO_LOST_DATA
+07E4                ;non overlow mode
+07E4                	ldm	r0,(r14,#FDC_STS-R14_BASE)
+07E4                	tst	r0,#STS_DATA_REQ
+07E4                	bne	fdc_rd_drq
+07E4                .endif
+07E4                ;read FDD data in RFSH access
+07E4 80 3F          	cli
+07E6 18 1E          	stm	(r14,#FDM_AL-R14_BASE),r1
+07E8 29 1E          	stm	(r14,#FDM_AH-R14_BASE),r2
+07EA                ;pointer increment
+07EA 01 81          	add	r1,#1:8
+07EC 00 A2          	adc	r2,#0:8
+07EE                ;wait until data read
+07EE                fdc_rd_drq1:
+07EE 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+07F0 02 27 00 C0    	tst	r0,#DMAM_BUSY
+07F4 FD 29          	bne	fdc_rd_drq1
+07F6                ;copy read DATA to DATA regiter
+07F6 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+07F8 FF 40          	and	r0,#0ffh:8
+07FA 0B 1B          	stm	(r11,#FDC_DAT-R11_BASE),r0
+07FC                ;clear RFSH access
+07FC 00 70          	mov	r0,#0:8
+07FE 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0
+0800 90 3F          	sti
+0802                ;set DRQ status
+0802 06 0E          	ldm	r0,(r14,#FDC_DRQ_SET-R14_BASE)
+0804                ;count down sector length
+0804 01 93          	sub	r3,#1:8
+0806 EC 29          	bne	fdc_rd_drq
+0808                ;end of RD
+0808                ;wait until CRC read
+0808 04 70          	mov	r0,#32*2/TIME_TICK:8
+080A 05 27 B1 2F    	jsr	OS_Sleep
+080E                ;
+080E                sec_end:
+080E 10 C7          	tst	r7,#10h:8  ;m==1 ?
+0810 06 27 4E 21    	jeq	fdc_loop
+0814                ;multi sector
+0814 0A 0B          	ldm	r0,(r11,#FDC_SEC-R11_BASE)
+0816 01 80          	add	r0,#1:8
+0818 FF 40          	and	r0,#0ffh:8
+081A 0A 1B          	stm	(r11,#FDC_SEC-R11_BASE),r0
+081C BB 2F          	bra	type2_4
+081E                ;
+081E                ;----- recoard not found error -----
+081E                type2_rnf:
+081E 06 27 4E 2F    	jmp	fdc_loop
+0822                ;
+0822                ;----------------------------------------------------------------------------
+0822                ; TYPE-II write main
+0822                ;----------------------------------------------------------------------------
+0822                fdc_type2_wr:
+0822                ;wait 2byte
+0822                ;set DRQ for 1st data
+0822 06 0E          	ldm	r0,(r14,#FDC_DRQ_SET-R14_BASE)
+0824                ;wait 8byte
+0824                ;if(not DREQ) goto LOST_DATA error
+0824                ;wait 1byte
+0824                ;if(dden==0)
+0824                ;  wait 1byte,WG=1,write 12byte 00h
+0824                ;else
+0824                ;  WG=1,write 6byte
+0824                ;
+0824 01 C7          	tst	r7,#1:8   ;a0
+0826                ;if(a0) write DeletedDataMark
+0826                ;else   write DataMark
+0826                ;
+0826                ;DRQ ISR set
+0826                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0826                ;----------------------------------------------------------------------------
+0826                ; FDC WriteSector DRQ ISR
+0826                ;----------------------------------------------------------------------------
+0826                fdc_wr_drq:
+0826 02 70          	mov	r0,#32/TIME_TICK:8
+0828 05 27 B1 2F    	jsr	OS_Sleep
+082C                .ifdef NO_LOST_DATA
+082C                ;non overlow mode
+082C                	ldm	r0,(r14,#FDC_STS-R14_BASE)
+082C                	tst	r0,#STS_DATA_REQ
+082C                	bne	fdc_wr_drq
+082C                .endif
+082C 80 3F          	cli
+082E                ;request FDD memory write
+082E 0B 0B          	ldm	r0,(r11,#FDC_DAT-R11_BASE)
+0830 00 1E          	stm	(r14,#DMA_DATA-R14_BASE),r0
+0832                ;
+0832 11 1F          	push	r1
+0834 0A 0A          	ldm	r0,(R10,#fdd_meml-R10_BASE)
+0836 08 1E          	stm	(r14,#FDM_AL-R14_BASE),r0
+0838 1B 0A          	ldm	r1,(R10,#fdd_memH-R10_BASE)
+083A 91 27 00 51    	or	r1,#DMAM_RFSH_REQ |DMAM_MREQ | DMAM_WR
+083E 19 1E          	stm	(r14,#FDM_AH-R14_BASE),r1
+0840                ;next FDD memory point
+0840 01 80          	add	r0,#1:8
+0842 00 A1          	adc	r1,#0:8
+0844 1B 1A          	stm	(R10,#fdd_memH-r10_base),r1
+0846 0A 1A          	stm	(R10,#fdd_meml-r10_base),r0
+0848 11 0F          	pop	r1
+084A                ;wait until data wrote
+084A                fdc_wr_drq1:
+084A 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+084C 02 27 00 C0    	tst	r0,#DMAM_BUSY
+0850 FD 29          	bne	fdc_wr_drq1
+0852                ;clear RFSH access
+0852 00 70          	mov	r0,#0:8
+0854 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0
+0856 90 3F          	sti
+0858                ;count down
+0858 01 0A          	ldm	r0,(r10,#fdc_slen-R10_BASE)
+085A 01 90          	sub	r0,#1:8
+085C 01 1A          	stm	(r10,#fdc_slen-R10_BASE),r0
+085E 03 21          	beq	fdc_wr_drq_r
+0860                ;set DRQ for next data
+0860 06 0E          	ldm	r0,(r14,#FDC_DRQ_SET-R14_BASE)
+0862                ;
+0862 E2 2F          	bra	fdc_wr_drq
+0864                ;
+0864                fdc_wr_drq_r:
+0864                ;wait until CRC write
+0864 04 70          	mov	r0,#32*2/TIME_TICK:8
+0866 05 27 B1 2F    	jsr	OS_Sleep
+086A                ;
+086A D2 2F          	bra	sec_end
+086C                ;
+086C                ;--------------------
+086C                ;waiting for HLT=1
+086C                ;--------------------
+086C                wait_hlt:
+086C                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+086C 00 0F          	ret
+086E                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+086E 03 0E          	ldm	r0,(r14,#FDC_IN-R14_BASE)
+0870 01 27 00 C0    	tst	r0,#IN_HLT
+0874 02 21          	beq	wait_hlt_w
+0876 00 0F          	ret
+0878                wait_hlt_w:
+0878 02 70          	mov	r0,#2:8
+087A 05 27 B1 2F    	jsr	OS_Sleep
+087E F7 2F          	bra	wait_hlt
+0880                ;
+0880                ;------------------------------------------------
+0880                ;read IDAM and comapre TRK
+0880                ;------------------------------------------------
+0880                ;input
+0880                ;otuput
+0880                ;  CF = IP timeout error
+0880                ;  r0 = C
+0880                ;  r1 = H
+0880                ;  r2 = R
+0880                ;  r3 = N
+0880                ;  FDC.STS CRC error
+0880                read_idam:
+0880                ;
+0880                
+0880 00 0A          	ldm	r0,(r10,#fdc_ip-r10_BASE)
+0882 05 D0          	cmp	r0,#5:8
+0884 20 28          	bhs	read_idam_tout
+0886                ;
+0886                ;fdd_trk:	ds	2 ;track data top position
+0886                ;fdd_num_sec	ds	2 ;data
+0886                ;fdd_c		ds	2 ;C
+0886                ;fdd_h		ds	2 ;H
+0886                ;fdd_r		ds	2 ;R
+0886                ;fdd_n		ds	2 ;N
+0886                ;fdd_sts		ds	2 ;status
+0886                ;
+0886                ;fdd_meml	ds	2 ;memory point
+0886                ;fdd_memh	ds	2
+0886                ;fdc_slen		ds	2 ;memory point
+0886                ;
+0886 09 27 8B 2F    	jsr	fdd_get_next_id
+088A 1C 20          	bcs	read_idwt
+088C                ;set recoard length
+088C 17 0A          	ldm	r1,(r10,#fdd_N-R10_BASE)
+088E 80 70          	mov	r0,#80h:8 ;N=0:80H
+0890 01 91          	sub	r1,#1:8
+0892 08 20          	blo	n_sel
+0894 08 30          	add	r0,r0  ;N=1:100h
+0896 01 91          	sub	r1,#1:8
+0898 05 20          	blo	n_sel
+089A 08 30          	add	r0,r0  ;N=2:200h
+089C 01 91          	sub	r1,#1:8
+089E 02 20          	blo	n_sel
+08A0 08 30          	add	r0,r0  ;N=3:400h
+08A2                n_sel:
+08A2 01 1A          	stm	(r10,#fdc_slen-R10_BASE),r0
+08A4                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+08A4 08 27 CF 2F    	jsr	fdc_upd_sts
+08A8                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+08A8                ;compare TRK
+08A8 09 0B          	ldm	r0,(r11,#FDC_TRK-R11_BASE)
+08AA 14 0A          	ldm	r1,(r10,#fdd_C-R10_BASE)
+08AC 1D 30          	cmp	r0,r1
+08AE 08 21          	beq	read_idok
+08B0                ;TRK mismatch , try to nect sector
+08B0                ;ID MARK
+08B0                ; FM  GAP1(40)+SYNC(6) +IDX(1)+GAP(26)
+08B0                ; MFM GAP1(80)+SYNC(12)+IDX(4)+GAP(50)
+08B0                ;sector to sector
+08B0                ; FM  GAP2(11)+SYNC(6) +DAM(1)+DATA+CRC(2)+GAP3(27) +SYNC(6) +ID(1)
+08B0                ; MFM GAP2(22)+SYNC(12)+DAM(4)+DATA+CRC(2)+GAP3(54) +SYNC(12)+ID(4)
+08B0 01 0A          	ldm	r0,(r10,#fdc_slen-R10_BASE)
+08B2 4E 80          	add	r0,#78:8 ;MFM
+08B4 01 27 00 F0    	mlh	r0,#100h*16/TIME_TICK
+08B8 05 27 B1 2F    	jsr	OS_Sleep
+08BC E2 2F          	bra	read_idam
+08BE                ;
+08BE                ;OK return
+08BE                read_idok:
+08BE 20 3F          	clc
+08C0 00 0F          	ret
+08C2                ;
+08C2                read_idwt:
+08C2 DF 2F          	bra	read_idam
+08C4                ;
+08C4                ;-- 5xID hole timeout --
+08C4                read_idam_tout:
+08C4                ;STS_RECOARD_NOT_FOUND(SEEK_ERROR)
+08C4 13 0E          	ldm	r1,(r14,#FDC_STS-R14_BASE)
+08C6 10 51          	or	r1,#STS_RECOARD_NOT_FOUND:8
+08C8 13 1E          	stm	(r14,#FDC_STS-R14_BASE),r1
+08CA 30 3F          	stc
+08CC 00 0F          	ret
+08CE                ;
+08CE                ;----------------------------------------------------------------------------
+08CE                ; UPDATE IDLE STSTUS PORT
+08CE                ;----------------------------------------------------------------------------
+08CE                ;r0 = update status mask
+08CE                fdc_upd_sts:
+08CE                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+08CE 09 27 4B 2F    	jsr	fdd_check
+08D2                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+08D2 C8 70          	mov	r0,#STS_NOT_RDY|STS_WRITE_PROTECT|STS_CRC_ERROR:8 ;TYPE II/III
+08D4 80 C7          	tst	r7,#80h:8
+08D6 02 29          	bne	fdc_upd_s1
+08D8 C6 70          	mov	r0,#STS_NOT_RDY|STS_WRITE_PROTECT|STS_TRACK_00|STS_INDEX:8 ;TYPE I
+08DA                fdc_upd_s1:
+08DA 80 3F          	cli
+08DC 18 0A          	ldm	r1,(r10,#fdd_sts-R10_BASE)
+08DE 04 31          	and	r1,r0
+08E0 23 0E          	ldm	r2,(r14,#FDC_STS-R14_BASE)
+08E2 05 32          	or	r2,r0
+08E4 06 32          	xor	r2,r0
+08E6                ;
+08E6 25 31          	or	r1,r2
+08E8 13 1E          	stm	(r14,#FDC_STS-R14_BASE),r1
+08EA 90 3F          	sti
+08EC 00 0F          	ret
+08EE                ;
+08EE                ;----------------------------------------------------------------------------
+08EE                ; un emulatedf
+08EE                ;----------------------------------------------------------------------------
+08EE                fdc_type3:
+08EE                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+08EE FF 27 F0 70    	mov	r0,#0fff0h
+08F2 07 1E          	stm	(r14,#SEG7_NUM-R14_BASE),r0
+08F4 80 3F          	cli
+08F6 FC 2F          	bra	fdc_type3
+08F8                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+08F8                
+08F8 06 27 4E 2F    	jmp	fdc_loop
+08FC                ;;	bra	fdc_loop
+08FC                fdc_type4:
+08FC                ;TYPE 2/3 DRQ Clear
+08FC                ;	ldm	r0,(r14,#FDC_DRQ_CLR-R14_BASE)
+08FC 06 27 4E 2F    	jmp	fdc_loop
+0900                ;;	bra	fdc_loop
+0900                	include "fdd_emu.asm"
+0900                ;******************************************************************************
+0900                ; FD image data *.2D / *.D88 emulation for X1 FD Interface
+0900                ;
+0900                ; 2005. 4.12
+0900                ;
+0900                ;******************************************************************************
+0900                ;
+0900 00 00 00 01    FDC_PRESET equ 1
+0900                ;
+0900                ;----- image mode -----
+0900 00 00 00 01    FDD_D88	equ	1
+0900 00 00 00 01    FDD_2D	equ	1
+0900 00 00 00 01    FDD_AUTO equ	FDD_D88 & FDD_2D
+0900                ;
+0900                ;D88 format
+0900                ;
+0900                ;----- HEADER -----
+0900 00 00 00 00    D88_NAME	equ	0000H ;17 DiskName (ASCII-Z)
+0900 00 00 00 09    D88_RSV11	equ	0009H ; 9 RSV
+0900 00 00 00 1A    D88_WPRT	equ	001AH ; 1 10H = WriteProtect
+0900 00 00 00 00    D88_WPRT_OFF	equ	00H   ;   Protect OFF
+0900 00 00 00 10    D88_WPRT_ON	equ	10H   ;   Protect ON (*any)
+0900 00 00 00 1B    D88_TYPE	equ	001BH ; 1 Disk Type
+0900 00 00 00 00    D88_TYPE_2D	equ	00H   ;   2D
+0900 00 00 00 10    D88_TYPE_2DD	equ	10H   ;   2DD
+0900 00 00 00 20    D88_TYPE_2HD	equ	20H   ;   2HD
+0900 00 00 00 1C    D88_DISK_SIZE	equ	001CH ; 4 Disk Size
+0900 00 00 00 20    D88_TRK_TBL	equ	0020H ; 4*160 TrackDataTable
+0900                ;
+0900                ;----- TRACK -----
+0900 00 00 00 00    D88_TRK_C	equ	0000H ; 1 Cylinder
+0900 00 00 00 01    D88_TRK_H	equ	0001H ; 1 Head
+0900 00 00 00 02    D88_TRK_R	equ	0002H ; 1 Recoard
+0900 00 00 00 03    D88_TRK_N	equ	0003H ; 1 Number?
+0900 00 00 00 04    D88_TRK_NUM_SEC	equ	0004H ; 2 number of sectors per track
+0900 00 00 00 06    D88_TRK_ENC	equ	0006H ; 1 Encode Mode
+0900 00 00 00 00    D88_TRK_ENC_MFM	equ	00H   ;   MFM encode
+0900 00 00 00 40    D88_TRK_ENC_FM	equ	40H   ;   FM encode
+0900 00 00 00 07    D88_TRK_DD	equ	0007H ; 1 Data Mark
+0900 00 00 00 10    D88_TRK_DD_DEL	equ	10H   ;   DeletedDataMark
+0900 00 00 00 08    D88_TRK_STS	equ	0008H ; 1 Status
+0900 00 00 00 00    D88_TRK_STS_OK	equ	00H   ;   no error
+0900 00 00 00 09    D88_TRK_RSV09	equ	0009H ; 5 reserved
+0900 00 00 00 0E    D88_TRK_SIZE	equ	000EH ; 2 sector size
+0900 00 00 00 10    D88_TRK_DATA	equ	0010H ;(D88_TRK_SIZE) sector data
+0900                ;
+0900                	CSEG
+0900                ;
+0900                ;-------------------------------------
+0900                ;get drive physical data pointer
+0900                ;-------------------------------------
+0900                ;input
+0900                ; FDC_MOT : motor on/off and DS1,DS0
+0900                ;output
+0900                ; r0      : fdd_phyX
+0900                ; fdd_sts : NOT READY
+0900                ;
+0900                get_drv_ptr:
+0900 0C 0B          	ldm	r0,(r11,#FDC_MOT-R11_BASE) ;X1 DS0,DS1 port
+0902 18 0A          	ldm	r1,(r10,#fdd_sts-R10_BASE)
+0904 80 C0          	tst	r0,#80h:8
+0906 0E 21          	beq	no_drv     ;motor OFF!
+0908                ;
+0908 02 C0          	tst	r0,#2:8
+090A 0C 29          	bne	no_drv     ;Drive 2,3!
+090C                ;
+090C                fdd_drv01:
+090C 01 40          	and	r0,#1:8
+090E                ;LED Controll
+090E 07 31          	mov	r1,r0
+0910 01 81          	add	r1,#1:8
+0912 14 1E          	stm	(r14,#FDD_PORT-R14_BASE),r1
+0914                ;
+0914 06 E0          	mlt	r0,#fd_phy_size:8
+0916 10 27 F4 80    	add	r0,#fd_phy0
+091A 7F 41          	and	r1,#0ffh ^ STS_NOT_RDY:8  ; READY
+091C                fdd_sd1:
+091C 0D 1A          	stm	(r10,#fdd_ptr-R10_BASE),r0
+091E 18 1A          	stm	(r10,#fdd_sts-R10_BASE),r1
+0920 00 0F          	ret
+0922                ;
+0922                ;drive 2,3 not ready
+0922                no_drv:
+0922                ;LED OFF
+0922 00 70          	mov	r0,#0:8
+0924 04 1E          	stm	(r14,#FDD_PORT-R14_BASE),r0
+0926                ;
+0926 10 27 F4 70    	mov	r0,#fd_phy0          ; NO DATA
+092A 80 51          	or	r1,#STS_NOT_RDY:8    ; NOT READY
+092C FB 21          	beq	no_drv     ;motor OFF!
+092E                
+092E F7 2F          	bra	fdd_sd1
+0930                ;
+0930                ;-------------------------------------
+0930                ;seek one pulse
+0930                ;-------------------------------------
+0930                fdd_seek_pulse
+0930                ;
+0930                ;-------------------------------------
+0930                ;OUTPUT SEEK SOUND
+0930 00 70          	mov	r0,#0:8
+0932 A0 71          	mov	r1,#160:8
+0934 05 27 71 2F    	jsr	pcm_play
+0938                ;-------------------------------------
+0938                ;
+0938 09 27 01 2F    	jsr	get_drv_ptr
+093C 10 00          	ldm	r1,(r0,#fd_phy_trk-fd_phy0)
+093E 01 81          	add	r1,#1:8   ;+1
+0940 10 C6          	tst	r6,#FDC_DIRC:8
+0942 02 29          	bne	fdd_trk_set
+0944 02 91          	sub	r1,#2:8   ;-1
+0946                fdd_trk_set:
+0946 10 10          	stm	(r0,#fd_phy_trk-fd_phy0),r1
+0948 04 2F          	bra	fdd_check2
+094A                ;
+094A                ;-------------------------------------
+094A                ;FDD drive , status check
+094A                ;-------------------------------------
+094A                fdd_check:
+094A 09 27 01 2F    	jsr	get_drv_ptr
+094E 10 00          	ldm	r1,(r0,#fd_phy_trk-fd_phy0)
+0950                fdd_check2:
+0950 01 D1          	cmp	r1,#1:8
+0952 07 28          	bhs	trk_plus
+0954                ;0 or minus
+0954 00 71          	mov	r1,#0:8                      ;adjust TRK zero
+0956 10 10          	stm	(r0,#fd_phy_trk-fd_phy0),r1
+0958                ;
+0958 08 0A          	ldm	r0,(r10,#fdd_sts-R10_BASE)
+095A 04 50          	or	r0,#STS_TRACK_00:8           ; TRACK_00 = 1
+095C 08 1A          	stm	(r10,#fdd_sts-R10_BASE),r0
+095E 00 0F          	ret
+0960                ;plus
+0960                trk_plus:
+0960 2B D1          	cmp	r1,#40+3:8    ;TRACK LIMIT (2D)
+0962                ;	cmp	r1,#82+3:8    ;TRACK LIMIT (2HD)
+0962 03 20          	blo	trk_ok
+0964 2B 71          	mov	r1,#40+3:8    ;TRACK LIMIT (2D)
+0966                ;	mov	r1,#82+3:8    ;TRACK LIMIT (2HD)
+0966 10 10          	stm	(r0,#fd_phy_trk-fd_phy0),r1
+0968                trk_ok:
+0968 08 0A          	ldm	r0,(r10,#fdd_sts-R10_BASE)
+096A FB 40          	and	r0,#0ffh ^ STS_TRACK_00:8  ; TRACK_00 = 0
+096C 08 1A          	stm	(r10,#fdd_sts-R10_BASE),r0
+096E 00 0F          	ret
+0970                ;
+0970                ;-------------------------------------
+0970                ;move FDD FDC target track
+0970                ;-------------------------------------
+0970                ;in
+0970                ;
+0970                ;out
+0970                ; r0 : logical track number
+0970                fdd_focus:
+0970                ;pick memory base pointer
+0970 09 27 01 2F    	jsr	get_drv_ptr
+0974 11 00          	ldm	r1,(r0,#fd_phy_ml-fd_phy0)
+0976 22 00          	ldm	r2,(r0,#fd_phy_mh-fd_phy0)
+0978 1A 1A          	stm	(r10,#fdd_meml-R10_BASE),r1
+097A 2B 1A          	stm	(r10,#fdd_memh-R10_BASE),r2
+097C                ;pick track
+097C 00 00          	ldm	r0,(r0,#fd_phy_trk-fd_phy0)
+097E 08 30          	add	r0,r0  ; x2
+0980                ;pick HEAD SIDE
+0980 1C 0B          	ldm	r1,(r11,#FDC_MOT-R11_BASE)
+0982 10 C1          	tst	r1,#10h:8
+0984 02 21          	beq	fdd_tg1
+0986 01 50          	or	r0,#1:8 ;+1 side
+0988                fdd_tg1:
+0988 00 0F          	ret
+098A                ;
+098A                ;-------------------------------------
+098A                ;get ID emulation
+098A                ;-------------------------------------
+098A                fdd_get_next_id:
+098A                .if FDD_AUTO
+098A 09 27 71 2F    	jsr	fdd_focus
+098E 0A 27 5D 2F    	jsr	fdd_check_d88
+0992 2A 28          	bcc	focus_d88
+0994                .endif
+0994                .if FDD_2D
+0994                ;-------------------------------------
+0994                ;.2D focus sector
+0994                ;-------------------------------------
+0994                focus_2d:
+0994                ;SAVE C,H
+0994 09 27 71 2F    	jsr	fdd_focus
+0998 07 31          	mov	r1,r0
+099A 80 27 00 F1    	mlh	r1,#8000h                ; r0 /= 2
+099E 14 1A          	stm	(r10,#fdd_C-R10_BASE),r1 ; Cylinder
+09A0 07 31          	mov	r1,r0
+09A2 01 41          	and	r1,#1:8
+09A4 15 1A          	stm	(r10,#fdd_H-R10_BASE),r1 ; Head
+09A6                ;SECTOR increment
+09A6 29 0A          	ldm	r2,(r10,#fdd_sec_ptr-R10_BASE)
+09A8 01 82          	add	r2,#1:8
+09AA 10 D2          	cmp	r2,#10h:8
+09AC 05 20          	blo	focus_2d1
+09AE                ;IP countup
+09AE 20 0A          	ldm	r2,(r10,#fdc_ip-r10_BASE)
+09B0 01 82          	add	r2,#1:8
+09B2 20 1A          	stm	(r10,#fdc_ip-r10_BASE),r2
+09B4 00 72          	mov	r2,#0:8    ;roll back
+09B6                focus_2d1:
+09B6 29 1A          	stm	(r10,#fdd_sec_ptr-R10_BASE),r2
+09B8 01 82          	add	r2,#1:8
+09BA 26 1A          	stm	(r10,#fdd_R-R10_BASE),r2  ;1 to 16
+09BC 01 92          	sub	r2,#1:8
+09BE                ;to recoard number
+09BE 10 E0          	mlt	r0,#10h:8
+09C0 28 30          	add	r0,r2
+09C2                ;to memory offset
+09C2 07 31          	mov	r1,r0
+09C4 01 27 00 E0    	mlt	r0,#100h
+09C8 01 27 00 F1    	mlh	r1,#100h
+09CC                ;+base address
+09CC 2A 0A          	ldm	r2,(r10,#fdd_meml-R10_BASE)
+09CE 28 30          	add	r0,r2
+09D0 2B 0A          	ldm	r2,(r10,#fdd_memh-R10_BASE)
+09D2 2A 31          	adc	r1,r2
+09D4 0A 1A          	stm	(r10,#fdd_meml-R10_BASE),r0
+09D6 1B 1A          	stm	(r10,#fdd_memh-R10_BASE),r1
+09D8                ;STATUS all ready
+09D8 08 0A          	ldm	r0,(r10,#fdd_sts-R10_BASE)
+09DA C7 40          	and	r0,#0ffh ^ STS_RECOARD_TYPE ^ STS_RECOARD_NOT_FOUND ^ STS_CRC_ERROR:8
+09DC 08 1A          	stm	(r10,#fdd_sts-R10_BASE),r0
+09DE                ;N = 1
+09DE 01 70          	mov	r0,#1:8
+09E0 07 1A          	stm	(r10,#fdd_N-R10_BASE),r0
+09E2                ;
+09E2 20 3F          	clc
+09E4 00 0F          	ret
+09E6                .endif
+09E6                .if FDD_D88
+09E6                ;
+09E6                ;-------------------------------------
+09E6                ;.D88 focus sector
+09E6                ;-------------------------------------
+09E6                focus_d88:
+09E6 09 27 71 2F    	jsr	fdd_focus
+09EA 04 E0          	mlt	r0,#4:8           ;track data size
+09EC 20 80          	add	r0,#D88_TRK_TBL:8 ;header offset
+09EE 2A 0A          	ldm	r2,(r10,#fdd_meml-R10_BASE) ;image base
+09F0 1B 0A          	ldm	r1,(r10,#fdd_memh-R10_BASE)
+09F2 28 30          	add	r0,r2
+09F4 00 A1          	adc	r1,#0:8
+09F6                ;get track data top
+09F6 0A 27 CD 2F    	jsr	read_fd_word
+09FA 27 33          	mov	r3,r2
+09FC 0A 27 CD 2F    	jsr	read_fd_word
+0A00 0A 0A          	ldm	r0,(r10,#fdd_meml-R10_BASE) ;image base
+0A02 1B 0A          	ldm	r1,(r10,#fdd_memh-R10_BASE)
+0A04 38 30          	add	r0,r3
+0A06 2A 31          	adc	r1,r2
+0A08                ;
+0A08                ;get number of sectors in  track
+0A08 04 80          	add	r0,#D88_TRK_NUM_SEC:8
+0A0A 00 A1          	adc	r1,#0:8
+0A0C 0A 27 CD 2F    	jsr	read_fd_word
+0A10 06 90          	sub	r0,#D88_TRK_NUM_SEC+2:8
+0A12 00 B1          	sbc	r1,#0:8
+0A14                ;increment SECTOR
+0A14 39 0A          	ldm	r3,(r10,#fdd_sec_ptr-R10_BASE)
+0A16 01 83          	add	r3,#1:8
+0A18 2D 33          	cmp	r3,r2
+0A1A 05 20          	blo	d88_no_roll
+0A1C                ;rollback sector
+0A1C 30 0A          	ldm	r3,(r10,#fdc_ip-r10_BASE)
+0A1E 01 83          	add	r3,#1:8
+0A20 30 1A          	stm	(r10,#fdc_ip-r10_BASE),r3
+0A22 00 73          	mov	r3,#0:8
+0A24                d88_no_roll:
+0A24 39 1A          	stm	(r10,#fdd_sec_ptr-R10_BASE),r3
+0A26                ;
+0A26                ;SEARCH TARGET SECTOR
+0A26                d88_skip_sec:
+0A26 01 93          	sub	r3,#1:8
+0A28 08 20          	blo	d88_found_sec
+0A2A                ;
+0A2A 0E 80          	add	r0,#D88_TRK_SIZE:8
+0A2C 00 A1          	adc	r1,#0:8
+0A2E 0A 27 CD 2F    	jsr	read_fd_word
+0A32                ;
+0A32 28 30          	add	r0,r2
+0A34 00 A1          	adc	r1,#0:8
+0A36 F8 2F          	bra	d88_skip_sec
+0A38                ;
+0A38                d88_found_sec:
+0A38                ;COPY C,H,R,N
+0A38 0A 27 AD 2F    	jsr	read_fd_byte
+0A3C 24 1A          	stm	(r10,#fdd_C-R10_BASE),r2
+0A3E 0A 27 AD 2F    	jsr	read_fd_byte
+0A42 25 1A          	stm	(r10,#fdd_H-R10_BASE),r2
+0A44 0A 27 AD 2F    	jsr	read_fd_byte
+0A48 26 1A          	stm	(r10,#fdd_R-R10_BASE),r2
+0A4A 0A 27 AD 2F    	jsr	read_fd_byte
+0A4E 27 1A          	stm	(r10,#fdd_N-R10_BASE),r2
+0A50                ;COPY SECTOR DATA POINTER
+0A50 0C 80          	add	r0,#D88_TRK_DATA-4:8
+0A52 00 A1          	adc	r1,#0:8
+0A54 0A 1A          	stm	(r10,#fdd_meml-R10_BASE),r0
+0A56 1B 1A          	stm	(r10,#fdd_memh-R10_BASE),r1
+0A58                ;
+0A58                ;	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0A58                ;	push	r0
+0A58                ;	mov	r0,#T1sec
+0A58                ;	jsr	OS_Sleep
+0A58                ;	pop	r0
+0A58                ;
+0A58 00 0F          	ret
+0A5A                ;
+0A5A                .endif
+0A5A                
+0A5A                .if FDD_AUTO
+0A5A                ;-------------------------------------
+0A5A                ;reset media
+0A5A                ;-------------------------------------
+0A5A                reset_media:
+0A5A                ;set track limit
+0A5A                ;	mov	r0,#40+3:8
+0A5A                ;	stm	(fdd_limit_trk),r0
+0A5A                ;set 1MHz to FDC clock
+0A5A                ;write protect off
+0A5A 00 0F          	ret
+0A5C                ;
+0A5C                ;-------------------------------------
+0A5C                ;check media
+0A5C                ;-------------------------------------
+0A5C                ;
+0A5C                ;output
+0A5C                ;   CF = .d88 found
+0A5C                fdd_check_d88:
+0A5C 0A 27 5B 2F    	jsr	reset_media
+0A60                ;try to check d88 format
+0A60 0A 0A          	ldm	r0,(r10,#fdd_meml-R10_BASE) ;image base
+0A62 1B 0A          	ldm	r1,(r10,#fdd_memh-R10_BASE)
+0A64                ;WPRT
+0A64 1A 72          	mov	r2,#D88_WPRT:8
+0A66 28 30          	add	r0,r2
+0A68 00 A1          	adc	r1,#0:8
+0A6A 0A 27 AD 2F    	jsr	read_fd_byte
+0A6E 00 D2          	cmp	r2,#D88_WPRT_OFF:8
+0A70 04 21          	beq	fdd_cm1
+0A72                ;	cmp	r2,#D88_WPRT_ON:8
+0A72                ;	bne	fdd_dot_2d
+0A72                ;write proect on
+0A72 38 0A          	ldm	r3,(r10,#fdd_sts-R10_BASE)
+0A74 40 53          	or	r3,#STS_WRITE_PROTECT:8 ; protect on
+0A76 38 1A          	stm	(r10,#fdd_sts-R10_BASE),r3
+0A78                fdd_cm1:
+0A78                ;TYPE 2D/2DD/2HD
+0A78 0A 27 AD 2F    	jsr	read_fd_byte
+0A7C 00 D2          	cmp	r2,#D88_TYPE_2D:8
+0A7E 06 21          	beq	d88_2d
+0A80 10 D2          	cmp	r2,#D88_TYPE_2DD:8
+0A82 04 21          	beq	d88_2dd
+0A84 20 D2          	cmp	r2,#D88_TYPE_2HD:8
+0A86 02 21          	beq	d88_2hd
+0A88                ;err
+0A88 0E 2F          	bra	fdd_dot_2d
+0A8A                d88_2d:
+0A8A                d88_2dd:
+0A8A                d88_2hd:
+0A8A                ;check to of D88_TRK_TBL
+0A8A 04 80          	add	r0,#4:8
+0A8C 00 A1          	adc	r1,#0:8
+0A8E 0A 27 CD 2F    	jsr	read_fd_word
+0A92 02 27 B0 D2    	cmp	r2,#02b0h      ;check TRACK1 sector point!
+0A96 07 29          	bne	fdd_dot_2d
+0A98 0A 27 CD 2F    	jsr	read_fd_word
+0A9C 00 D2          	cmp	r2,#0:8
+0A9E 03 29          	bne	fdd_dot_2d
+0AA0                ;OK
+0AA0 20 3F          	clc
+0AA2 00 0F          	ret
+0AA4                ;
+0AA4                ;if m88 format error then 2D mode
+0AA4                fdd_dot_2d:
+0AA4 0A 27 5B 2F    	jsr	reset_media
+0AA8 30 3F          	stc
+0AAA 00 0F          	ret
+0AAC                .endif
+0AAC                ;
+0AAC                ;-------------------------------------
+0AAC                ;read FD data
+0AAC                ;-------------------------------------
+0AAC                ;in
+0AAC                ; r0,r1 = fd address
+0AAC                ;output
+0AAC                ; r2    : read byte data
+0AAC                read_fd_byte:
+0AAC 80 3F          	cli
+0AAE 08 1E          	stm	(r14,#FDM_AL-R14_BASE),r0
+0AB0 51 27 00 51    	or	r1,#DMAM_RFSH_REQ | DMAM_MREQ | DMAM_RD
+0AB4 19 1E          	stm	(r14,#FDM_AH-R14_BASE),r1
+0AB6                ;next point
+0AB6 01 80          	add	r0,#1:8
+0AB8 00 A1          	adc	r1,#0:8
+0ABA                ;wait for RFSH end
+0ABA                read_fd_b1:
+0ABA 20 0E          	ldm	r2,(r14,#DMA_DATA-R14_BASE)
+0ABC 02 27 00 C2    	tst	r2,#DMAM_BUSY
+0AC0 FD 29          	bne	read_fd_b1
+0AC2                ;get data
+0AC2 20 0E          	ldm	r2,(r14,#DMA_DATA-R14_BASE)
+0AC4 FF 42          	and	r2,#0ffh:8
+0AC6                ;clear request
+0AC6 29 1E          	stm	(r14,#FDM_AH-R14_BASE),r2
+0AC8 90 3F          	sti
+0ACA                ;
+0ACA 00 0F          	ret
+0ACC                ;
+0ACC                read_fd_word:
+0ACC 31 1F          	push	r3
+0ACE 0A 27 AD 2F    	jsr	read_fd_byte
+0AD2 27 33          	mov	r3,r2
+0AD4 0A 27 AD 2F    	jsr	read_fd_byte
+0AD8 01 27 00 E2    	mlt	r2,#100h
+0ADC 35 32          	or	r2,r3
+0ADE 31 0F          	pop	r3
+0AE0 00 0F          	ret
+0AE2                ;
+0AE2                ;-------------------------------------
+0AE2                ;initialize
+0AE2                ;-------------------------------------
+0AE2                fdd_init:
+0AE2                .ifdef FDC_PRESET
+0AE2 00 70          	mov	r0,#0h:8
+0AE4 09 1B          	stm	(r11,#FDC_TRK-R11_BASE),r0
+0AE6 01 70          	mov	r0,#1h:8
+0AE8 0A 1B          	stm	(r11,#FDC_SEC-R11_BASE),r0
+0AEA 10 70          	mov	r0,#10h:8
+0AEC 0B 1B          	stm	(r11,#FDC_DAT-R11_BASE),r0
+0AEE 80 70          	mov	r0,#80h:8
+0AF0 0C 1B          	stm	(r11,#FDC_MOT-R11_BASE),r0
+0AF2                .endif
+0AF2 00 70          	mov	r0,#0:8
+0AF4 08 1A          	stm	(r10,#fdd_sts-R10_BASE),r0
+0AF6                ;
+0AF6                ; drive0 base addres = 1_0000H
+0AF6 10 27 F4 72    	mov	r2,#fd_phy0
+0AFA 00 70          	mov	r0,#0000h:8
+0AFC 01 71          	mov	r1,#01h:8
+0AFE 0B 27 0D 2F    	jsr	set_phy
+0B02                ; drive1 base addres = 7_8000H
+0B02 10 27 FA 72    	mov	r2,#fd_phy1
+0B06 80 27 00 70    	mov	r0,#8000h
+0B0A 07 71          	mov	r1,#07h:8
+0B0C                set_phy:
+0B0C 01 12          	stm	(r2,#fd_phy_ml-fd_phy0),r0
+0B0E 12 12          	stm	(r2,#fd_phy_mh-fd_phy0),r1
+0B10 00 70          	mov	r0,#0:8
+0B12 00 12          	stm	(r2,#fd_phy_trk-fd_phy0),r0
+0B14 00 0F          	ret
+0B16                ;
+0B16                ;----------------------------------------------------------------------------
+0B16                ; Z80 DMA Emulator
+0B16                ;----------------------------------------------------------------------------
+0B16                ;
+0B16                .ifdef Z80DMA
+0B16                	include "z80dma.asm"
+0B16                ;******************************************************************************
+0B16                ; Z80DMA emulator for mr16
+0B16                ;
+0B16                ; 2005. 4.14
+0B16                ;
+0B16                ; 2005. 5. 6 DMA enable flag fix
+0B16                ;
+0B16                ;******************************************************************************
+0B16                ;
+0B16                ;1.src address
+0B16                ;2.src MEM/IO , num cycle , ealy end , ce/wait
+0B16                ;3.dst address
+0B16                ;4.dst MEM/IO , num cycle , ealy start , ealy end
+0B16                ;
+0B16                ;DMA_SA
+0B16                ;DMA_DA
+0B16                ;DMA_TMG
+0B16                ;DMA_TMG_SCYC	equ 0003h ;bit1,0
+0B16                ;DMA_TMG_SMREQ	equ 0004h
+0B16                ;DMA_TMG_SIORQ	equ 0008h
+0B16                ;
+0B16 00 00 00 01    PRE_CYC equ	1   ;now coding!
+0B16 00 00 00 01    PRE_DIR equ	1   ;
+0B16 00 00 00 01    IRQ_LOCK equ	1   ;lockup when IRQ enable
+0B16                ;
+0B16                ;-------------- 7SEG SHOW OPTION -----------------------
+0B16                ;SHOW_DMA_TRAP equ 1
+0B16                ;SHOW_DMA_WR equ 1 
+0B16                ;SHOW_DMA_DST_ADDR equ 1 
+0B16 00 00 00 01    SHOW_DMA_BC equ 1 
+0B16                ;SHOW_DMA_LEN equ 1 
+0B16                ;
+0B16                ;PRESET_DMA   equ 1 
+0B16                ;
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;WR0 |  0  | [LH]| [LL]|[AAH]|[AAL]|AtoB |SEARC|TRANS|
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16 00 00 00 01    WR0_TRANS  equ 01h ;TRANSFER bit
+0B16 00 00 00 02    WR0_SEARCH equ 02h ;SEARCH bit
+0B16 00 00 00 04    WR0_ATOB   equ 04h ;direction A->B
+0B16 00 00 00 08    WR0_AAL    equ 08h ;[A Address L]
+0B16 00 00 00 10    WR0_AAH    equ 10h ;[A Address H]
+0B16 00 00 00 20    WR0_LL     equ 20h ;[Length L]
+0B16 00 00 00 40    WR0_LH     equ 40h ;[Length H]
+0B16                
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;WR1 |  0  |[TMG]|AFIX |AINC | AIO |  1  |  0  |  0  |
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16 00 00 00 08    WR1_A_IO	equ 08h ; PortA Mem / IO select
+0B16 00 00 00 10    WR1_A_INC	equ 10h ; PortA DEC / INC select
+0B16 00 00 00 10    WR1_A_FIX	equ 10h ; PortA FIX / INC,DEC select
+0B16                
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;WR2 |  0  |[TMG]|BFIX |BINC | BIO |  1  |  0  |  0  |
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16 00 00 00 08    WR2_B_IO	equ 08h ; PortB Mem / IO select
+0B16 00 00 00 10    WR2_B_INC	equ 10h ; PortB DEC / INC select
+0B16 00 00 00 10    WR2_B_FIX	equ 10h ; PortB FIX / INC,DEC select
+0B16                
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;WR3 |  1  | ENA | ENI |[MAT]|[MSK]| SOM |  0  |  0  |
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16 00 00 00 08    WR3_STOP_ON_MAT	equ 08h
+0B16 00 00 00 20    WR3_EN_INT	equ 20h ;enable INT
+0B16 00 00 00 40    WR3_EN_DMA	equ 40h ;enable DMA
+0B16                ;
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;WR4 |  1  |BM/CT/BS/x |[IRQ]|[BAH]|[BAL]|  0  |  1  |
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;TMG |-WR  |-RD  |  0  |  0  |-MREQ|-IORQ| 4/3/2/x   |
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;*ealy end, 0=nagate last fall,1=nagate next raise
+0B16                ;
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;WR5 |  1  |  0  | RST | CWT | RDY |  0  |  1  |  0  |
+0B16                ;    +-----+-----+-----+-----+-----+-----+-----+-----+
+0B16                ;
+0B16                ;additional
+0B16 00 00 00 08    WR5_RDY_DIR	equ 08h ;RDY active level 0=Low,1=High
+0B16 00 00 00 10    WR5_CE_WAIT	equ 10h ;CE/WAIT 0=CE , 1=CE/WAIT
+0B16 00 00 00 20    WR5_AUTO_RESTART equ 20h ;0=END , 1=RESTART
+0B16                ;aditional
+0B16 00 00 00 01    WR5_FORCE_RDY	equ 01h ;ForceReady
+0B16                ;
+0B16                ;
+0B16                ;vector[2:1]
+0B16                ; 00 RDY
+0B16                ; 01 MATCH
+0B16                ; 10 EOF
+0B16                ; 11 EOF & MATCH
+0B16                ;
+0B16                ;
+0B16                
+0B16                ;-------------------------------------------------------------------------
+0B16                	DSEG
+111A                ;
+111A                DMA_BASE_T:
+111A                ;
+111A                DMA_RR0	ds	2
+111C                DMA_BC	ds	2 ;RR1,RR2 Byte Counter
+111E                DMA_AAC	ds	2 ;RR3,RR4 Port A Counter
+1120                DMA_BAC	ds	2 ;RR5,RR6 Port B Counter
+1122                .if PRE_CYC
+1122                DMA_CTA ds	2 ;controll port of portA
+1124                DMA_CTB ds	2 ;controll port of portB
+1126                DMA_DFA ds	2 ;fix/inc/dec
+1128                DMA_DFB ds	2 ;fix_inc_dec
+112A                .endif
+112A                ;
+112A                .if PRE_DIR
+112A                DMA_SRC_B ds	2 ;base pointer of source
+112C                DMA_DST_B ds	2 ;base pointer of distination
+112E                .endif
+112E                DMA_BASE: ;
+112E                ;
+112E                DMA_ENT	ds	2	;DMA WR entry point
+1130                ;
+1130                DMA_WR0	ds	2
+1132                DMA_WR1	ds	2
+1134                DMA_WR2	ds	2
+1136                DMA_WR3	ds	2
+1138                DMA_WR4	ds	2
+113A                DMA_WR5	ds	2
+113C                DMA_WR6	ds	2
+113E                ;
+113E                DMA_AA	ds	2
+1140                DMA_BA	ds	2
+1142                DMA_LEN	ds	2
+1144                DMA_AT	ds	2
+1146                DMA_BT	ds	2
+1148                DMA_MSK	ds	2
+114A                DMA_MAT	ds	2
+114C                DMA_IRQ	ds	2
+114E                DMA_PLS	ds	2
+1150                DMA_VEC	ds	2
+1152                DMA_RM	ds	2
+1154                DMA_RP	ds	2
+1156                ;
+1156                	CSEG
+0B16                ;
+0B16                ;-----------------------------------------
+0B16                ; Z80DMA Write Entry
+0B16                ;-----------------------------------------
+0B16                ;r0 = write byte
+0B16                dma_isr:
+0B16 F1 1F          	push	flag
+0B18 01 1F          	push	r0
+0B1A 11 1F          	push	r1
+0B1C 71 1F          	push	r7
+0B1E                ;CMD Write
+0B1E 03 0B          	ldm	r0,(r11,#DMA_WD-R11_BASE)
+0B20 05 30          	or	r0,r0
+0B22 08 23          	bmi	dma_no_cmd
+0B24                .ifdef SHOW_DMA_TRAP
+0B24                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0B24                .endif
+0B24 80 27 00 71    	mov	r1,#8000h
+0B28 13 1B          	stm	(r11,#DMA_WD-R11_BASE),r1
+0B2A                ;
+0B2A 11 27 2E 77    	mov	r7,#DMA_BASE
+0B2E 10 07          	ldm	r1,(r7,#DMA_ENT-DMA_BASE)
+0B30                ;
+0B30 13 3F          	jsr	r1
+0B32                dma_no_cmd:
+0B32                ;RDY IRQ
+0B32 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+0B34 04 27 00 C0    	tst	r0,#DMAM_RDY
+0B38 03 21          	beq	dma_no_rdy
+0B3A 0D 27 29 2F    	jsr	dma_rdy_pole
+0B3E                dma_no_rdy:
+0B3E 71 0F          	pop	r7
+0B40 11 0F          	pop	r1
+0B42 01 0F          	pop	r0
+0B44 F1 0F          	pop	flag
+0B46 90 0F          	ret	sti
+0B48                ;
+0B48                ;-----------------------------------------
+0B48                ; Wr6 COMMAND
+0B48                ;-----------------------------------------
+0B48                
+0B48                dma_cmd_83: ; Disable DMA
+0B48                dma_cmd_8b:
+0B48                dma_cmd_8f
+0B48                dma_cmd_a3:
+0B48                dma_cmd_a7:
+0B48                dma_cmd_ab:
+0B48                dma_cmd_af
+0B48                dma_cmd_b7:
+0B48                dma_cmd_bf
+0B48                dma_cmd_c3:
+0B48                dma_cmd_c7:
+0B48                dma_cmd_cb:
+0B48                ;
+0B48                dma_cmd_na:
+0B48                dma_disable:
+0B48                ;clear force ready
+0B48 16 07          	ldm	r1,(r7,#DMA_WR5-DMA_BASE)
+0B4A FE 41          	and	r1,#0ffh ^ WR5_FORCE_RDY:8
+0B4C                dma_disable2:
+0B4C 16 17          	stm	(r7,#DMA_WR5-DMA_BASE),r1
+0B4E                ;disable dma
+0B4E 14 07          	ldm	r1,(r7,#DMA_WR3-DMA_BASE)
+0B50 BF 41          	and	r1,#0ffh ^ WR3_EN_DMA:8
+0B52 14 17          	stm	(r7,#DMA_WR3-DMA_BASE),r1
+0B54 00 0F          	ret
+0B56                
+0B56                ;--------------------------------------
+0B56                dma_cmd_87: ; Enable DMA
+0B56 14 07          	ldm	r1,(r7,#DMA_WR3-DMA_BASE)
+0B58 40 51          	or	r1,#WR3_EN_DMA:8
+0B5A 14 17          	stm	(r7,#DMA_WR3-DMA_BASE),r1
+0B5C                enable_dma:
+0B5C                ;RDY IRQ controll port
+0B5C 06 07          	ldm	r0,(r7,#DMA_WR5-DMA_BASE)
+0B5E 14 07          	ldm	r1,(r7,#DMA_WR3-DMA_BASE)
+0B60 15 30          	or	r0,r1
+0B62 0A 1E          	stm	(r14,#DMA_RDY-R14_BASE),r0 ;bit0=force,bit3=dir,bit6=enable
+0B64 00 0F          	ret
+0B66                ;
+0B66                ;--------------------------------------
+0B66                dma_cmd_b3: ; Force Ready
+0B66                ;set force ready
+0B66 16 07          	ldm	r1,(r7,#DMA_WR5-DMA_BASE)
+0B68 01 51          	or	r1,#WR5_FORCE_RDY:8
+0B6A F1 2F          	bra	dma_disable2
+0B6C                ;
+0B6C                ;--------------------------------------
+0B6C                dma_cmd_bb: ; READ MASK FOLLOWS
+0B6C 0B 27 74 71    	mov	r1,#dma_cmd_bbw
+0B70 10 17          	stm	(r7,#DMA_ENT-DMA_BASE),r1
+0B72 ED 2F          	bra	dma_disable2
+0B74                ;
+0B74                dma_cmd_bbw:
+0B74                ;	stm	(r7,DMA_RR_MASK),r0
+0B74                ;	choise 1st RR
+0B74 61 2F          	bra	dma_idle
+0B76                ;
+0B76                ;--------------------------------------
+0B76                dma_cmd_cf: ; Load
+0B76 11 27 1A 71    	mov	r1,#DMA_BASE_T
+0B7A 08 07          	ldm	r0,(r7,#DMA_AA-DMA_BASE)
+0B7C 02 11          	stm	(r1,#DMA_AAC-DMA_BASE_T),r0
+0B7E 09 07          	ldm	r0,(r7,#DMA_BA-DMA_BASE)
+0B80 03 11          	stm	(r1,#DMA_BAC-DMA_BASE_T),r0
+0B82                ;through to dma_cmd_d3
+0B82                
+0B82                ;--------------------------------------
+0B82                dma_cmd_d3: ;continue
+0B82                .if PRE_DIR
+0B82                ;source / direction select
+0B82 21 1F          	push	r2
+0B84 31 1F          	push	r3
+0B86 11 27 1A 71    	mov	r1,#DMA_BASE_T    ;portA = src
+0B8A 11 27 1C 72    	mov	r2,#DMA_BASE_T+2  ;portB = dst
+0B8E 17 33          	mov	r3,r1
+0B90                ;
+0B90 01 07          	ldm	r0,(r7,#DMA_WR0-DMA_BASE)
+0B92 04 C0          	tst	r0,#WR0_ATOB:8
+0B94 03 29          	bne	dma_atob
+0B96                ;BtoA
+0B96 02 81          	add	r1,#2:8
+0B98 02 92          	sub	r2,#2:8
+0B9A                dma_atob:
+0B9A 18 13          	stm	(r3,#DMA_SRC_B-DMA_BASE_T),r1 ;src
+0B9C 29 13          	stm	(r3,#DMA_DST_B-DMA_BASE_T),r2 ;dst
+0B9E                ;
+0B9E                .if PRE_CYC
+0B9E                ;source
+0B9E 21 1F          	push	r2
+0BA0 17 32          	mov	r2,r1
+0BA2 0D 27 D9 2F    	jsr	dma_setup_cyc
+0BA6 40 27 00 50    	or	r0,#DMAM_RD
+0BAA 04 12          	stm	(r2,#DMA_CTA-DMA_BASE_T),r0
+0BAC                ;dst
+0BAC 21 0F          	pop	r2
+0BAE 0D 27 D9 2F    	jsr	dma_setup_cyc
+0BB2 80 27 00 50    	or	r0,#DMAM_WR ;;;;;;;;;;;;;; if kahen cycle ;;;;;;;;;;;;;;;;;;;;
+0BB6 04 12          	stm	(r2,#DMA_CTA-DMA_BASE_T),r0
+0BB8                .endif
+0BB8 31 0F          	pop	r3
+0BBA 21 0F          	pop	r2
+0BBC                .endif
+0BBC                ;
+0BBC                
+0BBC                
+0BBC                
+0BBC 11 27 1A 71    	mov	r1,#DMA_BASE_T
+0BC0 0A 07          	ldm	r0,(r7,#DMA_LEN-DMA_BASE)
+0BC2                ;0000 -> 10000h
+0BC2                ;0001 -> 00002h
+0BC2                ;ffff -> 10000h
+0BC2 05 30          	or	r0,r0
+0BC4 02 29          	bne	dma_bc_not0
+0BC6 01 90          	sub	r0,#1:8 ;0000h -> 0ffffh
+0BC8                dma_bc_not0:
+0BC8 01 11          	stm	(r1,#DMA_BC-DMA_BASE_T),r0
+0BCA BF 2F          	bra	dma_disable
+0BCC                ;
+0BCC                ;-----------------------------------------
+0BCC                ; Wr6 write
+0BCC                ;-----------------------------------------
+0BCC                dma_wr6w:
+0BCC 07 17          	stm	(r7,#DMA_WR6-DMA_BASE),r0
+0BCE                .ifdef SHOW_DMA_WR
+0BCE                	or	r0,#6000h
+0BCE                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0BCE                	and	r0,#0ffh:8
+0BCE                .endif
+0BCE                ;command branch
+0BCE D4 D0          	cmp	r0,#0d3h+1:8
+0BD0 BC 28          	bcc	dma_cmd_na
+0BD2 80 27 00 F0    	mlh	r0,#8000h
+0BD6 3E 40          	and	r0,#03eh:8
+0BD8 0B 27 E0 80    	add	r0,#DMA_CMD_TBL
+0BDC 00 00          	ldm	r0,(r0)
+0BDE 02 3F          	jmp	r0
+0BE0                ;
+0BE0                ;
+0BE0                DMA_CMD_TBL:
+0BE0 48 0B 56 0B    	dw	dma_cmd_83,dma_cmd_87,dma_cmd_8b,dma_cmd_8f
+0BE4 48 0B 48 0B
+0BE8 48 0B 48 0B    	dw	dma_cmd_na,dma_cmd_na,dma_cmd_na,dma_cmd_na
+0BEC 48 0B 48 0B
+0BF0 48 0B 48 0B    	dw	dma_cmd_a3,dma_cmd_a7,dma_cmd_ab,dma_cmd_af
+0BF4 48 0B 48 0B
+0BF8 66 0B 48 0B    	dw	dma_cmd_b3,dma_cmd_b7,dma_cmd_bb,dma_cmd_bf
+0BFC 6C 0B 48 0B
+0C00 48 0B 48 0B    	dw	dma_cmd_c3,dma_cmd_c7,dma_cmd_cb,dma_cmd_cf
+0C04 48 0B 76 0B
+0C08 82 0B          	dw	dma_cmd_d3
+0C0A                ;
+0C0A                ;-----------------------------------------
+0C0A                ; Write IDLE (new WR)
+0C0A                ;-----------------------------------------
+0C0A                ;r0 = write byte
+0C0A                dma_wi:
+0C0A 87 C0          	tst	r0,#87h:8
+0C0C 1E 21          	beq	dma_wr2c
+0C0E 83 C0          	tst	r0,#83h:8
+0C10 0E 21          	beq	dma_wr1c
+0C12 80 C0          	tst	r0,#80h:8
+0C14 15 21          	beq	dma_wr0c
+0C16                ;80-ff
+0C16 03 C0          	tst	r0,#03h:8
+0C18 1C 21          	beq	dma_wr3c
+0C1A 02 C0          	tst	r0,#02h:8
+0C1C 23 21          	beq	dma_wr4c
+0C1E 01 C0          	tst	r0,#01h:8
+0C20                
+0C20 0B 27 CC 29    	jne	dma_wr6w
+0C24                ;;;;;	bne	dma_wr6w
+0C24                ;wr5
+0C24                .ifdef SHOW_DMA_WR
+0C24                	or	r0,#5000h
+0C24                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0C24                .endif	
+0C24 0C 27 B6 71    	mov	r1,#dma_wr2w
+0C28 06 17          	stm	(r7,#DMA_WR5-DMA_BASE),r0
+0C2A 00 0F          	ret
+0C2C                ;
+0C2C                ;-----------------------------------------------------------------------------
+0C2C                ;check wr exit or continue
+0C2C                ;-----------------------------------------------------------------------------
+0C2C                dma_wr1c:
+0C2C 02 17          	stm	(r7,#DMA_WR1-DMA_BASE),r0
+0C2E                .ifdef SHOW_DMA_WR
+0C2E                	or	r0,#1000h
+0C2E                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0C2E                .endif
+0C2E 0C 27 B2 71    	mov	r1,#dma_wr1w
+0C32                dma_chk_40:
+0C32 40 C0          	tst	r0,#40h:8
+0C34                dma_chk:
+0C34 03 29          	bne	dma_sub
+0C36                dma_idle:
+0C36                .ifdef SHOW_DMA_WR
+0C36                	or	r0,#0e00h
+0C36                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0C36                .endif
+0C36 0C 27 0A 71    	mov	r1,#dma_wi
+0C3A                dma_sub:
+0C3A 10 17          	stm	(r7,#DMA_ENT-DMA_BASE),r1
+0C3C 00 0F          	ret
+0C3E                ;
+0C3E                dma_wr0c:
+0C3E 01 17          	stm	(r7,#DMA_WR0-DMA_BASE),r0
+0C40                .ifdef SHOW_DMA_WR
+0C40                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0C40                .endif
+0C40 0C 27 6C 71    	mov	r1,#dma_wr0w
+0C44 78 C0          	tst	r0,#78h:8
+0C46 F7 2F          	bra	dma_chk
+0C48                ;
+0C48                dma_wr2c:
+0C48 03 17          	stm	(r7,#DMA_WR2-DMA_BASE),r0
+0C4A                .ifdef SHOW_DMA_WR
+0C4A                	or	r0,#2000h
+0C4A                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0C4A                .endif
+0C4A 0C 27 B6 71    	mov	r1,#dma_wr2w
+0C4E F2 2F          	bra	dma_chk_40
+0C50                ;
+0C50                dma_wr3c:
+0C50 04 17          	stm	(r7,#DMA_WR3-DMA_BASE),r0
+0C52                .ifdef SHOW_DMA_WR
+0C52                	or	r0,#3000h
+0C52                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0C52                .endif
+0C52                .if PRE_DIR
+0C52 40 C0          	tst	r0,#WR3_EN_DMA:8
+0C54 03 21          	beq	wr3_dis_dma
+0C56 0B 27 5D 2F    	jsr	enable_dma
+0C5A                wr3_dis_dma:
+0C5A                .endif
+0C5A 0C 27 BA 71    	mov	r1,#dma_wr3w
+0C5E 18 C0          	tst	r0,#18h:8
+0C60 EA 2F          	bra	dma_chk
+0C62                ;
+0C62                dma_wr4c:
+0C62 05 17          	stm	(r7,#DMA_WR4-DMA_BASE),r0
+0C64                .ifdef SHOW_DMA_WR
+0C64                	or	r0,#4000h
+0C64                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0C64                .endif
+0C64 0C 27 CC 71    	mov	r1,#dma_wr4w
+0C68 1C C0          	tst	r0,#1ch:8
+0C6A E5 2F          	bra	dma_chk
+0C6C                ;
+0C6C                ;-----------------------------------------------------------------------------
+0C6C                ;wr0 sub reg
+0C6C                ;-----------------------------------------------------------------------------
+0C6C                dma_wr0w:
+0C6C 07 31          	mov	r1,r0
+0C6E 01 07          	ldm	r0,(r7,#DMA_WR0-DMA_BASE)
+0C70 08 C0          	tst	r0,#08h:8
+0C72 08 21          	beq	dma_wr0_1
+0C74                ;PortA Address Low
+0C74 08 60          	xor	r0,#08h:8
+0C76 28 07          	ldm	r2,(r7,#DMA_AA-DMA_BASE)
+0C78 FF 27 00 42    	and	r2,#0ff00h
+0C7C                dma_aa_w:
+0C7C 15 32          	or	r2,r1
+0C7E 28 17          	stm	(r7,#DMA_AA-DMA_BASE),r2
+0C80 DF 2F          	bra	dma_wr0c
+0C82                dma_wr0_1:
+0C82 10 C0          	tst	r0,#10h:8
+0C84 07 21          	beq	dma_wr0_2
+0C86                ;PortA Address High
+0C86 10 60          	xor	r0,#10h:8
+0C88 28 07          	ldm	r2,(r7,#DMA_AA-DMA_BASE)
+0C8A FF 42          	and	r2,#0ffh:8
+0C8C 01 27 00 E1    	mlt	r1,#100h
+0C90 F6 2F          	bra	dma_aa_w
+0C92                dma_wr0_2:
+0C92 20 C0          	tst	r0,#20h:8
+0C94 08 21          	beq	dma_wr0_3
+0C96                ;Length L
+0C96 20 60          	xor	r0,#20h:8
+0C98 2A 07          	ldm	r2,(r7,#DMA_LEN-DMA_BASE)
+0C9A FF 27 00 42    	and	r2,#0ff00h
+0C9E 15 32          	or	r2,r1
+0CA0 2A 17          	stm	(r7,#DMA_LEN-DMA_BASE),r2
+0CA2                .ifdef SHOW_DMA_LEN
+0CA2                	stm	(r14,#SEG7_NUM-R14_BASE),r2
+0CA2                .endif
+0CA2 CE 2F          	bra	dma_wr0c
+0CA4                dma_wr0_3:
+0CA4                ;PortA Address High
+0CA4 2A 07          	ldm	r2,(r7,#DMA_LEN-DMA_BASE)
+0CA6 FF 42          	and	r2,#0ffh:8
+0CA8 01 27 00 E1    	mlt	r1,#100h
+0CAC 15 32          	or	r2,r1
+0CAE 2A 17          	stm	(r7,#DMA_LEN-DMA_BASE),r2
+0CB0                .ifdef SHOW_DMA_LEN
+0CB0                	stm	(r14,#SEG7_NUM-R14_BASE),r2
+0CB0                .endif
+0CB0 C3 2F          	bra	dma_idle
+0CB2                ;-----------------------------------------------------------------------------
+0CB2                ;wr1
+0CB2                ;-----------------------------------------------------------------------------
+0CB2                dma_wr1w:
+0CB2 0B 17          	stm	(r7,#DMA_AT-DMA_BASE),r0
+0CB4 C1 2F          	bra	dma_idle
+0CB6                ;-----------------------------------------------------------------------------
+0CB6                ;wr2
+0CB6                ;-----------------------------------------------------------------------------
+0CB6                dma_wr2w:
+0CB6 0C 17          	stm	(r7,#DMA_BT-DMA_BASE),r0
+0CB8 BF 2F          	bra	dma_idle
+0CBA                ;-----------------------------------------------------------------------------
+0CBA                ;wr3
+0CBA                ;-----------------------------------------------------------------------------
+0CBA                dma_wr3w:
+0CBA 07 31          	mov	r1,r0
+0CBC 04 07          	ldm	r0,(r7,#DMA_WR3-DMA_BASE)
+0CBE 08 C0          	tst	r0,#08h:8
+0CC0 04 21          	beq	dma_wr3_1
+0CC2                ;Mask
+0CC2 08 60          	xor	r0,#08h:8
+0CC4 1D 17          	stm	(r7,#DMA_MSK-DMA_BASE),r1
+0CC6 C5 2F          	bra	dma_wr3c
+0CC8                dma_wr3_1:
+0CC8                ;match
+0CC8 1E 17          	stm	(r7,#DMA_MAT-DMA_BASE),r1
+0CCA B6 2F          	bra	dma_idle
+0CCC                ;-----------------------------------------------------------------------------
+0CCC                ;wr4
+0CCC                ;-----------------------------------------------------------------------------
+0CCC                dma_wr4w:
+0CCC 07 31          	mov	r1,r0
+0CCE 05 07          	ldm	r0,(r7,#DMA_WR4-DMA_BASE)
+0CD0 04 C0          	tst	r0,#04h:8
+0CD2 08 21          	beq	dma_wr4_1
+0CD4                ;PortB Address Low
+0CD4 04 60          	xor	r0,#04h:8
+0CD6 29 07          	ldm	r2,(r7,#DMA_BA-DMA_BASE)
+0CD8 FF 27 00 42    	and	r2,#0ff00h
+0CDC                dma_ba_w:
+0CDC 15 32          	or	r2,r1
+0CDE 29 17          	stm	(r7,#DMA_BA-DMA_BASE),r2
+0CE0 C1 2F          	bra	dma_wr4c
+0CE2                dma_wr4_1:
+0CE2 08 C0          	tst	r0,#08h:8
+0CE4 07 21          	beq	dma_wr4_2
+0CE6                ;PortA Address High
+0CE6 08 60          	xor	r0,#08h:8
+0CE8 29 07          	ldm	r2,(r7,#DMA_BA-DMA_BASE)
+0CEA FF 42          	and	r2,#0ffh:8
+0CEC 01 27 00 E1    	mlt	r1,#100h
+0CF0 F6 2F          	bra	dma_ba_w
+0CF2                dma_wr4_2:
+0CF2                ;IRQ
+0CF2 17 30          	mov	r0,r1
+0CF4                dma_wr4_2c:
+0CF4 0F 17          	stm	(r7,#DMA_IRQ-DMA_BASE),r0
+0CF6                .ifdef SHOW_DMA_WR
+0CF6                	or	r0,#4100h
+0CF6                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0CF6                .endif
+0CF6                .ifdef IRQ_LOCK
+0CF6 63 C0          	tst	r0,#63h:8
+0CF8 06 21          	beq	dma_no_irq
+0CFA EE 27 E0 70    	mov	r0,#0eee0h
+0CFE 07 1E          	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0D00 80 3F          	cli
+0D02 00 2F          	bra	$
+0D04                dma_no_irq:
+0D04                
+0D04                .endif
+0D04 0D 27 0C 71    	mov	r1,#dma_wr4sw
+0D08 18 C0          	tst	r0,#18h:8
+0D0A 95 2F          	bra	dma_chk
+0D0C                ;-----------------------------------------------------------------------------
+0D0C                ;wr4 IRQ sub
+0D0C                ;-----------------------------------------------------------------------------
+0D0C                dma_wr4sw:
+0D0C 07 31          	mov	r1,r0
+0D0E 0F 07          	ldm	r0,(r7,#DMA_IRQ-DMA_BASE)
+0D10 08 C0          	tst	r0,#08h:8
+0D12 05 21          	beq	dma_wr4s_1
+0D14                ;PULSE
+0D14 08 60          	xor	r0,#08h:8
+0D16 01 27 00 71    	stw	(r7,#DMA_PLS-DMA_BASE),r1
+0D1A ED 2F          	bra	dma_wr4_2c
+0D1C                dma_wr4s_1:
+0D1C                ;VECTOR
+0D1C 01 27 01 71    	stw	(r7,#DMA_VEC-DMA_BASE),r1
+0D20 8B 2F          	bra	dma_idle
+0D22                ;
+0D22                ;-----------------------------------------------------------------------------
+0D22                ;wr6 cmd BB
+0D22                ;-----------------------------------------------------------------------------
+0D22                dma_wr6_bb:
+0D22 01 27 02 71    	stw	(r7,#DMA_RM-DMA_BASE),r1
+0D26 88 2F          	bra	dma_idle
+0D28                ;
+0D28                ;-----------------------------------------------------------------------------
+0D28                ;FDD RDY TRAP
+0D28                ;-----------------------------------------------------------------------------
+0D28                ;r0 = temporaly work
+0D28                ;r1 = source       base pointer
+0D28                ;r2 = distination  base pointer
+0D28                ;
+0D28                dma_rdy_pole:
+0D28 11 1F          	push	r1
+0D2A 21 1F          	push	r2
+0D2C                ;BUSRQ ON and wait BUSAK
+0D2C 0D 27 F9 2F    	jsr	get_bus
+0D30                ;----- burst/continus mode loop -----
+0D30                dma_poll_loop:
+0D30                .if PRE_DIR
+0D30 11 27 1A 72    	mov	r2,#DMA_BASE_T
+0D34 28 02          	ldm	r2,(r2,#DMA_SRC_B-DMA_BASE_T)
+0D36                .else
+0D36                ;direction
+0D36                	mov	r2,#DMA_BASE_T
+0D36                	mov	r0,#DMA_BASE_T+2 ;dst base
+0D36                	ldm	r1,(r2,#DMA_WR0-DMA_BASE_T)
+0D36                	tst	r1,#04h:8        ;WR0
+0D36                	bne	dma_atob
+0D36                ;swap B to A
+0D36                	add	r2,#2:8 ;src = PortB
+0D36                	sub	r0,#2:8 ;dst = PortA
+0D36                dma_atob:
+0D36                	push	r0
+0D36                .endif
+0D36                ;---------------------
+0D36                ;source cycle
+0D36                ;---------------------
+0D36                .if PRE_CYC
+0D36                ;set ADDR
+0D36 02 02          	ldm	r0,(r2,#DMA_AAC-DMA_BASE_T) ; DMA_AAC or DMA_BAC
+0D38 08 1E          	stm	(r14,#FDM_AL-R14_BASE),r0  ; 0:T1 raise
+0D3A 04 02          	ldm	r0,(r2,#DMA_CTA-DMA_BASE_T); 2
+0D3C 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0  ; 4:T1 fall
+0D3E                ;increment address
+0D3E 11 1F          	push	r1                         ; 6
+0D40 02 02          	ldm	r0,(r2,#DMA_AAC-DMA_BASE_T); 8:T2 Raise
+0D42 16 02          	ldm	r1,(r2,#DMA_DFA-DMA_BASE_T);10
+0D44 18 30          	add	r0,r1                      ;11
+0D46 00 80          	add	r0,#0:8
+0D48 02 12          	stm	(r2,#DMA_AAC-DMA_BASE_T),r0;14:T3 Raise
+0D4A 11 0F          	pop	r1                         ;16
+0D4C 08 27 00 70    	mov	r0,#DMAM_BUSRQ             ;18:
+0D50 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0  ;20:T3 Fall
+0D52                .else
+0D52                	jsr	dma_set
+0D52                	or	r0,#DMAM_RD
+0D52                	stm	(r14,#FDM_AH-R14_BASE),r0  ; 2:T1 Fall
+0D52                	jsr	wait_12clk                 ;12:
+0D52                	mov	r0,#DMAM_BUSRQ             ; 2:
+0D52                	stm	(r14,#FDM_AH-R14_BASE),r0  ; 2:T3 Fall
+0D52                .endif
+0D52                ;---------------------
+0D52                ;read data
+0D52                ;---------------------
+0D52                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D52                ;sorcerian break fix test
+0D52 0D 27 C9 2F    	jsr	wait_16clk
+0D56                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D56                ;
+0D56 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE) ;2:
+0D58 00 1E          	stm	(r14,#DMA_DATA-R14_BASE),r0 ;2:
+0D5A                .if PRE_DIR
+0D5A 11 27 1A 72    	mov	r2,#DMA_BASE_T
+0D5E 29 02          	ldm	r2,(r2,#DMA_DST_B-DMA_BASE_T)
+0D60                .else
+0D60                	pop	r2
+0D60                .endif
+0D60                ;---------------------
+0D60                ;Distination Cycle
+0D60                ;---------------------
+0D60                .ifdef SHOW_DMA_DST_ADDR
+0D60                ;ADDR
+0D60                	ldm	r0,(r2,#DMA_AAC-DMA_BASE_T)
+0D60                	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0D60                .endif
+0D60                .if PRE_CYC
+0D60 02 02          	ldm	r0,(r2,#DMA_AAC-DMA_BASE_T)
+0D62 08 1E          	stm	(r14,#FDM_AL-R14_BASE),r0  ; 0:T1 raise , Assert DST
+0D64                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D64                ;sorcerian break fix test
+0D64                ;late WR fall
+0D64 04 02          	ldm	r0,(r2,#DMA_CTA-DMA_BASE_T)
+0D66 80 27 00 60    	xor	r0,#DMAM_WR
+0D6A 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0
+0D6C                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D6C 04 02          	ldm	r0,(r2,#DMA_CTA-DMA_BASE_T); 2
+0D6E 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0  ; 4:T1 fall  , Assert DST REQ,WR
+0D70                ;increment address
+0D70 11 1F          	push	r1                         ; 6
+0D72 02 02          	ldm	r0,(r2,#DMA_AAC-DMA_BASE_T); 8:T2 Raise
+0D74 16 02          	ldm	r1,(r2,#DMA_DFA-DMA_BASE_T);10
+0D76 18 30          	add	r0,r1                      ;11
+0D78 00 80          	add	r0,#0:8                    ;12 T2 Fall
+0D7A 02 12          	stm	(r2,#DMA_AAC-DMA_BASE_T),r0;14
+0D7C 11 0F          	pop	r1                         ;16:T3 Raise
+0D7E                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D7E                ;sorcerian break fix test
+0D7E                ;ealy WR raise
+0D7E                ;
+0D7E 0D 27 C9 2F    	jsr	wait_16clk
+0D82                ;
+0D82 04 02          	ldm	r0,(r2,#DMA_CTA-DMA_BASE_T)
+0D84 80 27 00 60    	xor	r0,#DMAM_WR
+0D88 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0
+0D8A                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D8A 08 27 00 70    	mov	r0,#DMAM_BUSRQ             ;18
+0D8E 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0  ;20:T3 Fall , Deassert Cycle
+0D90                .else
+0D90                	jsr	dma_set
+0D90                ;T1 Fall
+0D90                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D90                	or	r0,#DMAM_WR
+0D90                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0D90                	stm	(r14,#FDM_AH-R14_BASE),r0 ;2:T1 Fall
+0D90                	jsr	wait_4clk                 ;4
+0D90                	or	r0,#DMAM_WR               ;2
+0D90                	stm	(r14,#FDM_AH-R14_BASE),r0 ;2:T2 Fall
+0D90                	jsr	wait_4clk                 ;4
+0D90                	mov	r0,#DMAM_BUSRQ            ;2
+0D90                	stm	(r14,#FDM_AH-R14_BASE),r0 ;2 T3 Fall
+0D90                ;	jsr	wait_4clk
+0D90                .endif
+0D90                ;---------------------
+0D90                ;byte counter
+0D90                ;---------------------
+0D90 11 27 1A 72    	mov	r2,#DMA_BASE_T
+0D94 01 02          	ldm	r0,(r2,#DMA_BC-DMA_BASE_T)
+0D96 01 90          	sub	r0,#1:8
+0D98                .ifdef SHOW_DMA_BC
+0D98 07 1E          	stm	(r14,#SEG7_NUM-R14_BASE),r0
+0D9A                .endif
+0D9A 07 28          	bcc	dma_no_eob
+0D9C                ;---------------------
+0D9C                ;end fo block
+0D9C                ;---------------------
+0D9C                ;dma_eob:
+0D9C 0E 02          	ldm	r0,(r2,#DMA_WR3-DMA_BASE_T)
+0D9E BF 40          	and	r0,#0ffh ^ WR3_EN_DMA:8
+0DA0 0E 12          	stm	(r2,#DMA_WR3-DMA_BASE_T),r0
+0DA2                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0DA2 00 70          	mov	r0,#0:8
+0DA4 0A 1E          	stm	(r14,#DMA_RDY-R14_BASE),r0
+0DA6                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0DA6 0C 2F          	bra	dma_poll_r1
+0DA8                ;---------------------
+0DA8                ;not end fo block
+0DA8                ;---------------------
+0DA8                dma_no_eob:
+0DA8 01 12          	stm	(r2,#DMA_BC-DMA_BASE_T),r0
+0DAA                ;---------------------
+0DAA                ;burst/continus mode check
+0DAA                ;---------------------
+0DAA 0F 02          	ldm	r0,(r2,#DMA_WR4-DMA_BASE_T)
+0DAC 60 C0          	tst	r0,#60h:8
+0DAE 08 21          	beq	dma_poll_r1  ; byte mode
+0DB0                ;RDY check
+0DB0 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+0DB2 04 27 00 C0    	tst	r0,#DMAM_RDY
+0DB6 BD 29          	bne	dma_poll_loop ; loop when not byte mode and RDY
+0DB8                ;end of RDY
+0DB8 0F 02          	ldm	r0,(r2,#DMA_WR4-DMA_BASE_T)
+0DBA 20 C0          	tst	r0,#20h:8
+0DBC 03 29          	bne	dma_poll_r2 ;when continus mode , bus hook and end
+0DBE                dma_poll_r1:
+0DBE                ;release BUSREQ
+0DBE 00 70          	mov	r0,#0:8
+0DC0 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0
+0DC2                dma_poll_r2:
+0DC2 21 0F          	pop	r2
+0DC4 11 0F          	pop	r1
+0DC6 00 0F          	ret
+0DC8                ;
+0DC8                wait_16clk:
+0DC8 01 1F          	push	r0
+0DCA 01 0F          	pop	r0
+0DCC                wait_12clk:
+0DCC 01 1F          	push	r0
+0DCE 01 0F          	pop	r0
+0DD0                wait_8clk:
+0DD0 01 1F          	push	r0
+0DD2 01 0F          	pop	r0
+0DD4                wait_4clk:
+0DD4 00 3F          	nop
+0DD6 00 0F          	ret
+0DD8                ;
+0DD8                .if PRE_CYC
+0DD8                ;---------------------
+0DD8                ;DMA port setup
+0DD8                ;---------------------
+0DD8                ;in
+0DD8                ;  r2 = DMA_BASE_T = PORTA , DMA_BASE_T+2 = PORTB
+0DD8                ;out
+0DD8                ;  r0 = memory cycle value
+0DD8                dma_setup_cyc:
+0DD8 1C 02          	ldm	r1,(r2,#DMA_WR1-DMA_BASE_T) ; DMA_WR1 or DMA_WR2
+0DDA 00 70          	mov	r0,#0:8    ;FIX value
+0DDC 20 C1          	tst	r1,#20h:8  ;FIX address?
+0DDE 05 29          	bne	dma_setup_cyc1
+0DE0 01 70          	mov	r0,#1:8    ;INC value
+0DE2 10 C1          	tst	r1,#10h:8  ;INC
+0DE4 02 29          	bne	dma_setup_cyc1
+0DE6 02 90          	sub	r0,#2:8    ;DEC value
+0DE8                dma_setup_cyc1:
+0DE8 06 12          	stm	(r2,#DMA_DFA-DMA_BASE_T),r0 ; DMA_DFA or DMA_DFB
+0DEA                ;
+0DEA 18 27 00 70    	mov	r0,#DMAM_BUSRQ | DMAM_MREQ
+0DEE 08 C1          	tst	r1,#08h:8   ;I/O or memory?
+0DF0 03 21          	beq	dma_setup_cyc2
+0DF2 30 27 00 60    	xor	r0,#DMAM_MREQ | DMAM_IORQ
+0DF6                dma_setup_cyc2:
+0DF6 00 0F          	ret
+0DF8                .else
+0DF8                ;---------------------
+0DF8                ;DMA port setup
+0DF8                ;---------------------
+0DF8                ;r2 = DMA_BASE_T = PORTA , DMA_BASE_T+2 = PORTB
+0DF8                dma_set:
+0DF8                	ldm	r0,(r2,#DMA_AAC-DMA_BASE_T) ; DMA_AAC or DMA_BAC
+0DF8                	stm	(r14,#FDM_AL-R14_BASE),r0
+0DF8                	ldm	r1,(r2,#DMA_WR1-DMA_BASE_T) ; DMA_WR1 or DMA_WR2
+0DF8                	tst	r1,#20h:8  ;FIX address?
+0DF8                	bne	dma_rc2
+0DF8                	add	r0,#1:8
+0DF8                	tst	r1,#10h:8  ;INC ?
+0DF8                	bne	dma_rc1
+0DF8                	sub	r0,#2:8
+0DF8                dma_rc1:
+0DF8                	stm	(r2,#DMA_AAC-DMA_BASE_T),r0 ; DMA_AAC or DMA_BAC
+0DF8                dma_rc2:
+0DF8                	mov	r0,#DMAM_BUSRQ | DMAM_MREQ
+0DF8                	tst	r1,#08h:8   ;I/O or memory?
+0DF8                	beq	dma_rc3
+0DF8                	xor	r0,#DMAM_MREQ | DMAM_IORQ
+0DF8                dma_rc3:
+0DF8                	ret
+0DF8                .endif
+0DF8                ;
+0DF8                .ifdef GET_BUS_BYPASS
+0DF8                .else
+0DF8                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0DF8                ;BUSRQ ON
+0DF8                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0DF8                get_bus:
+0DF8 0E 27 0F 2F    	jsr	wait_rfsh_req
+0DFC 04 2F          	bra	get_bus2
+0DFE                get_bus1:
+0DFE 08 27 00 70    	mov	r0,#DMAM_BUSRQ
+0E02 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0
+0E04                get_bus2:
+0E04 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+0E06 01 27 00 C0    	tst	r0,#DMAM_BUSAK
+0E0A FA 29          	bne	get_bus1
+0E0C 00 0F          	ret
+0E0E                .endif
+0E0E                
+0E0E                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0E0E                ;wait rfsh cycle
+0E0E                ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+0E0E                wait_rfsh_req:
+0E0E 00 0E          	ldm	r0,(r14,#DMA_DATA-R14_BASE)
+0E10 02 27 00 C0    	tst	r0,#DMAM_BUSY
+0E14 FD 29          	bne	wait_rfsh_req
+0E16                dma_bus_poff:
+0E16 00 70          	mov	r0,#0:8
+0E18 09 1E          	stm	(r14,#FDM_AH-R14_BASE),r0
+0E1A 00 0F          	ret
+0E1C                ;
+0E1C                ;-----------------------------------------------------------------------------
+0E1C                ;FDD WRITE IRQ TRAP
+0E1C                ;-----------------------------------------------------------------------------
+0E1C                dma_fdd_wr:
+0E1C 00 0F          	ret
+0E1E                ;
+0E1E                ;-----------------------------------------------------------------------------
+0E1E                ;DMA_IDLE
+0E1E                ;-----------------------------------------------------------------------------
+0E1E                dma_init:
+0E1E 11 27 2E 70    	mov	r0,#DMA_BASE
+0E22 0C 27 0A 71    	mov	r1,#dma_wi
+0E26 10 10          	stm	(r0,#DMA_ENT-DMA_BASE),r1
+0E28                ;
+0E28 80 27 00 71    	mov	r1,#8000h
+0E2C 13 1B          	stm	(r11,#DMA_WD-R11_BASE),r1
+0E2E                ;
+0E2E                .ifdef PRESET_DMA
+0E2E                	mov	r1,#87h:8
+0E2E                	stm	(r0,#DMA_WR6-DMA_BASE),r1
+0E2E                	mov	r1,#3000h
+0E2E                ;	mov	r1,#8000h
+0E2E                	stm	(r0,#DMA_BA-DMA_BASE),r1
+0E2E                .endif
+0E2E 00 0F          	ret
+0E30                ;
+0E30                .else
+0E30                dma_isr:
+0E30                	ret	sti
+0E30                .endif
+0E30                ;
+0E30                ;******************************************************************************
+0E30                ; PS2 keyvode table
+0E30                ;******************************************************************************
+0E30                	include "ps2map.inc"
+0E30                ps2_raw:
+0E30 00             	db	KC_NOMAP ;000H
+0E31 00             	db	KC_NOMAP ;001H
+0E32 00             	db	KC_NOMAP ;002H
+0E33 3D             	db	KC_F5 ;003H
+0E34 3B             	db	KC_F3 ;004H
+0E35 39             	db	KC_F1 ;005H
+0E36 3A             	db	KC_F2 ;006H
+0E37                ;	db	KC_NOMAP ;007H
+0E37 FF             	db	KC_JOY_EMU ;007H
+0E38 00             	db	KC_NOMAP ;008H
+0E39 00             	db	KC_NOMAP ;009H
+0E3A 00             	db	KC_NOMAP ;00AH
+0E3B 00             	db	KC_NOMAP ;00BH
+0E3C 3C             	db	KC_F4 ;00CH
+0E3D 34             	db	KC_TAB ;00DH
+0E3E 35             	db	KC_HANZEN ;00EH
+0E3F 00             	db	KC_NOMAP ;00FH
+0E40 00             	db	KC_NOMAP ;010H
+0E41 84             	db	KC_L_ALT ;011H
+0E42 81             	db	KC_L_SHFT ;012H
+0E43 82             	db	KC_KANA ;013H
+0E44 80             	db	KC_L_CTRL ;014H
+0E45 11             	db	KC_Q ;015H
+0E46 1B             	db	KC_1 ;016H
+0E47 00             	db	KC_NOMAP ;017H
+0E48 00             	db	KC_NOMAP ;018H
+0E49 00             	db	KC_NOMAP ;019H
+0E4A 1A             	db	KC_Z ;01AH
+0E4B 13             	db	KC_S ;01BH
+0E4C 01             	db	KC_A ;01CH
+0E4D 17             	db	KC_W ;01DH
+0E4E 1C             	db	KC_2 ;01EH
+0E4F 00             	db	KC_NOMAP ;01FH
+0E50 00             	db	KC_NOMAP ;020H
+0E51 03             	db	KC_C ;021H
+0E52 18             	db	KC_X ;022H
+0E53 04             	db	KC_D ;023H
+0E54 05             	db	KC_E ;024H
+0E55 1E             	db	KC_4 ;025H
+0E56 1D             	db	KC_3 ;026H
+0E57 00             	db	KC_NOMAP ;027H
+0E58 00             	db	KC_NOMAP ;028H
+0E59 33             	db	KC_SPACE ;029H
+0E5A 16             	db	KC_V ;02AH
+0E5B 06             	db	KC_F ;02BH
+0E5C 14             	db	KC_T ;02CH
+0E5D 12             	db	KC_R ;02DH
+0E5E 1F             	db	KC_5 ;02EH
+0E5F 00             	db	KC_NOMAP ;02FH
+0E60 00             	db	KC_NOMAP ;030H
+0E61 0E             	db	KC_N ;031H
+0E62 02             	db	KC_B ;032H
+0E63 08             	db	KC_H ;033H
+0E64 07             	db	KC_G ;034H
+0E65 19             	db	KC_Y ;035H
+0E66 20             	db	KC_6 ;036H
+0E67 00             	db	KC_NOMAP ;037H
+0E68 00             	db	KC_NOMAP ;038H
+0E69 00             	db	KC_NOMAP ;039H
+0E6A 0D             	db	KC_M ;03AH
+0E6B 0A             	db	KC_J ;03BH
+0E6C 15             	db	KC_U ;03CH
+0E6D 21             	db	KC_7 ;03DH
+0E6E 22             	db	KC_8 ;03EH
+0E6F 00             	db	KC_NOMAP ;03FH
+0E70 00             	db	KC_NOMAP ;040H
+0E71 2D             	db	KC_KAMMA ;041H
+0E72 0B             	db	KC_K ;042H
+0E73 09             	db	KC_I ;043H
+0E74 0F             	db	KC_O ;044H
+0E75 24             	db	KC_0 ;045H
+0E76 23             	db	KC_9 ;046H
+0E77 00             	db	KC_NOMAP ;047H
+0E78 00             	db	KC_NOMAP ;048H
+0E79 2E             	db	KC_DOT ;049H
+0E7A 2F             	db	KC_DIV ;04AH
+0E7B 0C             	db	KC_L ;04BH
+0E7C 2B             	db	KC_SEMICOL ;04CH
+0E7D 10             	db	KC_P ;04DH
+0E7E 25             	db	KC_MIN ;04EH
+0E7F 00             	db	KC_NOMAP ;04FH
+0E80 00             	db	KC_NOMAP ;050H
+0E81 30             	db	KC_UNDER ;051H
+0E82 2C             	db	KC_CORON ;052H
+0E83 00             	db	KC_NOMAP ;053H
+0E84 28             	db	KC_AT ;054H
+0E85 26             	db	KC_EQU ;055H
+0E86 00             	db	KC_NOMAP ;056H
+0E87 00             	db	KC_NOMAP ;057H
+0E88 83             	db	KC_CAPS ;058H
+0E89 89             	db	KC_R_SHFT ;059H
+0E8A 31             	db	KC_ENTER ;05AH
+0E8B 29             	db	KC_K_ED ;05BH
+0E8C 00             	db	KC_NOMAP ;05CH
+0E8D 27             	db	KC_BKSL ;05DH
+0E8E 00             	db	KC_NOMAP ;05EH
+0E8F 00             	db	KC_NOMAP ;05FH
+0E90 00             	db	KC_NOMAP ;060H
+0E91 00             	db	KC_NOMAP ;061H
+0E92 00             	db	KC_NOMAP ;062H
+0E93 00             	db	KC_NOMAP ;063H
+0E94 37             	db	KC_XFER ;064H
+0E95 00             	db	KC_NOMAP ;065H
+0E96 32             	db	KC_BS ;066H
+0E97 00             	db	KC_NOMAP ;067H
+0E98 00             	db	KC_NOMAP ;068H
+0E99 4F             	db	KC_KP_1 ;069H
+0E9A 2A             	db	KC_YEN ;06AH
+0E9B 52             	db	KC_KP_4 ;06BH
+0E9C 55             	db	KC_KP_7 ;06CH
+0E9D 00             	db	KC_NOMAP ;06DH
+0E9E 00             	db	KC_NOMAP ;06EH
+0E9F 00             	db	KC_NOMAP ;06FH
+0EA0 4E             	db	KC_KP_0 ;070H
+0EA1 4D             	db	KC_KP_DOT ;071H
+0EA2 50             	db	KC_KP_2 ;072H
+0EA3 53             	db	KC_KP_5 ;073H
+0EA4 54             	db	KC_KP_6 ;074H
+0EA5 56             	db	KC_KP_8 ;075H
+0EA6 36             	db	KC_ESC ;076H
+0EA7 47             	db	KC_NUM ;077H
+0EA8 00             	db	KC_NOMAP ;078H
+0EA9 4B             	db	KC_KP_PUL ;079H
+0EAA 51             	db	KC_KP_3 ;07AH
+0EAB 4A             	db	KC_KP_MIN ;07BH
+0EAC 49             	db	KC_KP_MUL ;07CH
+0EAD 57             	db	KC_KP_9 ;07DH
+0EAE 38             	db	KC_SCROLL ;07EH
+0EAF 00             	db	KC_NOMAP ;07FH
+0EB0 00             	db	KC_NOMAP ;0E0H,00H
+0EB1 00             	db	KC_NOMAP ;0E0H,01H
+0EB2 00             	db	KC_NOMAP ;0E0H,02H
+0EB3 00             	db	KC_NOMAP ;0E0H,03H
+0EB4 00             	db	KC_NOMAP ;0E0H,04H
+0EB5 00             	db	KC_NOMAP ;0E0H,05H
+0EB6 00             	db	KC_NOMAP ;0E0H,06H
+0EB7 00             	db	KC_NOMAP ;0E0H,07H
+0EB8 00             	db	KC_NOMAP ;0E0H,08H
+0EB9 00             	db	KC_NOMAP ;0E0H,09H
+0EBA 00             	db	KC_NOMAP ;0E0H,0AH
+0EBB 00             	db	KC_NOMAP ;0E0H,0BH
+0EBC 00             	db	KC_NOMAP ;0E0H,0CH
+0EBD 00             	db	KC_NOMAP ;0E0H,0DH
+0EBE 00             	db	KC_NOMAP ;0E0H,0EH
+0EBF 00             	db	KC_NOMAP ;0E0H,0FH
+0EC0 00             	db	KC_NOMAP ;0E0H,10H
+0EC1 8C             	db	KC_R_ALT ;0E0H,11H
+0EC2 00             	db	KC_NOMAP ;0E0H,12H
+0EC3 00             	db	KC_NOMAP ;0E0H,13H
+0EC4 88             	db	KC_R_CTRL ;0E0H,14H
+0EC5 00             	db	KC_NOMAP ;0E0H,15H
+0EC6 00             	db	KC_NOMAP ;0E0H,16H
+0EC7 00             	db	KC_NOMAP ;0E0H,17H
+0EC8 00             	db	KC_NOMAP ;0E0H,18H
+0EC9 00             	db	KC_NOMAP ;0E0H,19H
+0ECA 00             	db	KC_NOMAP ;0E0H,1AH
+0ECB 00             	db	KC_NOMAP ;0E0H,1BH
+0ECC 00             	db	KC_NOMAP ;0E0H,1CH
+0ECD 00             	db	KC_NOMAP ;0E0H,1DH
+0ECE 00             	db	KC_NOMAP ;0E0H,1EH
+0ECF 00             	db	KC_NOMAP ;0E0H,1FH
+0ED0 00             	db	KC_NOMAP ;0E0H,20H
+0ED1 00             	db	KC_NOMAP ;0E0H,21H
+0ED2 00             	db	KC_NOMAP ;0E0H,22H
+0ED3 00             	db	KC_NOMAP ;0E0H,23H
+0ED4 00             	db	KC_NOMAP ;0E0H,24H
+0ED5 00             	db	KC_NOMAP ;0E0H,25H
+0ED6 00             	db	KC_NOMAP ;0E0H,26H
+0ED7 00             	db	KC_NOMAP ;0E0H,27H
+0ED8 00             	db	KC_NOMAP ;0E0H,28H
+0ED9 00             	db	KC_NOMAP ;0E0H,29H
+0EDA 00             	db	KC_NOMAP ;0E0H,2AH
+0EDB 00             	db	KC_NOMAP ;0E0H,2BH
+0EDC 00             	db	KC_NOMAP ;0E0H,2CH
+0EDD 00             	db	KC_NOMAP ;0E0H,2DH
+0EDE 00             	db	KC_NOMAP ;0E0H,2EH
+0EDF 00             	db	KC_NOMAP ;0E0H,2FH
+0EE0 00             	db	KC_NOMAP ;0E0H,30H
+0EE1 00             	db	KC_NOMAP ;0E0H,31H
+0EE2 00             	db	KC_NOMAP ;0E0H,32H
+0EE3 00             	db	KC_NOMAP ;0E0H,33H
+0EE4 00             	db	KC_NOMAP ;0E0H,34H
+0EE5 00             	db	KC_NOMAP ;0E0H,35H
+0EE6 00             	db	KC_NOMAP ;0E0H,36H
+0EE7 00             	db	KC_NOMAP ;0E0H,37H
+0EE8 00             	db	KC_NOMAP ;0E0H,38H
+0EE9 00             	db	KC_NOMAP ;0E0H,39H
+0EEA 00             	db	KC_NOMAP ;0E0H,3AH
+0EEB 00             	db	KC_NOMAP ;0E0H,3BH
+0EEC 00             	db	KC_NOMAP ;0E0H,3CH
+0EED 00             	db	KC_NOMAP ;0E0H,3DH
+0EEE 00             	db	KC_NOMAP ;0E0H,3EH
+0EEF 00             	db	KC_NOMAP ;0E0H,3FH
+0EF0 00             	db	KC_NOMAP ;0E0H,40H
+0EF1 00             	db	KC_NOMAP ;0E0H,41H
+0EF2 00             	db	KC_NOMAP ;0E0H,42H
+0EF3 00             	db	KC_NOMAP ;0E0H,43H
+0EF4 00             	db	KC_NOMAP ;0E0H,44H
+0EF5 00             	db	KC_NOMAP ;0E0H,45H
+0EF6 00             	db	KC_NOMAP ;0E0H,46H
+0EF7 00             	db	KC_NOMAP ;0E0H,47H
+0EF8 00             	db	KC_NOMAP ;0E0H,48H
+0EF9 00             	db	KC_NOMAP ;0E0H,49H
+0EFA 48             	db	KC_KP_DIV ;0E0H,4AH
+0EFB 00             	db	KC_NOMAP ;0E0H,4BH
+0EFC 00             	db	KC_NOMAP ;0E0H,4CH
+0EFD 00             	db	KC_NOMAP ;0E0H,4DH
+0EFE 00             	db	KC_NOMAP ;0E0H,4EH
+0EFF 00             	db	KC_NOMAP ;0E0H,4FH
+0F00 00             	db	KC_NOMAP ;0E0H,50H
+0F01 00             	db	KC_NOMAP ;0E0H,51H
+0F02 00             	db	KC_NOMAP ;0E0H,52H
+0F03 00             	db	KC_NOMAP ;0E0H,53H
+0F04 00             	db	KC_NOMAP ;0E0H,54H
+0F05 00             	db	KC_NOMAP ;0E0H,55H
+0F06 00             	db	KC_NOMAP ;0E0H,56H
+0F07 00             	db	KC_NOMAP ;0E0H,57H
+0F08 00             	db	KC_NOMAP ;0E0H,58H
+0F09 00             	db	KC_NOMAP ;0E0H,59H
+0F0A 4C             	db	KC_KP_ENTER ;0E0H,5AH
+0F0B 00             	db	KC_NOMAP ;0E0H,5BH
+0F0C 00             	db	KC_NOMAP ;0E0H,5CH
+0F0D 00             	db	KC_NOMAP ;0E0H,5DH
+0F0E 00             	db	KC_NOMAP ;0E0H,5EH
+0F0F 00             	db	KC_NOMAP ;0E0H,5FH
+0F10 00             	db	KC_NOMAP ;0E0H,60H
+0F11 00             	db	KC_NOMAP ;0E0H,61H
+0F12 00             	db	KC_NOMAP ;0E0H,62H
+0F13 00             	db	KC_NOMAP ;0E0H,63H
+0F14 00             	db	KC_NOMAP ;0E0H,64H
+0F15 00             	db	KC_NOMAP ;0E0H,65H
+0F16 00             	db	KC_NOMAP ;0E0H,66H
+0F17 00             	db	KC_NOMAP ;0E0H,67H
+0F18 00             	db	KC_NOMAP ;0E0H,68H
+0F19 00             	db	KC_NOMAP ;0E0H,69H
+0F1A 00             	db	KC_NOMAP ;0E0H,6AH
+0F1B 44             	db	KC_L_ARROW ;0E0H,6BH
+0F1C 42             	db	KC_HOME ;0E0H,6CH
+0F1D 00             	db	KC_NOMAP ;0E0H,6DH
+0F1E 00             	db	KC_NOMAP ;0E0H,6EH
+0F1F 00             	db	KC_NOMAP ;0E0H,6FH
+0F20 3E             	db	KC_INSERT ;0E0H,70H
+0F21 3F             	db	KC_DELETE ;0E0H,71H
+0F22 45             	db	KC_D_ARROW ;0E0H,72H
+0F23 00             	db	KC_NOMAP ;0E0H,73H
+0F24 46             	db	KC_R_ARROW ;0E0H,74H
+0F25 43             	db	KC_U_ARROW ;0E0H,75H
+0F26 00             	db	KC_NOMAP ;0E0H,76H
+0F27 00             	db	KC_NOMAP ;0E0H,77H
+0F28 00             	db	KC_NOMAP ;0E0H,78H
+0F29 00             	db	KC_NOMAP ;0E0H,79H
+0F2A 41             	db	KC_PG_DN ;0E0H,7AH
+0F2B 00             	db	KC_NOMAP ;0E0H,7BH
+0F2C 00             	db	KC_NOMAP ;0E0H,7CH
+0F2D 40             	db	KC_PG_UP ;0E0H,7DH
+0F2E 00             	db	KC_NOMAP ;0E0H,7EH
+0F2F 00             	db	KC_NOMAP ;0E0H,7FH
+0F30                	.align 2
+0F30                ;******************************************************************************
+0F30                ; X1 ASCII code table
+0F30                ;******************************************************************************
+0F30                raw_x1_no:
+0F30                	include "x1map0.inc"
+0F30                raw_x1_0: ;max 89
+0F30 31             	db	031H ;1B KC_1
+0F31 32             	db	032H ;1C KC_2
+0F32 33             	db	033H ;1D KC_3
+0F33 34             	db	034H ;1E KC_4
+0F34 35             	db	035H ;1F KC_5
+0F35 36             	db	036H ;20 KC_6
+0F36 37             	db	037H ;21 KC_7
+0F37 38             	db	038H ;22 KC_8
+0F38 39             	db	039H ;23 KC_9
+0F39 30             	db	030H ;24 KC_0
+0F3A 2D             	db	02DH ;25 KC_MIN
+0F3B 5E             	db	05EH ;26 KC_EQU
+0F3C 5D             	db	05DH ;27 KC_BKSL
+0F3D 40             	db	040H ;28 KC_AT
+0F3E 5B             	db	05BH ;29 KC_K_ED
+0F3F 5C             	db	05CH ;2A KC_YEN
+0F40 3B             	db	03BH ;2B KC_SEMICOL
+0F41 3A             	db	03AH ;2C KC_CORON
+0F42 2C             	db	02CH ;2D KC_KAMMA
+0F43 2E             	db	02EH ;2E KC_DOT
+0F44 2F             	db	02FH ;2F KC_DIV
+0F45 5F             	db	05FH ;30 KC_UNDER
+0F46 0D             	db	00DH ;31 KC_ENTER
+0F47 08             	db	008H ;32 KC_BS
+0F48 20             	db	020H ;33 KC_SPACE
+0F49 09             	db	009H ;34 KC_TAB
+0F4A 1B             	db	01BH ;35 KC_HANZEN
+0F4B 1B             	db	01BH ;36 KC_ESC
+0F4C FE             	db	0FEH ;37 KC_XFER
+0F4D 13             	db	013H ;38 KC_SCROLL
+0F4E 71             	db	071H ;39 KC_F1
+0F4F 72             	db	072H ;3A KC_F2
+0F50 73             	db	073H ;3B KC_F3
+0F51 74             	db	074H ;3C KC_F4
+0F52 75             	db	075H ;3D KC_F5
+0F53 08             	db	008H ;3E KC_INSERT
+0F54 08             	db	008H ;3F KC_DELETE
+0F55 0E             	db	00EH ;40 KC_PG_UP
+0F56 0F             	db	00FH ;41 KC_PG_DN
+0F57 0B             	db	00BH ;42 KC_HOME
+0F58 1E             	db	01EH ;43 KC_U_ARROW
+0F59 1D             	db	01DH ;44 KC_L_ARROW
+0F5A 1F             	db	01FH ;45 KC_D_ARROW
+0F5B 1C             	db	01CH ;46 KC_R_ARROW
+0F5C 0B             	db	00BH ;47 KC_NUM
+0F5D 2F             	db	02FH ;48 KC_KP_DIV
+0F5E 2A             	db	02AH ;49 KC_KP_MUL
+0F5F 2D             	db	02DH ;4A KC_KP_MIN
+0F60 2B             	db	02BH ;4B KC_KP_PUL
+0F61 0D             	db	00DH ;4C KC_KP_ENTER
+0F62 2E             	db	02EH ;4D KC_KP_DOT
+0F63 30             	db	030H ;4E KC_KP_0
+0F64 31             	db	031H ;4F KC_KP_1
+0F65 32             	db	032H ;50 KC_KP_2
+0F66 33             	db	033H ;51 KC_KP_3
+0F67 34             	db	034H ;52 KC_KP_4
+0F68 35             	db	035H ;53 KC_KP_5
+0F69 36             	db	036H ;54 KC_KP_6
+0F6A 37             	db	037H ;55 KC_KP_7
+0F6B 38             	db	038H ;56 KC_KP_8
+0F6C 39             	db	039H ;57 KC_KP_9
+0F6D                	.align 2
+0F6E                raw_x1_sh:
+0F6E                	include "x1map1.inc"
+0F6E                raw_x1_1: ;max 89
+0F6E 21             	db	021H ;1B KC_1
+0F6F 22             	db	022H ;1C KC_2
+0F70 23             	db	023H ;1D KC_3
+0F71 24             	db	024H ;1E KC_4
+0F72 25             	db	025H ;1F KC_5
+0F73 26             	db	026H ;20 KC_6
+0F74 27             	db	027H ;21 KC_7
+0F75 28             	db	028H ;22 KC_8
+0F76 29             	db	029H ;23 KC_9
+0F77 7E             	db	07EH ;24 KC_0
+0F78 3D             	db	03DH ;25 KC_MIN
+0F79 60             	db	060H ;26 KC_EQU
+0F7A 7D             	db	07DH ;27 KC_BKSL
+0F7B 60             	db	060H ;28 KC_AT
+0F7C 7B             	db	07BH ;29 KC_K_ED
+0F7D 7C             	db	07CH ;2A KC_YEN
+0F7E 2B             	db	02BH ;2B KC_SEMICOL
+0F7F 2A             	db	02AH ;2C KC_CORON
+0F80 3C             	db	03CH ;2D KC_KAMMA
+0F81 3E             	db	03EH ;2E KC_DOT
+0F82 3F             	db	03FH ;2F KC_DIV
+0F83 5F             	db	05FH ;30 KC_UNDER
+0F84 0D             	db	00DH ;31 KC_ENTER
+0F85 12             	db	012H ;32 KC_BS
+0F86 20             	db	020H ;33 KC_SPACE
+0F87 09             	db	009H ;34 KC_TAB
+0F88 1B             	db	01BH ;35 KC_HANZEN
+0F89 1B             	db	01BH ;36 KC_ESC
+0F8A FE             	db	0FEH ;37 KC_XFER
+0F8B 03             	db	003H ;38 KC_SCROLL
+0F8C 76             	db	076H ;39 KC_F1
+0F8D 77             	db	077H ;3A KC_F2
+0F8E 78             	db	078H ;3B KC_F3
+0F8F 79             	db	079H ;3C KC_F4
+0F90 7A             	db	07AH ;3D KC_F5
+0F91 12             	db	012H ;3E KC_INSERT
+0F92 12             	db	012H ;3F KC_DELETE
+0F93 0E             	db	00EH ;40 KC_PG_UP
+0F94 0F             	db	00FH ;41 KC_PG_DN
+0F95 0C             	db	00CH ;42 KC_HOME
+0F96 1E             	db	01EH ;43 KC_U_ARROW
+0F97 1D             	db	01DH ;44 KC_L_ARROW
+0F98 1F             	db	01FH ;45 KC_D_ARROW
+0F99 1C             	db	01CH ;46 KC_R_ARROW
+0F9A 0C             	db	00CH ;47 KC_NUM
+0F9B 2F             	db	02FH ;48 KC_KP_DIV
+0F9C 2A             	db	02AH ;49 KC_KP_MUL
+0F9D 2D             	db	02DH ;4A KC_KP_MIN
+0F9E 2B             	db	02BH ;4B KC_KP_PUL
+0F9F 0D             	db	00DH ;4C KC_KP_ENTER
+0FA0 2E             	db	02EH ;4D KC_KP_DOT
+0FA1 30             	db	030H ;4E KC_KP_0
+0FA2 31             	db	031H ;4F KC_KP_1
+0FA3 32             	db	032H ;50 KC_KP_2
+0FA4 33             	db	033H ;51 KC_KP_3
+0FA5 34             	db	034H ;52 KC_KP_4
+0FA6 35             	db	035H ;53 KC_KP_5
+0FA7 36             	db	036H ;54 KC_KP_6
+0FA8 37             	db	037H ;55 KC_KP_7
+0FA9 38             	db	038H ;56 KC_KP_8
+0FAA 39             	db	039H ;57 KC_KP_9
+0FAB                	.align 2
+0FAC                raw_x1_ct:
+0FAC                	include "x1map2.inc"
+0FAC                raw_x1_2: ;max 89
+0FAC 31             	db	031H ;1B KC_1
+0FAD 32             	db	032H ;1C KC_2
+0FAE 33             	db	033H ;1D KC_3
+0FAF 34             	db	034H ;1E KC_4
+0FB0 35             	db	035H ;1F KC_5
+0FB1 36             	db	036H ;20 KC_6
+0FB2 37             	db	037H ;21 KC_7
+0FB3 38             	db	038H ;22 KC_8
+0FB4 39             	db	039H ;23 KC_9
+0FB5 30             	db	030H ;24 KC_0
+0FB6 00             	db	000H ;25 KC_MIN
+0FB7 1E             	db	01EH ;26 KC_EQU
+0FB8 1D             	db	01DH ;27 KC_BKSL
+0FB9 40             	db	040H ;28 KC_AT
+0FBA 00             	db	000H ;29 KC_K_ED
+0FBB 00             	db	000H ;2A KC_YEN
+0FBC 00             	db	000H ;2B KC_SEMICOL
+0FBD 00             	db	000H ;2C KC_CORON
+0FBE 00             	db	000H ;2D KC_KAMMA
+0FBF 00             	db	000H ;2E KC_DOT
+0FC0 00             	db	000H ;2F KC_DIV
+0FC1 00             	db	000H ;30 KC_UNDER
+0FC2 0D             	db	00DH ;31 KC_ENTER
+0FC3 00             	db	000H ;32 KC_BS
+0FC4 00             	db	000H ;33 KC_SPACE
+0FC5 00             	db	000H ;34 KC_TAB
+0FC6 00             	db	000H ;35 KC_HANZEN
+0FC7 00             	db	000H ;36 KC_ESC
+0FC8 FE             	db	0FEH ;37 KC_XFER
+0FC9 13             	db	013H ;38 KC_SCROLL
+0FCA 00             	db	000H ;39 KC_F1
+0FCB 00             	db	000H ;3A KC_F2
+0FCC 00             	db	000H ;3B KC_F3
+0FCD 00             	db	000H ;3C KC_F4
+0FCE 00             	db	000H ;3D KC_F5
+0FCF 00             	db	000H ;3E KC_INSERT
+0FD0 00             	db	000H ;3F KC_DELETE
+0FD1 0E             	db	00EH ;40 KC_PG_UP
+0FD2 0F             	db	00FH ;41 KC_PG_DN
+0FD3 0B             	db	00BH ;42 KC_HOME
+0FD4 1E             	db	01EH ;43 KC_U_ARROW
+0FD5 1D             	db	01DH ;44 KC_L_ARROW
+0FD6 1F             	db	01FH ;45 KC_D_ARROW
+0FD7 1C             	db	01CH ;46 KC_R_ARROW
+0FD8 0B             	db	00BH ;47 KC_NUM
+0FD9 2F             	db	02FH ;48 KC_KP_DIV
+0FDA 2A             	db	02AH ;49 KC_KP_MUL
+0FDB 2D             	db	02DH ;4A KC_KP_MIN
+0FDC 2B             	db	02BH ;4B KC_KP_PUL
+0FDD 0D             	db	00DH ;4C KC_KP_ENTER
+0FDE 2E             	db	02EH ;4D KC_KP_DOT
+0FDF 30             	db	030H ;4E KC_KP_0
+0FE0 31             	db	031H ;4F KC_KP_1
+0FE1 32             	db	032H ;50 KC_KP_2
+0FE2 33             	db	033H ;51 KC_KP_3
+0FE3 34             	db	034H ;52 KC_KP_4
+0FE4 35             	db	035H ;53 KC_KP_5
+0FE5 36             	db	036H ;54 KC_KP_6
+0FE6 37             	db	037H ;55 KC_KP_7
+0FE7 38             	db	038H ;56 KC_KP_8
+0FE8 39             	db	039H ;57 KC_KP_9
+0FE9                	.align 2
+0FEA                .ifdef GRAPH_ASCII
+0FEA                raw_x1_gr:
+0FEA                	include "x1map3.inc"
+0FEA                	.align 2
+0FEA                .endif
+0FEA                ;minimize option
+0FEA                .ifdef KANA_ASCII
+0FEA                raw_x1_ka:
+0FEA                	include "x1map4.inc"
+0FEA                	.align 2
+0FEA                raw_x1_sk:
+0FEA                	include "x1map5.inc"
+0FEA                	.align 2
+0FEA                .endif
+0FEA                
+0FEA                ;
+0FEA                .ifdef F_GAME_KEY
+0FEA                ;KC_Q     KC_W     KC_E      KC_A      KC_D      KC_Z     KC_X     KC_C
+0FEA                ;KC_KP_7  KC_KP_4  KC_KP_1   KC_KP_8   KC_KP_2   KC_KP_9  KC_KP_6  KC_KP_3
+0FEA                ;KC_ESC   KC_1     KC_KP_MIN KC_KP_PUL KC_KP_MUL KC_TAB   KC_SPACE KC_ENTER
+0FEA                raw_x1_gk:
+0FEA                	include "x1map6.inc"
+0FEA                	.align 2
+0FEA                .endif
+0FEA                ;
+0FEA                code_end
+0FEA                ;
+0FEA                		END
+0FEA                

@@ -1,0 +1,729 @@
+;1994/10/13  JR,DJNZ アドレスチェックのバグ修正
+;2000/09/03  if endif 等を .ifに変更
+;
+;Ｚ８０、ＨＤ６４１８０用マクロ定義
+;
+;レジスター定数
+;(HL)のような括弧は対応していないため直接マクロ定義する(__GAP__)
+const	_R		= B,C,D,E,H,L,__GAP__,A
+const	_T		= BC,DE,HL,SP
+const	_Q		= BC,DE,HL,AF
+const	_P		= BC,DE,IX,SP
+const	_S		= BC,DE,IY,SP
+const	_HII	= HL,IX,IY
+const	_II		= IX,IY
+const	_BD		= BC,DE
+const	_IR		= I,R
+;
+;命令
+const	_AAS	= ADD,ADC,SUB,SBC,AND,XOR,OR,CP
+const	_AAGS	= ADD,ADC,__GAP__,SBC
+const	_ROT	= RLC,RRC,RL,RR,SLA,SRA,SLI,SRL
+const	_ROTA	= RLCA,RRCA,RLA,RRA
+const	_BIT	= BIT,RES,SET
+const	_ID		= INC,DEC
+const	_DCSC	= DAA,CPL,SCF,CCF
+;
+;フラグ
+const	_C		= NZ,Z,NC,C,PO,PE,P,M
+;
+;ライブラリ関連で使用する変数定義
+.ifndef	_rel
+;デフォルトでリロケートさせる
+var	_rel = 1
+.endif
+;
+;以後の処理をリロケートさせる
+macro	REL_ON
+	_rel = 1
+endm
+;
+;以後の処理をリロケートさせない
+macro	REL_OFF
+	_rel = 0
+endm
+;
+;アドレス関連指定マクロ
+;NUMBER は予約語で、数値が入る
+macro	ORG NUMBER
+	$ = #0
+endm
+
+macro	DS NUMBER
+	$ = $+#0
+endm
+
+macro	DEFS NUMBER
+	$ = $+#0
+endm
+;
+;８ビットロード
+macro	LD _R,_R
+	DB	40h+(#0<<3)+#1
+endm
+
+macro	LD (HL),_R
+	DB	70h+#0
+endm
+
+macro	LD _R,(HL)
+	DB	40h+(#0<<3)+6
+endm
+
+macro	LD _R,NUMBER
+	DB	6h+(#0<<3),#1
+endm
+
+macro	LD (HL),NUMBER
+	DB	36h,#0
+endm
+
+;
+
+macro	LD _R,(_II+NUMBER)
+	db	0ddh+(#1<<5),46h+(#0<<3),#2
+endm
+
+macro	LD _R,(_II)
+	db	0ddh+(#1<<5),46h+(#0<<3),0
+endm
+
+macro	LD (HL),(_II+NUMBER)
+	db	0ddh+(#0<<5),76h,#1
+endm
+
+macro	LD (HL),(_II)
+	db	0ddh+(#0<<5),76h,0
+endm
+
+macro	LD (_II+NUMBER),_R
+	db	0ddh+(#0<<5),70h+#2,#1
+endm
+
+macro	LD (_II),_R
+	db	0ddh+(#0<<5),70h+#1,0
+endm
+
+macro	LD (_II+NUMBER),(HL)
+	db	0ddh+(#0<<5),76h,#1
+endm
+
+macro	LD (_II),(HL)
+	db	0ddh+(#0<<5),76h,0
+endm
+
+macro	LD (_II+NUMBER),NUMBER
+	db	0ddh+(#0<<5),36h,#1,#2
+endm
+
+macro	LD (_II),NUMBER
+	db	0ddh+(#0<<5),36h,0,#1
+endm
+
+macro	LD A,(_BD)
+	db	0ah + (#0<<4)
+endm
+
+macro	LD (_BD),A
+	db	02h + (#0<<4)
+endm
+
+macro	LD A,_IR
+	db	0edh,57h + (#0<<3)
+endm
+
+macro	LD _IR,A
+	db	0edh,047h + (#0<<3)
+endm
+
+macro	LD A,(NUMBER)
+	db	3ah
+.if	_rel
+	dw	REL #0
+.else
+	dw	#0
+.endif
+endm
+
+macro	LD (NUMBER),A
+	db	32h
+.if	_rel
+	dw	REL #0
+.else
+	dw	#0
+.endif
+endm
+
+macro	LDI
+	db	0edh,0a0h
+endm
+
+macro	LDIR
+	db	0edh,0b0h
+endm
+
+macro	LDD
+	db	0edh,0a8h
+endm
+
+macro	LDDR
+	db	0edh,0b8h
+endm
+
+;
+;１６ビットロード
+macro	LD _T,NUMBER
+	db	1 + (#0<<4)
+.if	_rel
+	dw	REL #1
+.else
+	dw	#1
+.endif
+endm
+
+macro	LD _II,NUMBER
+	db	0ddh + (#0<<5),21h
+.if	_rel
+	dw	REL #1
+.else
+	dw	#1
+.endif
+endm
+
+macro	LD _T,(NUMBER)
+.if	#0 == 2
+	db	2ah
+.else
+	db	0edh,4bh + (#0<<4)
+.endif
+.if	_rel
+	dw	REL #1
+.else
+	dw	#1
+.endif
+endm
+
+macro	LD (NUMBER),_T
+.if	#1 == 2
+	db	22h
+.else
+	db	0edh,43h + (#1<<4)
+.endif
+.if	_rel
+	dw	REL #0
+.else
+	dw	#0
+.endif
+endm
+
+macro	LD _II,(NUMBER)
+	db	0ddh + (#0<<5),2ah
+.if	_rel
+	dw	REL #1
+.else
+	dw	#1
+.endif
+endm
+
+macro	LD (NUMBER),_II
+	db	0ddh + (#1<<5),22h
+.if	_rel
+	dw	REL #0
+.else
+	dw	#0
+.endif
+endm
+
+macro	LD SP,_HII
+.if	#0
+	db	0bdh + (#0<<5)
+.endif
+	db	0f9h
+endm
+
+macro	PUSH _Q
+	db	0c5h + (#0<<4)
+endm
+
+macro	POP _Q
+	db	0c1h + (#0<<4)
+endm
+
+macro	PUSH _II
+	db	0ddh + (#0<<5),0e5h
+endm
+
+macro	POP _II
+	db	0ddh + (#0<<5),0e1h
+endm
+
+macro	EX DE,HL
+	db	0ebh
+endm
+
+macro	EX AF,AF'
+	db	08h
+endm
+
+macro	EX (SP),_HII
+.if	#0
+	db	0bdh + (#0<<5)
+.endif
+	db	0e3h
+endm
+
+macro	EXX
+	db	0d9h
+endm
+
+;
+;８ビット演算
+macro	_AAS _R
+	db	80h + (#0<<3) + #1
+endm
+
+macro	_AAS (HL)
+	db	80h + (#0<<3) + 6
+endm
+
+macro	_AAGS A,_R
+	db	80h + (#0<<3) + #1
+endm
+
+macro	_AAGS A,(HL)
+	db	80h + (#0<<3) + 6
+endm
+
+macro	_AAS NUMBER
+	db	0c6h + (#0<<3),#1
+endm
+
+macro	_AAGS A,NUMBER
+	db	0c6h + (#0<<3),#1
+endm
+
+macro	_AAS (_II+NUMBER)
+	db 	0ddh + (#1<<5),86h + (#0<<3),#2
+endm
+
+macro	_AAS (_II)
+	db 	0ddh + (#1<<5),86h + (#0<<3),0
+endm
+
+macro	_AAGS A,(_II+NUMBER)
+	db	0ddh + (#1<<5),86h + (#0<<3),#2
+endm
+
+macro	_AAGS A,(_II)
+	db	0ddh + (#1<<5),86h + (#0<<3),0
+endm
+
+macro	_ID _R
+	db	4 + #0 + (#1<<3)
+endm
+
+macro	_ID (HL)
+	db	34h + #0
+endm
+
+macro	_ID (_II+NUMBER)
+	db 	0ddh + (#1<<5),34h + #0,#2
+endm
+
+macro	_ID (_II)
+	db 	0ddh + (#1<<5),34h + #0,0
+endm
+
+macro	CPI
+	db 	0edh,0a1h
+endm
+
+macro	CPIR
+	db	0edh,0b1h
+endm
+
+macro	CPD
+	db	0edh,0a9h
+endm
+
+macro	CPDR
+	db 	0edh,0b9h
+endm
+
+;
+;１６ビット演算
+macro	ADD HL,_T
+	db	9 + (#0<<4)
+endm
+
+macro	ADD IX,_P
+	db	0ddh,9 + (#0<<4)
+endm
+
+macro	ADD IY,_S
+	db	0fdh,9 + (#0<<4)
+endm
+
+macro	ADC HL,_T
+	db	0edh,4ah + (#0<<4)
+endm
+
+macro	SBC HL,_T
+	db	0edh,42H + (#0<<4)
+endm
+
+macro	_ID _T
+	db	3 + (#0<<3) + (#1<<4)
+endm
+
+macro	_ID _II
+	db	0ddh+(#1<<5),23h + (#0<<3)
+endm
+
+;
+;ＣＰＵ制御、その他
+macro	_DCSC
+	db	27h+(#0<<3)
+endm
+
+macro	NOP
+	db	0
+endm
+
+macro	NEG
+	db	0edh,44h
+endm
+
+macro	HALT
+	db	76h
+endm
+
+macro	DI
+	db	0f3h
+endm
+
+macro	EI
+	db	0fbh
+endm
+
+macro	IM NUMBER
+.if #0<0 || #0>2
+error 	"Invalid interrupt mode.\n"
+.endif
+	db	0edh
+.if	#0
+	db	4eh + (#0<<3)
+.else
+	db	46h
+.endif
+endm
+
+;
+;回転、シフト操作
+macro	_ROTA
+	db	7 + (#0<<3)
+endm
+
+macro	_ROT _R
+	db	0cbh,#1 + (#0<<3)
+endm
+
+macro	_ROT (HL)
+	db	0cbh,6 + (#0<<3)
+endm
+
+macro	_ROT (_II+NUMBER)
+	db	0ddh + (#1<<5),0cbh,#2,6 + (#0<<3)
+endm
+
+macro	_ROT (_II)
+	db	0ddh + (#1<<5),0cbh,0,6 + (#0<<3)
+endm
+
+macro	RLD
+	db	0edh,6fh
+endm
+
+macro	RRD
+	db	0edh,067h
+endm
+
+;
+;ビットテスト、セット
+macro	_BIT NUMBER,_R
+.if #1<0 || #1>7
+error	"Invalid bit number!\n"
+.endif
+	db	0cbh,40h + (#0<<6) + (#1<<3) + #2
+endm
+
+macro	_BIT NUMBER,(HL)
+.if #1<0 || #1>7
+error	"Invalid bit number!\n"
+.endif
+	db	0cbh,40h + (#0<<6) + (#1<<3) + 6
+endm
+
+macro	_BIT NUMBER,(_II+NUMBER)
+.if #1<0 || #1>7
+error	"Invalid bit number!\n"
+.endif
+	db	0ddh + (#2<<5),0cbh,#3,46h + (#0<<6) + (#1<<3)
+endm
+
+macro	_BIT NUMBER,(_II)
+.if #1<0 || #1>7
+error	"Invalid bit number!\n"
+.endif
+	db	0ddh + (#2<<5),0cbh,0,46h + (#0<<6) + (#1<<3)
+endm
+
+;
+;ジャンプ、コール
+macro	JP _C,NUMBER
+	db	0c2h + (#0<<3)
+.if	_rel
+	dw	REL #1
+.else
+	dw	#1
+.endif
+endm
+
+macro	CALL _C,NUMBER
+	db	0c4h + (#0<<3)
+.if	_rel
+	dw	REL #1
+.else
+	dw	#1
+.endif
+endm
+
+macro	RST NUMBER
+.if	(#0 % 8) != 0
+error	"Invalid restart address\n"
+.endif
+.if #0<0 || #0>56
+error	"Invalid restart address\n"
+.endif
+	db	0c7h + ((#0/8)<<3)
+endm
+
+macro	JP NUMBER
+	db	0c3h
+.if	_rel
+	dw	REL #0
+.else
+	dw	#0
+.endif
+endm
+
+macro	CALL NUMBER
+	db	0cdh
+.if	_rel
+	dw	REL #0
+.else
+	dw	#0
+.endif
+endm
+
+macro	JR _C,NUMBER
+;Pass 1 では NUMBER が確定していないので asm_pass == 2 を必ず付ける
+.if asm_pass == 2
+ .if (#1-($+2) >= 128) || (#1-($+2) < -128)
+  error	"Too long jump\n"
+ .endif
+.endif
+.if #0 > 3
+error	"Bad operand\n"
+.endif
+	db	20h + (#0<<3)
+	db	(#1-($+1))	; 直前で１バイト出力しているので ($+1) になる
+endm
+
+macro	JR NUMBER
+;Pass 1 では NUMBER が確定していないので asm_pass == 2 を必ず付ける
+.if asm_pass == 2
+ .if (#0-($+2) >= 128) || (#0-($+2) < -128)
+  error	"Too long jump\n"
+ .endif
+.endif
+	db	18h
+	db	(#0-($+1))	; 直前で１バイト出力しているので ($+1) になる
+endm
+
+macro	JP (_HII)
+.if	#0
+	db	0ddh + ((#0-1)<<5)
+.endif
+	db	0e9h
+endm
+
+macro	DJNZ NUMBER
+;Pass 1 では NUMBER が確定していないので asm_pass == 2 を必ず付ける
+.if asm_pass == 2
+ .if (#0-($+2) >= 128) || (#0-($+2) < -128)
+  error	"Too long jump\n"
+ .endif
+.endif
+	db	10h
+	db	(#0-($+1))	; 直前で１バイト出力しているので ($+1) になる
+endm
+
+macro	RET
+	db	0c9h
+endm
+
+macro	RET _C
+	db	0c0h + (#0<<3)
+endm
+
+macro	RETI
+	db	0edh,4dh
+endm
+
+macro	RETN
+	db	0edh,45h
+endm
+
+;
+;入出力
+macro	IN A,(NUMBER)
+	db	0dbh,#0
+endm
+
+macro	OUT (NUMBER),A
+	db	0d3h,#0
+endm
+
+macro	IN _R,(C)
+	db	0edh,40h + (#0<<3)
+endm
+
+macro	IN (HL),(C)
+	db	0edh,70h
+endm
+
+macro	OUT (C),_R
+	db	0edh,41h + (#0<<3)
+endm
+
+macro	OUT (C),(HL)
+	db	0edh,71h
+endm
+
+macro	INI
+	db	0edh,0a2h
+endm
+
+macro	INIR
+	db	0edh,0b2h
+endm
+
+macro	OUTI
+	db	0edh,0a3h
+endm
+
+macro	OTIR
+	db	0edh,0b3h
+endm
+
+macro	IND
+	db	0edh,0aah
+endm
+
+macro	INDR
+	db	0edh,0bah
+endm
+
+macro	OUTD
+	db	0edh,0abh
+endm
+
+macro	OTDR
+	db	0edh,0bbh
+endm
+
+;
+;ＨＤ６４１８０対応分
+macro	IN0 _R,(NUMBER)
+	db	0edh,(#0<<3),#1
+endm
+
+macro	OUT0 (NUMBER),_R
+	db	0edh,1+(#1<<3),#0
+endm
+
+macro	OTDM
+	db	0edh,8bh
+endm
+
+macro	OTDMR
+	db	0edh,9bh
+endm
+
+macro	OTIM
+	db	0edh,83h
+endm
+
+macro	OTIMR
+	db	0edh,93h
+endm
+
+macro	MLT _T
+	db	0edh,4ch+(#0<<4)
+endm
+
+macro	TST (HL)
+	db	0edh,34h
+endm
+
+macro	TST _R
+	db	0edh,4+(#0<<3)
+endm
+
+macro	TST NUMBER
+	db	0edh,64h,#0
+endm
+
+macro	TSTIO (NUMBER)
+	db	0edh,74h,#0
+endm
+
+macro	SLP
+	db	0edh,76h
+endm
+
+;
+;他アセンブラ互換性対応
+macro	END
+msg ""		; ダミーの処理を入れる
+endm
+
+;その他便利なマクロ
+;CSEG から DSEG に替えてアドレスを継続するマクロ
+macro DSEG_CONNECT
+.ifndef _conn
+var	_conn
+.endif
+ _conn = $
+ DSEG
+ $ = _conn
+endm
+
+;DSEG から CSEG に替えてアドレスを継続するマクロ
+macro CSEG_CONNECT
+.ifndef _conn
+var	_conn
+.endif
+ _conn = $
+ CSEG
+ $ = _conn
+endm
+
+;偶数番地から開始させるマクロ
+macro WORD_ADJUST
+.if ($ % 2) == 1
+ $ = $+1
+.endif
+endm
+

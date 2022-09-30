@@ -1,0 +1,130 @@
+﻿  Vtop.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+  Vtop__Dpi.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+  Vtop__Slow.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+  Vtop__Syms.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+  Vtop__Trace.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+  Vtop__Trace__Slow.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+  imgui.cpp
+  imgui_draw.cpp
+  imgui_impl_dx11.cpp
+  imgui_impl_win32.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  sim_bus.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+  sim_clock.cpp
+  sim_console.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\sim_console.cpp(163,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  sim_input.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  sim_video.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\sim_video.cpp(309,26): warning C4456: declaration of 'desc' hides previous local declaration
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\sim_video.cpp(275,23): message : see declaration of 'desc'
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\sim_video.cpp(431,29): warning C4244: '=': conversion from 'LONG' to 'float', possible loss of data
+  verilated.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_imp.h(300,1): warning C4267: '=': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=IData
+          ]
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(871,49): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(873,50): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(894,49): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(896,50): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(1330,22): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(1525,79): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(2269,91): warning C4267: '=': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=IData
+          ]
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(2468,40): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(715,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(811): message : see reference to function template instantiation 'std::string _vl_vsformat_time<double>(char *,T,int,bool,size_t)' being compiled
+          with
+          [
+              T=double
+          ]
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.cpp(715,1): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+  verilated_save.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_imp.h(300,1): warning C4267: '=': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=IData
+          ]
+  verilated_vcd_c.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_vcd_c.cpp(529,69): warning C4267: '=': conversion from 'size_t' to 'char', possible loss of data
+  Generating Code...
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(465): warning C4701: potentially uninitialized local variable '__Vdlyvval__top__DOT__uut__DOT__pf_ram__DOT__ram0__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(699): warning C4701: potentially uninitialized local variable '__Vdlyvval__top__DOT__uut__DOT__hs_ram__DOT__mem__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(699): warning C4701: potentially uninitialized local variable '__Vdlyvdim0__top__DOT__uut__DOT__hs_ram__DOT__mem__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(703): warning C4701: potentially uninitialized local variable '__Vdlyvdim0__top__DOT__uut__DOT__hs_ram__DOT__mem__v1' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(465): warning C4701: potentially uninitialized local variable '__Vdlyvdim0__top__DOT__uut__DOT__pf_ram__DOT__ram0__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(469): warning C4701: potentially uninitialized local variable '__Vdlyvval__top__DOT__uut__DOT__pf_ram__DOT__ram3__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(469): warning C4701: potentially uninitialized local variable '__Vdlyvdim0__top__DOT__uut__DOT__pf_ram__DOT__ram3__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(473): warning C4701: potentially uninitialized local variable '__Vdlyvval__top__DOT__uut__DOT__pf_ram__DOT__ram1__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(473): warning C4701: potentially uninitialized local variable '__Vdlyvdim0__top__DOT__uut__DOT__pf_ram__DOT__ram1__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(477): warning C4701: potentially uninitialized local variable '__Vdlyvval__top__DOT__uut__DOT__pf_ram__DOT__ram2__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(477): warning C4701: potentially uninitialized local variable '__Vdlyvdim0__top__DOT__uut__DOT__pf_ram__DOT__ram2__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(481): warning C4701: potentially uninitialized local variable '__Vdlyvval__top__DOT__uut__DOT__ram__DOT__mem__v0' used
+C:\NoSync\MiSTer\Verilator_Template\verilator\obj_dir\Vtop.cpp(481): warning C4701: potentially uninitialized local variable '__Vdlyvdim0__top__DOT__uut__DOT__ram__DOT__mem__v0' used
+  Compiling...
+  sim_main.cpp
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2636,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2655,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated.h(2665,9): warning C4018: '>=': signed/unsigned mismatch
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_heavy.h(908,67): warning C4267: 'return': conversion from 'size_t' to 'IData', possible loss of data
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim\vinc\verilated_save.h(282,34): warning C4267: 'initializing': conversion from 'size_t' to 'vluint32_t', possible loss of data
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\um\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+  Generating Code...
+C:\NoSync\MiSTer\Verilator_Template\verilator\sim_main.cpp(160): warning C4702: unreachable code
+  sim.vcxproj -> C:\NoSync\MiSTer\Verilator_Template\verilator\x64\Debug\sim.exe

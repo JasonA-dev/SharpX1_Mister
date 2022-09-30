@@ -1,0 +1,404 @@
+-----------------------------------------------------------------------------
+Minimum Resource 16bit RISC document  (Preliminary) 2005.4.8
+                                                        By Tatsuyuki Satoh
+-----------------------------------------------------------------------------
+
+The MR16 is The Minimum Resource 16bit RISC optimized to Xilinx FPGA.
+
+-----------------------------------------------------------------------------
+architecture specifications
+-----------------------------------------------------------------------------
+
+-simple full RISC.
+-The minimal circuit that necessity under 200 slice on the Xilinx FPGA.
+-simple pipeline for direct connect to the FPGA BLOCK-RAM.
+-memory access operation need 2cycle,other operation need 1cycle.
+-16bit x 16 general-purpose register with stack point register.
+-populer 16bit ALU with multiplex or rightshift unit.
+ ALU,AND,OR,XOR,ADD,ADC,SUB,SBC,CMP,TST,(MLT,MLH or SHR)
+-15 type Full conditional branch.
+
+-----------------------------------------------------------------------------
+The weak point compared with other populer CPU.
+-----------------------------------------------------------------------------
+
+ 0.It doesn't have the reliability of core.
+   It is to build it up from now. 
+
+ 1.16bit data width bus should be necessary.
+
+ 2.A development system is hard to use.
+   I wrote macro of universal assembler 'AASM' for mr16c.
+   It is much better than a poor special assembler. 
+   And most instruction are general, and it is easy to understand. 
+   But, it doesn't have C Compiler yet. I want it very much...
+   The debug circuit and remote debugger are future subjects. 
+
+-----------------------------------------------------------------------------
+operation map
+-----------------------------------------------------------------------------
+
+ instruction decode map
++-----+---------+---+---+---+---+---+---+---+---+---------------------------+
+|15:12|  b11-b8 |b7 |b6 |b5 |b4 |b3 |b2 |b1 |b0 |opcode                     |
++-----+---------+---+---+---+---+---+---+---+---+---------------------------+
+| 0000|   1111  |IFL|ZFL|CFL|FD | x | x | x | 0 |RET  [CLx/STx]             |
+| 0000|   1111  |     RB        | x | x | x | 1 |POP  RB                    |
+| 0000|RA(0-14) |     RB        |  DISP[4:1]    |LDM  RB,(RA,#DISP)         |
+| 0001|   1111  |     RB        | x | x | x | 1 |PUSH RB                    |
+| 0001|RA(0-14) |     RB        |  DISP[4:1]    |STM  (RA,#DISP),RB         |
++-----+---------+---+---+---+---+---+---+---+---+---------------------------+
+| 0010|   0111  |             PFX               |Prefix (2word opcode)      |
+| 0010|   cond  |             REL               |Bcond REL                  |
++-----+---------+---+---+---+---+---+---+---+---+---------------------------+
+| 0011|   1111  |IFL|ZFL|CFL|FD | 0 | 0 | 0 | 0 |NOP / CLx / STx            |
+| 0011|RA(0-14) |     RB        | 0 | 0 | 0 | 0 |reserved                   |
+| 0011|    RA   |    SMOD       | 0 | 0 | 0 | 1 |SHIFT                      |
+| 0011|   cond  |     RB        | 0 | 0 | 1 | 0 |Jcond  RB                  |
+| 0011|   1111  |     RB        | 0 | 0 | 1 | 1 |JSR    RB             (SBC)|
++-----+---------+---+---+---+---+---+---+---+---+---------------------------+
+| 0011|    RA   |     RB        | 0 | 1 | LMOD  |AND/OR/XOR/MOV  RA,RB      |
+| 0011|    RA   |     RB        | 1 | 0 | AMOD  |ADD/SUB/ADC/SBC RA,RB      |
+| 0011|    RA   |     RB        | 1 | 1 | 0 | 0 |TST  RA,RB            (AND)|
+| 0011|    RA   |     RB        | 1 | 1 | 0 | 1 |CMP  RA,RB            (SUB)|
+| 0011|    RA   |     RB        | 1 | 1 | 1 | 0 |MLT  RA,RB                 |
+| 0011|    RA   |     RB        | 1 | 1 | 1 | 1 |MLTH RA,RB                 |
++-----+---------+---+---+---+---+---+---+---+---+---------------------------+
+| 0100|    RA   |            IMM[7:0]           |AND/OR/XOR/MOV  RA,#IMM:8  |
+| 1000|    RA   |            IMM[7:0]           |ADD/SUB/ADC/SBC RA,#IMM:8  |
+| 1100|    RA   |            IMM[7:0]           |TST  RA,#IMM:8        (AND)|
+| 1101|    RA   |            IMM[7:0]           |CMP  RA,#IMM:8        (SUB)|
+| 1110|    RA   |            IMM[7:0]           |MLT  RA,#IMM:8        (*1) |
+| 1111|    RA   |            IMM[7:0]           |MLTH RA,#IMM:8    (*1)(*2) |
++-----+---------+---+---+---+---+---+---+---+---+---------------------------+
+
+ prefixed instruction decode map
++-------------+-----+-------+-----+---+---+---+---+-------------------------+
+|   prefix    |15:12|b11:b8 |b7:4 |b3 |b2 |b1 |b0 |opcode                   |
++-------------+-----+-------+-----+---+---+---+---+-------------------------+
+|1|DISP[0,8:4]| 0000|  RA   |  RB |   DISP[4:1]   |LDMB RB,(RA,#DISP:11)    |
+|1|DISP[0,8:4]| 0001|  RA   |  RB |   DISP[4:1]   |STMB (RA,#DISP:11),RB    |
+|0|DISP[0,8:4]| 0000|  RA   |  RB |   DISP[4:1]   |LDM  RB,(RA,#DISP:11)    |
+|0|DISP[0,8:4]| 0001|  RA   |  RB |   DISP[4:1]   |STM  (RA,#DISP:11),RB    |
++-------------+-----+-------+-----+---+---+---+---+-------------------------+
+|  ABS[15:8]  | 0010| <-cc->|     ABS[7:1]    | 0 |Jcc ABS                  |
+|  ABS[15:8]  | 0010| 1111  |     ABS[7:1]    | 1 |JSR ABS                  |
++-------------+-----+-------+-----+---+---+---+---+-------------------------+
+|  IMM[15:8]  | 0100|  RA   |      IMM[7:0]       |AND/OR/XOR/MOV  RA,#IMM:16|
+|  IMM[15:8]  | 1000|  RA   |      IMM[7:0]       |ADD/SUB/ADC/SBC RA,#IMM:16|
+|  IMM[15:8]  | 1100|  RA   |      IMM[7:0]       |TST  RA,#IMM:16     (AND)|
+|  IMM[15:8]  | 1101|  RA   |      IMM[7:0]       |CMP  RA,#IMM:16     (SUB)|
+|  IMM[15:8]  | 1110|  RA   |      IMM[7:0]       |MLT  RA,#IMM:16      (*1)|
+|  IMM[15:8]  | 1111|  RA   |      IMM[7:0]       |MLTH RA,#IMM:16  (*1)(*2)|
++-------------+-----+-------+-----+---+---+---+---+-------------------------+
+(*1): choise SHIFT or MLT,MLTH unit
+(*2): option selectable
+
+branch condition
++-------+-------------+---------+---------+
+|cc[2:0]|   condition |cc[3]==0 |cc[3]==1 |
++-------+-------------+---------+---------+
+|  000  |           cf| G/CS    | LT/CC   |
+|  001  |        zf   | EQ      | NE      |
+|  011  |    vf       | VS      | VC      |
+|  011  | nf          | MI      | PL      |
+|  100  |    vf &zf&cf| LS      | HI      |
+|  101  |(nf^vf)      | LT      | GE      |
+|  111  |(nf^vf)&zf   | LE      | GT      |
+|  111  |     0       |   ---   | BRA/JMP |
++-------+-------------+---------+---------+
+
+ register set
++-----+--------+-----------------+----------------+
+| rs  | select | value           |assembler syntax|
++-----+--------+-----------------+----------------+
+| any | r[rs1] | register direct | r0 .. r15      |
++-----+--------+-----------------+----------------+
+
+ register or stack
++-----+------------+---------------------+----------------+
+| rf  | select     | value               |assembler syntax|
++-----+------------+---------------------+----------------+
+|1111 | FLAG       | flag register       | FLAG           |
+|other| r[rf]      | register direct     | r0 .. r14      |
++-----+------------+---------------------+----------------+
+
+ logical function flag
++----+-------------+
+|LMOD| instruction |
++----+-------------+
+| 00 | AND         |
+| 01 | OR          |
+| 10 | XOR         |
+| 11 | MOV         |
++----+-------------+
+
+ althmetic function flag
++----+-------------+
+|AMOD| instruction |
++----+-------------+
+| 00 | ADD         |
+| 01 | SUB         |
+| 10 | ADC         |
+| 11 | SBC         |
++----+-------------+
+
+shift source
++---+------------------------------+
+|SM | sfhif in bit                 |
++---+------------------------------+
+| 0 | register bit 15 (ASR)        |
+| 1 | cf (SHL)                     |
++---+------------------------------+
+
+-----------------------------------------------------------------------------
+Register set
+-----------------------------------------------------------------------------
+
++--------+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|register|15|14|13|12|11|10|b9|b8|b7|b6|b5|b4|b3|b2|b1|b0|
++--------+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|PC      |      program counter                       |--|
++--------+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|PFX(*4) |immidateH/memory state | x| x| x| x| x| x| x| x|
++--------+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|FLAG    | x| x| x| x| x| x| x| x| x| x| x|IF|NF|VF|ZF|CF|(*5)
++--------+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|R0      |      generic register                         |
+|R1      |      generic register                         |
+|R2      |      generic register                         |
+|R3      |      generic register                         |
+|R4      |      generic register                         |
+|R5      |      generic register                         |
+|R6      |      generic register                         |
+|R7      |      generic register                         |
+|R8      |      generic register                         |
+|R9      |      generic register                         |
+|R10     |      generic register                         |
+|R11     |      generic register                         |
+|R12     |      generic register                         |
+|R13     |      generic register                         |
+|R14     |      generic register                         |
+|R15(SP) |      stack pointer                            |
++--------+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+
+(*4):Can't access direct in CPU instruction.
+(*5):IF are read only , there are not set with POP FLAG instrioction.
+
+-----------------------------------------------------------------------------
+instruction operand
+-----------------------------------------------------------------------------
+
+ parameter's
++------+--------------------------------+-----------------------------+
+|param | select                         | range                       |
++------+--------------------------------+-----------------------------+
+|REL   | PC + (signed)(REL*2)           | PC-256 to PC+254 (EVEN only)|
+|ABS   | ABS*2                          | 0000 to fffe (EVEN only)    |
+|DISP:4| (unsigned)(DISP4*2)            | 0 to +30 (EVEN only)        |
+|DISP  | (signed){PFX[6:1],DISPL,PFX[0]}| -1024 to +1023              |
+|IMM:8 | IMM                            | 0 - 255                     |
+|IMM   | {PFX,IMM}                      | 0 - 65535                   |
++------+--------------------------------+-----------------------------+
+
+-----------------------------------------------------------------------------
+interrupt cycle
+-----------------------------------------------------------------------------
+
+An interrupt circuit is mounted by op-code override trick.
+when ivector==0 or  IF==0 ,A CPU works as usual. 
+When ivector!=0 and IF==1, and PFX reg.=0, it becomes IACK cycle.
+
+The IACK are,
+
+IACK cycle 1 : (PUSH PC,CLI)
+  IF <- 0 (cli)
+  memory[R15] <- PC,R15 <- R15-2
+IACK cycle 2 : (jmp memory[ivector*2])
+  PC <- memory[ivector*2] 
+
+-----------------------------------------------------------------------------
+Instruction set
+-----------------------------------------------------------------------------
+
+ System Controll
++---------+---+---+---------------------------------------------------------+
+|syntax   |WRD|CYC| function                                                |
++---------+---+---+---------------------------------------------------------+
+|NOP      | 1 | 1 | no operation                                            |
+|CLC      | 1 | 1 | CF <- 0                                                 |
+|STC      | 1 | 1 | CF <- 1                                                 |
+|CLZ      | 1 | 1 | ZF <- 0                                                 |
+|STZ      | 1 | 1 | ZF <- 1                                                 |
+|CLI      | 1 | 1 | IF <- 0                                                 |
+|STI      | 1 | 1 | IF <- 1                                                 |
++---------+---+---+---------------------------------------------------------+
+
+ BRANCH / CALL
++---------+---+---+---------------------------------------------------------+
+|syntax   |WRD|CYC| function                                                |
++---------+---+---+---------------------------------------------------------+
+|B[cc] REL| 1 | 1 | if(cc == true) PC=REL(pc-256 to pc+254)                 |
+|J[cc] RB | 1 | 1 | if(cc == true) PC=RB                                    |
+|JSR   RB | 1 | 2 | (--R15) <- PC , PC <- RB                                |
+|RET      | 1 | 2 | PC      <- (R15++)                                      |
+|RET   CLI| 1 | 2 | PC      <- (R15++) , IF <- 0                            |
+|RET   STI| 1 | 2 | PC      <- (R15++) , IF <- 1                            |
++---------+---+---+---------------------------------------------------------+
+|J[cc] ABS| 2 | 2 | if(cc == true)  PC <- ABS                               |
+|JSR   ABS| 2 | 3 | (--R15) <- PC , PC <- ABS                               |
++---------+---+---+---------------------------------------------------------+
+
+ PUSH / POP
++---------+---+---+---------------------------------------------------------+
+|syntax   |WRD|CYC| function                                                |
++---------+---+---+---------------------------------------------------------+
+|PUSH RF  | 1 | 2 | MEM16(RA-2) <- RF , RA <- RA-2                          |
+|POP  RF  | 1 | 2 | RF <- MEM16(RA)   , RA <- RA+2                          |
++---------+---+---+---------------------------------------------------------+
+
+SHIFT (*1)
++---------+---+---+---------------------------------------------------------+
+|syntax   |WRD|CYC| function                                                |
++---------+---+---+---------------------------------------------------------+
+|SHR  RA  | 1 | 1 | RA <- {CF,RA[15:1]}     , CF <- RA[0] , flags <- changes|
+|ASR  RA  | 1 | 1 | RA <- {RA[15],RA[15:1]} , CF <- RA[0] , flags <- changes|
++---------+---+---+---------------------------------------------------------+
+
+memory access
++--------------------+---+---+----------------------------------------------+
+|syntax              |WRD|CYC| function                                     |
++--------------------+---+---+----------------------------------------------+
+|LDM  RA,(RB,#DISP:4)| 1 | 2 | RA <- MEM16(RB+DISP)                         |
+|STM  (RB,#DISP:4),RA| 1 | 2 | MEM16(RB+DISP4) <- RA                        |
+|LDMW RA,(RB,#DISP)  | 2 | 3 | RA <- MEM16(RB+-DISP)                        |
+|STMW (RB,#DISP),RA  | 2 | 3 | MEM16(RB+-DISP) <= RA                        |
+|LDMB RA,(RB,#DISP)  | 2 | 3 | RA[7:0] <- MEM8(RB+-DISP)               (*)  |
+|STMB (RB,#DISP),RA  | 2 | 3 | MEM8(RB+-DISP) <= RA[7:0]               (*)  |
++--------------------+---+---+----------------------------------------------+
+DISP:4 = 0 to 30 (only EVEN number)
+DISP   = -1024 to +1023
+(*)no byte controll option (and 16Mx8bit separated bus)
+(*) RA[15:8] was no change not clear to 0.
+
+ ALU
++-------------------+---+---+-----------------------------------------------+
+|syntax             |WRD|CYC| function                                      |
++-------------------+---+---+-----------------------------------------------+
+|AND RA,RB          | 1 | 1 | RA <= RA & RB         , flags <- changes      |
+|OR  RA,RB          | 1 | 1 | RA <= RA | RB         , flags <- changes      |
+|XOR RA,RB          | 1 | 1 | RA <= RA ^ RB         , flags <- changes      |
+|MOV RA,RB          | 1 | 1 | RA <= RB              , flags <- changes      |
+|ADD RA,RB          | 1 | 1 | RA <= RA + RB         , flags <- changes      |
+|ADC RA,RB          | 1 | 1 | RA <= RA + RB + CF    , flags <- changes      |
+|SUB RA,RB          | 1 | 1 | RA <= RA - RB         , flags <- changes      |
+|SBC RA,RB          | 1 | 1 | RA <= RA - RB - CF    , flags <- changes      |
+|MLT RA,RB          | 1 | 1 | RA <= RA * RB         , flags <- changes      |
+|MLH RA,RB          | 1 | 1 | RA <= (RA * RB)>>16   , flags <- changes      |
++-------------------+---+---+-----------------------------------------------+
+|AND RA,IMM:8       | 1 | 1 | RA <= RA & IMM:8      , flags <- changes      |
+|OR  RA,IMM:8       | 1 | 1 | RA <= RA | IMM:8      , flags <- changes      |
+|XOR RA,IMM:8       | 1 | 1 | RA <= RA ^ IMM:8      , flags <- changes      |
+|MOV RA,IMM:8       | 1 | 1 | RA <= IMM:8           , flags <- changes      |
+|ADD RA,IMM:8       | 1 | 1 | RA <= RA + IMM:8      , flags <- changes      |
+|ADC RA,IMM:8       | 1 | 1 | RA <= RA + IMM:8 + CF , flags <- changes      |
+|SUB RA,IMM:8       | 1 | 1 | RA <= RA - IMM:8      , flags <- changes      |
+|SBC RA,IMM:8       | 1 | 1 | RA <= RA - IMM:8 - CF , flags <- changes      |
+|MLT RA,IMM:8       | 1 | 1 | RA <= RA * IMM:8      , flags <- changes      |
+|MLH RA,IMM:8       | 1 | 1 | RA <= (RA * IMM:8)>>16, flags <- changes      |
++-------------------+---+---+-----------------------------------------------+
+|AND RA,IMM         | 2 | 2 | RA <= RA & IMM        , flags <- changes      |
+|OR  RA,IMM         | 2 | 2 | RA <= RA | IMM        , flags <- changes      |
+|XOR RA,IMM         | 2 | 2 | RA <= RA ^ IMM        , flags <- changes      |
+|MOV RA,IMM         | 2 | 2 | RA <= IMM:8           , flags <- changes      |
+|ADD RA,IMM         | 2 | 2 | RA <= RA + IMM        , flags <- changes      |
+|ADC RA,IMM         | 2 | 2 | RA <= RA + IMM   + CF , flags <- changes      |
+|SUB RA,IMM         | 2 | 2 | RA <= RA - IMM        , flags <- changes      |
+|SBC RA,IMM         | 2 | 2 | RA <= RA - IMM   - CF , flags <- changes      |
+|MLT RA,IMM         | 2 | 2 | RA <= RA * IMM        , flags <- changes      |
+|MLH RA,IMM         | 2 | 2 | RA <= (RA * IMM)>>16  , flags <- changes      |
++-------------------+---+---+-----------------------------------------------+
+|TST RA,RB          | 1 | 1 | RA & RB       , flags <- changes              |
+|CMP RA,RB          | 1 | 1 | RA - RB       , flags <- changes              |
++-------------------+---+---+-----------------------------------------------+
+|TST RA,IMM:8       | 1 | 1 | RA & IMM:8    , flags <- changes              |
+|CMP RA,IMM:8       | 1 | 1 | RA - IMM:8    , flags <- changes              |
++-------------------+---+---+-----------------------------------------------+
+|TST RA,IMM         | 2 | 2 | RA & IMM      , flags <- changes              |
+|CMP RA,IMM         | 2 | 2 | RA - IMM      , flags <- changes              |
++-------------------+---+---+-----------------------------------------------+
+* IMM:8 = 8bit immidate
+* IMM   = 16bit immidate
+
+-----------------------------------------------------------------------------
+Tips
+-----------------------------------------------------------------------------
+
+---------------------------------------
+ISR handling
+---------------------------------------
+
+1.set entry point to TOP of memory
+
+  0000H : reset entry point
+  0002H : ivector== 1 isr entry point
+  0004H : ivector== 2 isr entry point
+  0008H : ivector== 3 isr entry point
+  000AH : ivector== 4 isr entry point
+                   :
+  007EH : ivector==63 isr entry point
+
+2.example
+
+---------------------------------------
+InterruptServiceRoutineroutine
+---------------------------------------
+	ORG	0000H
+;
+	DW	RESET
+	DW	ISR1
+;
+isr1:
+    push flag       ; save flag
+    push r0         ; save regs
+    push r1
+    push r2
+    push r3
+;    sti            ; if duplicate interrupt enable
+;-----------
+; work isr
+;-----------
+    pop  r3         ; restore flag
+    pop  r2
+    pop  r1
+    pop  flag
+    ret  sti        ; isr return
+;
+reset:
+;setup first
+;interrupt enable
+    sti
+;
+
+-----------------------------------------------------------------------------
+combination / replace instruction
+-----------------------------------------------------------------------------
+
+left shift
+
+SHL  RA,1  -> ADD RA,RA
+SHLC RA,1  -> ADC RA,RA
+
+for MLT unit only
+
+SHL RA,imm -> MLT RA,01H<<(imme-1)
+ROL RA,imm -> MLH RA,0101H<<imm
+SHR RA,imm -> MLH RA,8000H>>(imm-1) : (CF not correct)
+ROR RA,imm -> MLT RA,0101H<<imm
+
+word -> byte conversion
+
+MOV RA.L,RA.H -> MLH RA,100H (RA.H = 0)
+MOV RA.H,RA.L -> MLT RA,100H (RA.L = 0)
+
+
