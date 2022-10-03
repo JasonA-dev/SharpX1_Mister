@@ -55,7 +55,8 @@ CC_OPT = -O
 V_SRC = \
 	sim.v \
 	$(RTL)/sharpx1.v \
-	$(RTL)/dpram.sv \
+	$(RTL)/dpram.sv \	
+	$(RTL)/bootrom.v \
 	$(RTL)/rom.v
 
 C_SRC = \

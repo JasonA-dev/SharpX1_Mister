@@ -9,6 +9,11 @@
 
 //==========
 
+const IData Vtop::var_top__DOT__sharpx1__DOT__bios_fw_spi__DOT__DW(8U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__bios_fw_spi__DOT__AW(0xdU);
+const IData Vtop::var_top__DOT__sharpx1__DOT__dpram__DOT__data_width_g(8U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__dpram__DOT__addr_width_g(0x10U);
+
 Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModule{_vcname__}
  {
@@ -34,7 +39,7 @@ Vtop::~Vtop() {
 
 // Savable
 void Vtop::__Vserialize(VerilatedSerialize& os) {
-    vluint64_t __Vcheckval = 0xcaaef5597abae392ULL;
+    vluint64_t __Vcheckval = 0x5b847e218e919cb4ULL;
     os << __Vcheckval;
     os << __VlSymsp->_vm_contextp__;
     os<<clk_48;
@@ -90,26 +95,56 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     os<<top__DOT__sw2;
     os<<top__DOT__ce_pix;
     os<<top__DOT____Vcellout__sharpx1__video;
+    os<<top__DOT__ioctl_data;
     os<<top__DOT__unnamedblk1__DOT__old_clk;
     os<<top__DOT__sharpx1__DOT__clk_sys;
     os<<top__DOT__sharpx1__DOT__clk_28636;
     os<<top__DOT__sharpx1__DOT__reset;
     os<<top__DOT__sharpx1__DOT__pal;
     os<<top__DOT__sharpx1__DOT__scandouble;
+    os<<top__DOT__sharpx1__DOT__ioctl_download;
+    os<<top__DOT__sharpx1__DOT__ioctl_index;
+    os<<top__DOT__sharpx1__DOT__ioctl_wr;
+    os<<top__DOT__sharpx1__DOT__ioctl_addr;
+    os<<top__DOT__sharpx1__DOT__ioctl_dout;
     os<<top__DOT__sharpx1__DOT__ce_pix;
     os<<top__DOT__sharpx1__DOT__HBlank;
     os<<top__DOT__sharpx1__DOT__HSync;
     os<<top__DOT__sharpx1__DOT__VBlank;
     os<<top__DOT__sharpx1__DOT__VSync;
     os<<top__DOT__sharpx1__DOT__video;
+    os<<top__DOT__sharpx1__DOT__romDo_Sharpx1;
+    os<<top__DOT__sharpx1__DOT__romA;
+    os<<top__DOT__sharpx1__DOT__bios_fw_spi__DOT__clock;
+    os<<top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce;
+    os<<top__DOT__sharpx1__DOT__bios_fw_spi__DOT__data_out;
+    os<<top__DOT__sharpx1__DOT__bios_fw_spi__DOT__a;
+    for (int __Vi0=0; __Vi0<8192; ++__Vi0) {
+        os<<top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d[__Vi0];
+    }
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__clock;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__ram_cs;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__wren_a;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__address_a;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__data_a;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__q_a;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__ram_cs_b;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__wren_b;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__address_b;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__data_b;
+    os<<top__DOT__sharpx1__DOT__dpram__DOT__q_b;
+    for (int __Vi0=0; __Vi0<65536; ++__Vi0) {
+        os<<top__DOT__sharpx1__DOT__dpram__DOT__mem[__Vi0];
+    }
     os<<__Vclklast__TOP__clk_48;
+    os<<__Vclklast__TOP__clk_12;
     for (int __Vi0=0; __Vi0<1; ++__Vi0) {
         os<<__Vm_traceActivity[__Vi0];
     }
     __VlSymsp->__Vserialize(os);
 }
 void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
-    vluint64_t __Vcheckval = 0xcaaef5597abae392ULL;
+    vluint64_t __Vcheckval = 0x5b847e218e919cb4ULL;
     os.readAssert(__Vcheckval);
     os >> __VlSymsp->_vm_contextp__;
     os>>clk_48;
@@ -165,19 +200,49 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
     os>>top__DOT__sw2;
     os>>top__DOT__ce_pix;
     os>>top__DOT____Vcellout__sharpx1__video;
+    os>>top__DOT__ioctl_data;
     os>>top__DOT__unnamedblk1__DOT__old_clk;
     os>>top__DOT__sharpx1__DOT__clk_sys;
     os>>top__DOT__sharpx1__DOT__clk_28636;
     os>>top__DOT__sharpx1__DOT__reset;
     os>>top__DOT__sharpx1__DOT__pal;
     os>>top__DOT__sharpx1__DOT__scandouble;
+    os>>top__DOT__sharpx1__DOT__ioctl_download;
+    os>>top__DOT__sharpx1__DOT__ioctl_index;
+    os>>top__DOT__sharpx1__DOT__ioctl_wr;
+    os>>top__DOT__sharpx1__DOT__ioctl_addr;
+    os>>top__DOT__sharpx1__DOT__ioctl_dout;
     os>>top__DOT__sharpx1__DOT__ce_pix;
     os>>top__DOT__sharpx1__DOT__HBlank;
     os>>top__DOT__sharpx1__DOT__HSync;
     os>>top__DOT__sharpx1__DOT__VBlank;
     os>>top__DOT__sharpx1__DOT__VSync;
     os>>top__DOT__sharpx1__DOT__video;
+    os>>top__DOT__sharpx1__DOT__romDo_Sharpx1;
+    os>>top__DOT__sharpx1__DOT__romA;
+    os>>top__DOT__sharpx1__DOT__bios_fw_spi__DOT__clock;
+    os>>top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce;
+    os>>top__DOT__sharpx1__DOT__bios_fw_spi__DOT__data_out;
+    os>>top__DOT__sharpx1__DOT__bios_fw_spi__DOT__a;
+    for (int __Vi0=0; __Vi0<8192; ++__Vi0) {
+        os>>top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d[__Vi0];
+    }
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__clock;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__ram_cs;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__wren_a;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__address_a;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__data_a;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__q_a;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__ram_cs_b;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__wren_b;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__address_b;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__data_b;
+    os>>top__DOT__sharpx1__DOT__dpram__DOT__q_b;
+    for (int __Vi0=0; __Vi0<65536; ++__Vi0) {
+        os>>top__DOT__sharpx1__DOT__dpram__DOT__mem[__Vi0];
+    }
     os>>__Vclklast__TOP__clk_48;
+    os>>__Vclklast__TOP__clk_12;
     for (int __Vi0=0; __Vi0<1; ++__Vi0) {
         os>>__Vm_traceActivity[__Vi0];
     }
@@ -187,10 +252,23 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
 void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_initial__TOP__1\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
+    // Variables
+    VlWide<7>/*223:0*/ __Vtemp1;
     // Body
     vlTOPp->top__DOT__sw1 = 0U;
     vlTOPp->top__DOT__sw2 = 2U;
+    vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce = 1U;
     vlTOPp->ioctl_wait = 0U;
+    __Vtemp1[0U] = 0x2e726f6dU;
+    __Vtemp1[1U] = 0x626f6f74U;
+    __Vtemp1[2U] = 0x7370692fU;
+    __Vtemp1[3U] = 0x696f735fU;
+    __Vtemp1[4U] = 0x66775f62U;
+    __Vtemp1[5U] = 0x696f732fU;
+    __Vtemp1[6U] = 0x2e2e2f62U;
+    VL_READMEM_N(true, 8, 8192, 0, VL_CVT_PACK_STR_NW(7, __Vtemp1)
+                 ,  &(vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d)
+                 , 0U, ~0ULL);
     vlTOPp->top__DOT__ioctl_wait = vlTOPp->ioctl_wait;
 }
 
@@ -198,7 +276,11 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_settle__TOP__2\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
+    vlTOPp->top__DOT__sharpx1__DOT__ioctl_dout = vlTOPp->top__DOT__ioctl_data;
     vlTOPp->top__DOT__sharpx1__DOT__video = vlTOPp->top__DOT____Vcellout__sharpx1__video;
+    vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__a 
+        = (0x1fffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__romA) 
+                      >> 0U));
     vlTOPp->top__DOT__VGA_HS = vlTOPp->VGA_HS;
     vlTOPp->top__DOT__VGA_VS = vlTOPp->VGA_VS;
     vlTOPp->top__DOT__VGA_HB = vlTOPp->VGA_HB;
@@ -208,13 +290,9 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__rgb = vlTOPp->top__DOT____Vcellout__sharpx1__video;
     vlTOPp->top__DOT__clk_48 = vlTOPp->clk_48;
     vlTOPp->top__DOT__inputs = vlTOPp->inputs;
-    vlTOPp->top__DOT__ioctl_download = vlTOPp->ioctl_download;
     vlTOPp->top__DOT__ioctl_upload = vlTOPp->ioctl_upload;
-    vlTOPp->top__DOT__ioctl_wr = vlTOPp->ioctl_wr;
-    vlTOPp->top__DOT__ioctl_addr = vlTOPp->ioctl_addr;
     vlTOPp->top__DOT__ioctl_dout = vlTOPp->ioctl_dout;
     vlTOPp->top__DOT__ioctl_din = vlTOPp->ioctl_din;
-    vlTOPp->top__DOT__ioctl_index = vlTOPp->ioctl_index;
     vlTOPp->top__DOT__playerinput = (0x50U | (((((0x200U 
                                                   & ((~ 
                                                       ((IData)(vlTOPp->inputs) 
@@ -278,8 +356,14 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
                                                   >> 3U)))))));
     vlTOPp->top__DOT__pause = (1U & ((IData)(vlTOPp->inputs) 
                                      >> 0xbU));
-    vlTOPp->top__DOT__clk_12 = vlTOPp->clk_12;
     vlTOPp->top__DOT__reset = vlTOPp->reset;
+    vlTOPp->top__DOT__ioctl_download = vlTOPp->ioctl_download;
+    vlTOPp->top__DOT__ioctl_wr = vlTOPp->ioctl_wr;
+    vlTOPp->top__DOT__ioctl_addr = vlTOPp->ioctl_addr;
+    vlTOPp->top__DOT__ioctl_index = vlTOPp->ioctl_index;
+    vlTOPp->top__DOT__clk_12 = vlTOPp->clk_12;
+    vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__data_out 
+        = vlTOPp->top__DOT__sharpx1__DOT__romDo_Sharpx1;
     vlTOPp->top__DOT__ioctl_wait = vlTOPp->ioctl_wait;
     vlTOPp->top__DOT__sharpx1__DOT__HSync = vlTOPp->top__DOT__VGA_HS;
     vlTOPp->top__DOT__sharpx1__DOT__HSync = vlTOPp->top__DOT__VGA_HS;
@@ -329,8 +413,13 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
                                           >> 4U)) | 
                                 (3U & ((IData)(vlTOPp->top__DOT__rgb) 
                                        >> 7U))));
-    vlTOPp->top__DOT__sharpx1__DOT__clk_sys = vlTOPp->top__DOT__clk_12;
     vlTOPp->top__DOT__sharpx1__DOT__reset = vlTOPp->top__DOT__reset;
+    vlTOPp->top__DOT__sharpx1__DOT__ioctl_download 
+        = vlTOPp->top__DOT__ioctl_download;
+    vlTOPp->top__DOT__sharpx1__DOT__ioctl_wr = vlTOPp->top__DOT__ioctl_wr;
+    vlTOPp->top__DOT__sharpx1__DOT__ioctl_addr = vlTOPp->top__DOT__ioctl_addr;
+    vlTOPp->top__DOT__sharpx1__DOT__ioctl_index = vlTOPp->top__DOT__ioctl_index;
+    vlTOPp->top__DOT__sharpx1__DOT__clk_sys = vlTOPp->top__DOT__clk_12;
     vlTOPp->top__DOT__AUDIO_R = vlTOPp->AUDIO_R;
     vlTOPp->top__DOT__AUDIO_R = vlTOPp->AUDIO_R;
     vlTOPp->VGA_R = vlTOPp->top__DOT__VGA_R;
@@ -339,6 +428,10 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->VGA_G = vlTOPp->top__DOT__VGA_G;
     vlTOPp->VGA_B = vlTOPp->top__DOT__VGA_B;
     vlTOPp->VGA_B = vlTOPp->top__DOT__VGA_B;
+    vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__clock 
+        = vlTOPp->top__DOT__sharpx1__DOT__clk_sys;
+    vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__clock 
+        = vlTOPp->top__DOT__sharpx1__DOT__clk_sys;
 }
 
 void Vtop::_eval_initial(Vtop__Syms* __restrict vlSymsp) {
@@ -347,6 +440,7 @@ void Vtop::_eval_initial(Vtop__Syms* __restrict vlSymsp) {
     // Body
     vlTOPp->_initial__TOP__1(vlSymsp);
     vlTOPp->__Vclklast__TOP__clk_48 = vlTOPp->clk_48;
+    vlTOPp->__Vclklast__TOP__clk_12 = vlTOPp->clk_12;
 }
 
 void Vtop::final() {
@@ -420,18 +514,47 @@ void Vtop::_ctor_var_reset(Vtop* self) {
     self->top__DOT__sw2 = 0;
     self->top__DOT__ce_pix = 0;
     self->top__DOT____Vcellout__sharpx1__video = 0;
+    self->top__DOT__ioctl_data = 0;
     self->top__DOT__unnamedblk1__DOT__old_clk = 0;
     self->top__DOT__sharpx1__DOT__clk_sys = 0;
     self->top__DOT__sharpx1__DOT__clk_28636 = 0;
     self->top__DOT__sharpx1__DOT__reset = 0;
     self->top__DOT__sharpx1__DOT__pal = 0;
     self->top__DOT__sharpx1__DOT__scandouble = 0;
+    self->top__DOT__sharpx1__DOT__ioctl_download = 0;
+    self->top__DOT__sharpx1__DOT__ioctl_index = 0;
+    self->top__DOT__sharpx1__DOT__ioctl_wr = 0;
+    self->top__DOT__sharpx1__DOT__ioctl_addr = 0;
+    self->top__DOT__sharpx1__DOT__ioctl_dout = 0;
     self->top__DOT__sharpx1__DOT__ce_pix = 0;
     self->top__DOT__sharpx1__DOT__HBlank = 0;
     self->top__DOT__sharpx1__DOT__HSync = 0;
     self->top__DOT__sharpx1__DOT__VBlank = 0;
     self->top__DOT__sharpx1__DOT__VSync = 0;
     self->top__DOT__sharpx1__DOT__video = 0;
+    self->top__DOT__sharpx1__DOT__romDo_Sharpx1 = 0;
+    self->top__DOT__sharpx1__DOT__romA = 0;
+    self->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__clock = 0;
+    self->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce = 0;
+    self->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__data_out = 0;
+    self->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__a = 0;
+    for (int __Vi0=0; __Vi0<8192; ++__Vi0) {
+        self->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d[__Vi0] = 0;
+    }
+    self->top__DOT__sharpx1__DOT__dpram__DOT__clock = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__ram_cs = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__wren_a = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__address_a = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__data_a = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__q_a = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__ram_cs_b = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__wren_b = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__address_b = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__data_b = 0;
+    self->top__DOT__sharpx1__DOT__dpram__DOT__q_b = 0;
+    for (int __Vi0=0; __Vi0<65536; ++__Vi0) {
+        self->top__DOT__sharpx1__DOT__dpram__DOT__mem[__Vi0] = 0;
+    }
     for (int __Vi0=0; __Vi0<1; ++__Vi0) {
         self->__Vm_traceActivity[__Vi0] = 0;
     }

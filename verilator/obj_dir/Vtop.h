@@ -75,34 +75,71 @@ VL_MODULE(Vtop) {
     CData/*7:0*/ top__DOT__sw1;
     CData/*7:0*/ top__DOT__sw2;
     CData/*0:0*/ top__DOT__ce_pix;
+    CData/*0:0*/ top__DOT__ioctl_data;
     CData/*0:0*/ top__DOT__unnamedblk1__DOT__old_clk;
     CData/*0:0*/ top__DOT__sharpx1__DOT__clk_sys;
     CData/*0:0*/ top__DOT__sharpx1__DOT__clk_28636;
     CData/*0:0*/ top__DOT__sharpx1__DOT__reset;
     CData/*0:0*/ top__DOT__sharpx1__DOT__pal;
     CData/*0:0*/ top__DOT__sharpx1__DOT__scandouble;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__ioctl_download;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__ioctl_index;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__ioctl_wr;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__ioctl_dout;
     CData/*0:0*/ top__DOT__sharpx1__DOT__ce_pix;
     CData/*0:0*/ top__DOT__sharpx1__DOT__HBlank;
     CData/*0:0*/ top__DOT__sharpx1__DOT__HSync;
     CData/*0:0*/ top__DOT__sharpx1__DOT__VBlank;
     CData/*0:0*/ top__DOT__sharpx1__DOT__VSync;
     CData/*7:0*/ top__DOT__sharpx1__DOT__video;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__romDo_Sharpx1;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__clock;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__data_out;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__dpram__DOT__clock;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__dpram__DOT__ram_cs;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__dpram__DOT__wren_a;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__dpram__DOT__data_a;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__dpram__DOT__q_a;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__dpram__DOT__ram_cs_b;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__dpram__DOT__wren_b;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__dpram__DOT__data_b;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__dpram__DOT__q_b;
     SData/*11:0*/ top__DOT__inputs;
     SData/*15:0*/ top__DOT__AUDIO_L;
     SData/*15:0*/ top__DOT__AUDIO_R;
     SData/*8:0*/ top__DOT__rgb;
     SData/*9:0*/ top__DOT__playerinput;
+    SData/*13:0*/ top__DOT__sharpx1__DOT__romA;
+    SData/*12:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__a;
+    SData/*15:0*/ top__DOT__sharpx1__DOT__dpram__DOT__address_a;
+    SData/*15:0*/ top__DOT__sharpx1__DOT__dpram__DOT__address_b;
     IData/*24:0*/ top__DOT__ioctl_addr;
+    IData/*24:0*/ top__DOT__sharpx1__DOT__ioctl_addr;
+    VlUnpacked<CData/*7:0*/, 8192> top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d;
+    VlUnpacked<CData/*7:0*/, 65536> top__DOT__sharpx1__DOT__dpram__DOT__mem;
 
     // LOCAL VARIABLES
     // Internals; generally not touched by application code
     CData/*7:0*/ top__DOT____Vcellout__sharpx1__video;
     CData/*0:0*/ __Vclklast__TOP__clk_48;
+    CData/*0:0*/ __Vclklast__TOP__clk_12;
     VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
 
     // INTERNAL VARIABLES
     // Internals; generally not touched by application code
     Vtop__Syms* __VlSymsp;  // Symbol table
+
+    // PARAMETERS
+    // Parameters marked /*verilator public*/ for use by application code
+    enum _IDatatop__DOT__sharpx1__DOT__bios_fw_spi__DOT__DW { top__DOT__sharpx1__DOT__bios_fw_spi__DOT__DW = 8U};
+    static const IData var_top__DOT__sharpx1__DOT__bios_fw_spi__DOT__DW;
+    enum _IDatatop__DOT__sharpx1__DOT__bios_fw_spi__DOT__AW { top__DOT__sharpx1__DOT__bios_fw_spi__DOT__AW = 0xdU};
+    static const IData var_top__DOT__sharpx1__DOT__bios_fw_spi__DOT__AW;
+    // enum WData top__DOT__sharpx1__DOT__bios_fw_spi__DOT__FN  //wideenum _IDatatop__DOT__sharpx1__DOT__dpram__DOT__data_width_g { top__DOT__sharpx1__DOT__dpram__DOT__data_width_g = 8U};
+    static const IData var_top__DOT__sharpx1__DOT__dpram__DOT__data_width_g;
+    enum _IDatatop__DOT__sharpx1__DOT__dpram__DOT__addr_width_g { top__DOT__sharpx1__DOT__dpram__DOT__addr_width_g = 0x10U};
+    static const IData var_top__DOT__sharpx1__DOT__dpram__DOT__addr_width_g;
 
     // CONSTRUCTORS
   private:
@@ -155,6 +192,7 @@ VL_MODULE(Vtop) {
     static void _eval_settle(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _initial__TOP__1(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _sequent__TOP__4(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__5(Vtop__Syms* __restrict vlSymsp);
     static void _settle__TOP__2(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
   private:
     static void traceChgSub0(void* userp, VerilatedVcd* tracep);

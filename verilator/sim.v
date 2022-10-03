@@ -82,11 +82,16 @@ sharpx1 sharpx1
    .clk_sys(clk_12),
 	.reset(reset),
 
+	.pal(),
+	.scandouble(),
+
 	.ioctl_download(ioctl_download),
 	.ioctl_index(ioctl_index),
 	.ioctl_wr(ioctl_wr),
 	.ioctl_addr(ioctl_addr),
 	.ioctl_dout(ioctl_data),
+
+	.ce_pix(),
 
 	.HBlank(VGA_HB),
 	.HSync(VGA_HS),

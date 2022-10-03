@@ -132,17 +132,18 @@ module sharpx1
 
 
 wire  [7:0]  romDo_Sharpx1;
-wire [11:0]  romA;
-rom #(.AW(11), .FN("../bios/fw_bios_spi/bios.HEX")) bios_fw_spi
+wire [13:0]  romA;
+rom #(.AW(13), .FN("../bios/fw_bios_spi/boot.rom")) bios_fw_spi
 (
 	.clock      (clk_sys        ),
 	.ce         (1'b1           ),
 	.data_out   (romDo_Sharpx1 ),
-	.a          (romA[10:0]     )
+	.a          (romA[12:0]     )
 );
 
 
-dpram #(8, 12) dpram
+
+dpram #(8, 16) dpram
 (
 	.clock(clk_sys),
 	.address_a(),

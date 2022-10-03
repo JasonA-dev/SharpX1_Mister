@@ -30,7 +30,7 @@ using namespace std;
 // Simulation control
 // ------------------
 int initialReset = 48;
-bool run_enable = 1;
+bool run_enable = 0;
 int batchSize = 150000;
 bool single_step = 0;
 bool multi_step = 0;
@@ -252,7 +252,7 @@ int main(int argc, char** argv, char** env) {
 	// Setup video output
 	if (video.Initialise(windowTitle) == 1) { return 1; }
 
-	//bus.QueueDownload("./test.bin", 0, true);
+	bus.QueueDownload("./boot.rom", 0, true);
 
 
 #ifdef WIN32
@@ -315,11 +315,11 @@ int main(int argc, char** argv, char** env) {
 		//ImGui::Begin("PGROM Editor");
 		//mem_edit.DrawContents(top->top__DOT__uut__DOT__rom__DOT__mem, 32768, 0);
 		//ImGui::End();
-		//ImGui::Begin("ROM");
-		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__Rom_StudioII__DOT__d, 2048, 0);
-		//ImGui::End();		
+		ImGui::Begin("BOOTROM");
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d, 8192, 0);
+		ImGui::End();		
 		ImGui::Begin("DPRAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d, 4096, 0);
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__dpram__DOT__mem, 4096, 0);
 		ImGui::End();	
 
 		// Debug ioctl

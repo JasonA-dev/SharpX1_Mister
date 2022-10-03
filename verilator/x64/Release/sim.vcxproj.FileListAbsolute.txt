@@ -1,2 +1,0 @@
-C:\NoSync\MiSTer\Verilator_Template\verilator\x64\Release\sim.exe
-C:\NoSync\MiSTer\MyCores\SharpX1_Mister\verilator\x64\Release\sim.exe

@@ -7,4 +7,5 @@ verilator \
 --top-module top sim.v \
 ../rtl/sharpx1.v \
 ../rtl/dpram.sv \
+../rtl/bootrom.v \
 ../rtl/rom.v

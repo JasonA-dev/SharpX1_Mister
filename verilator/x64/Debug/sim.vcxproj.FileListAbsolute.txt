@@ -1,1 +1,0 @@
-C:\NoSync\MiSTer\Verilator_Template\verilator\x64\Debug\sim.exe
