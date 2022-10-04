@@ -130,20 +130,33 @@ module sharpx1
 */
 );
 
-
-wire  [7:0]  romDo_Sharpx1;
-wire [13:0]  romA;
+// ROM IPL 4KB
+//wire  [7:0]  romDo_Sharpx1;
+//wire [13:0]  romA;
 rom #(.AW(13), .FN("../bios/fw_bios_spi/boot.rom")) bios_fw_spi
 (
-	.clock      (clk_sys        ),
-	.ce         (1'b1           ),
-	.data_out   (romDo_Sharpx1 ),
-	.a          (romA[12:0]     )
+	.clock      (clk_sys       ),
+	.ce         (1'b1          ),
+	.data_out   ( ),
+	.a          (    )
 );
 
+// ROM 2KB CHARACTER GENERATOR
 
 
-dpram #(8, 16) dpram
+/*
+    X1 (CZ-800C) - November, 1982
+     * CPU: z80A @ 4MHz, 80C49 x 2 (one for key scan, the other for TV & Cas Ctrl)
+     * ROM: IPL (4KB) + chargen (2KB)
+     * RAM: Main memory (64KB) + VRAM (4KB) + RAM for PCG (6KB) + GRAM (48KB, Option)
+     * Text Mode: 80x25 or 40x25
+     * Graphic Mode: 640x200 or 320x200, 8 colors
+     * Sound: PSG 8 octave
+     * I/O Ports: Centronic ports, 2 Joystick ports, Cassette port (2700 baud)
+*/
+
+// RAM 64KB
+dpram #(8, 16) RAM
 (
 	.clock(clk_sys),
 	.address_a(),
@@ -157,8 +170,50 @@ dpram #(8, 16) dpram
 	.q_b()
 );
 
+// VRAM 4KB
+dpram #(8, 12) VRAM
+(
+	.clock(clk_sys),
+	.address_a(),
+	.wren_a(),
+	.data_a(),
+	.q_a(),
 
+	.wren_b(),
+	.address_b(),
+	.data_b(),
+	.q_b()
+);
 
+// PCG RAM 6KB
+dpram #(8, 13) PCGRAM
+(
+	.clock(clk_sys),
+	.address_a(),
+	.wren_a(),
+	.data_a(),
+	.q_a(),
+
+	.wren_b(),
+	.address_b(),
+	.data_b(),
+	.q_b()
+);
+
+// GRAM 48KB
+dpram #(8, 16) GRAM
+(
+	.clock(clk_sys),
+	.address_a(),
+	.wren_a(),
+	.data_a(),
+	.q_a(),
+
+	.wren_b(),
+	.address_b(),
+	.data_b(),
+	.q_b()
+);
 
 
 

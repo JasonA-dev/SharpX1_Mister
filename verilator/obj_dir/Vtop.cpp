@@ -159,7 +159,13 @@ VL_INLINE_OPT void Vtop::_combo__TOP__3(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1__DOT__clk_sys = vlTOPp->top__DOT__clk_12;
     vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__clock 
         = vlTOPp->top__DOT__sharpx1__DOT__clk_sys;
-    vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__clock 
+    vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__clock 
+        = vlTOPp->top__DOT__sharpx1__DOT__clk_sys;
+    vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__clock 
+        = vlTOPp->top__DOT__sharpx1__DOT__clk_sys;
+    vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__clock 
+        = vlTOPp->top__DOT__sharpx1__DOT__clk_sys;
+    vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__clock 
         = vlTOPp->top__DOT__sharpx1__DOT__clk_sys;
 }
 
@@ -176,48 +182,154 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__5(Vtop__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__5\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
-    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0;
-    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0;
-    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1;
-    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1;
-    SData/*15:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0;
-    SData/*15:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    SData/*15:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    SData/*15:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    SData/*11:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    SData/*11:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    SData/*12:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    SData/*12:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    SData/*15:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    SData/*15:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
     // Body
-    __Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0 = 0U;
-    __Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1 = 0U;
-    vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__q_b 
-        = vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__mem
-        [vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__address_b];
-    vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__q_a 
-        = vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__mem
-        [vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__address_a];
-    vlTOPp->top__DOT__sharpx1__DOT__romDo_Sharpx1 = 
-        vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d
-        [(0x1fffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__romA))];
-    if (vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__wren_a) {
-        __Vdlyvval__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0 
-            = vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__data_a;
-        __Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0 = 1U;
-        __Vdlyvdim0__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0 
-            = vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__address_a;
-    }
-    if (vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__wren_b) {
-        __Vdlyvval__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1 
-            = vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__data_b;
-        __Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1 = 1U;
-        __Vdlyvdim0__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1 
-            = vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__address_b;
-    }
-    if (__Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0) {
-        vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0] 
-            = __Vdlyvval__top__DOT__sharpx1__DOT__dpram__DOT__mem__v0;
-    }
-    if (__Vdlyvset__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1) {
-        vlTOPp->top__DOT__sharpx1__DOT__dpram__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1] 
-            = __Vdlyvval__top__DOT__sharpx1__DOT__dpram__DOT__mem__v1;
-    }
+    __Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0 = 0U;
+    __Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1 = 0U;
+    __Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0 = 0U;
+    __Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1 = 0U;
+    __Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0 = 0U;
+    __Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1 = 0U;
+    __Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0 = 0U;
+    __Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1 = 0U;
     vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__data_out 
-        = vlTOPp->top__DOT__sharpx1__DOT__romDo_Sharpx1;
+        = vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d
+        [vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__a];
+    vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__q_b 
+        = vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__address_b];
+    vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__q_a 
+        = vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__address_a];
+    vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__q_b 
+        = vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__address_b];
+    vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__q_a 
+        = vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__address_a];
+    vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__q_b 
+        = vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__address_b];
+    vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__q_a 
+        = vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__address_a];
+    vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__q_b = 
+        vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__address_b];
+    vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__q_a = 
+        vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__mem
+        [vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__address_a];
+    if (vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__wren_a) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__data_a;
+        __Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__address_a;
+    }
+    if (vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__wren_b) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__data_b;
+        __Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__address_b;
+    }
+    if (vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__wren_a) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__data_a;
+        __Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__address_a;
+    }
+    if (vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__wren_b) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__data_b;
+        __Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__address_b;
+    }
+    if (vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__wren_a) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__data_a;
+        __Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__address_a;
+    }
+    if (vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__wren_b) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__data_b;
+        __Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__address_b;
+    }
+    if (vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__wren_a) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__data_a;
+        __Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0 
+            = vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__address_a;
+    }
+    if (vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__wren_b) {
+        __Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__data_b;
+        __Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1 
+            = vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__address_b;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0) {
+        vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1) {
+        vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0) {
+        vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1) {
+        vlTOPp->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0) {
+        vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1) {
+        vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0) {
+        vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    }
+    if (__Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1) {
+        vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__mem[__Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1] 
+            = __Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    }
 }
 
 void Vtop::_eval(Vtop__Syms* __restrict vlSymsp) {

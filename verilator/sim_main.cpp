@@ -312,15 +312,24 @@ int main(int argc, char** argv, char** env) {
 		ImGui::SetWindowPos(windowTitle_DebugLog, ImVec2(0, 160), ImGuiCond_Once);
 
 		// Memory debug
-		//ImGui::Begin("PGROM Editor");
-		//mem_edit.DrawContents(top->top__DOT__uut__DOT__rom__DOT__mem, 32768, 0);
-		//ImGui::End();
-		ImGui::Begin("BOOTROM");
+		ImGui::Begin("BOOTROM IPL");
 		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d, 8192, 0);
 		ImGui::End();		
-		ImGui::Begin("DPRAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__dpram__DOT__mem, 4096, 0);
+		//ImGui::Begin("BOOTROM CHARGEN");
+		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d, 8192, 0);
+		//ImGui::End();		
+		ImGui::Begin("RAM");
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__RAM__DOT__mem, 65536, 0);
 		ImGui::End();	
+		ImGui::Begin("VRAM");
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__VRAM__DOT__mem, 4096, 0);
+		ImGui::End();
+		ImGui::Begin("PCG RAM");
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem, 8192, 0);
+		ImGui::End();
+		ImGui::Begin("GRAM");
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem, 65536, 0);
+		ImGui::End();
 
 		// Debug ioctl
 		ImGui::Begin("ioctl");
