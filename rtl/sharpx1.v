@@ -133,7 +133,7 @@ module sharpx1
 // ROM IPL 4KB
 //wire  [7:0]  romDo_Sharpx1;
 //wire [13:0]  romA;
-rom #(.AW(13), .FN("../bios/fw_bios_spi/boot.rom")) bios_fw_spi
+rom #(.AW(13), .FN("../bios/fw_bios_spi/boot.hex")) bios_fw_spi
 (
 	.clock      (clk_sys       ),
 	.ce         (1'b1          ),

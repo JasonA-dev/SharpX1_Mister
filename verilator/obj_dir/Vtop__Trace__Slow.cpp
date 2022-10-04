@@ -323,7 +323,7 @@ void Vtop::traceFullSub0(void* userp, VerilatedVcd* tracep) {
         tracep->fullCData(oldp+118,(vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__q_b),8);
         tracep->fullIData(oldp+119,(8U),32);
         tracep->fullIData(oldp+120,(0xdU),32);
-        __Vtemp2[0U] = 0x2e726f6dU;
+        __Vtemp2[0U] = 0x2e686578U;
         __Vtemp2[1U] = 0x626f6f74U;
         __Vtemp2[2U] = 0x7370692fU;
         __Vtemp2[3U] = 0x696f735fU;

@@ -345,7 +345,7 @@ void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sw2 = 2U;
     vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce = 1U;
     vlTOPp->ioctl_wait = 0U;
-    __Vtemp1[0U] = 0x2e726f6dU;
+    __Vtemp1[0U] = 0x2e686578U;
     __Vtemp1[1U] = 0x626f6f74U;
     __Vtemp1[2U] = 0x7370692fU;
     __Vtemp1[3U] = 0x696f735fU;
