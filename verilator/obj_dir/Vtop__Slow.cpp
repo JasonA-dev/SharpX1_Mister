@@ -8,6 +8,7 @@
 #include "verilated_dpi.h"
 
 //==========
+VlWide<8>/*255:0*/ Vtop::__Vconst1;
 
 const IData Vtop::var_top__DOT__sharpx1__DOT__bios_fw_spi__DOT__DW(8U);
 const IData Vtop::var_top__DOT__sharpx1__DOT__bios_fw_spi__DOT__AW(0xdU);
@@ -45,7 +46,7 @@ Vtop::~Vtop() {
 
 // Savable
 void Vtop::__Vserialize(VerilatedSerialize& os) {
-    vluint64_t __Vcheckval = 0xde9843de4b93c0a9ULL;
+    vluint64_t __Vcheckval = 0xc9f515c8db7ed377ULL;
     os << __Vcheckval;
     os << __VlSymsp->_vm_contextp__;
     os<<clk_48;
@@ -190,7 +191,7 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     __VlSymsp->__Vserialize(os);
 }
 void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
-    vluint64_t __Vcheckval = 0xde9843de4b93c0a9ULL;
+    vluint64_t __Vcheckval = 0xc9f515c8db7ed377ULL;
     os.readAssert(__Vcheckval);
     os >> __VlSymsp->_vm_contextp__;
     os>>clk_48;
@@ -338,21 +339,12 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
 void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_initial__TOP__1\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Variables
-    VlWide<7>/*223:0*/ __Vtemp1;
     // Body
     vlTOPp->top__DOT__sw1 = 0U;
     vlTOPp->top__DOT__sw2 = 2U;
     vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce = 1U;
     vlTOPp->ioctl_wait = 0U;
-    __Vtemp1[0U] = 0x2e686578U;
-    __Vtemp1[1U] = 0x626f6f74U;
-    __Vtemp1[2U] = 0x7370692fU;
-    __Vtemp1[3U] = 0x696f735fU;
-    __Vtemp1[4U] = 0x66775f62U;
-    __Vtemp1[5U] = 0x696f732fU;
-    __Vtemp1[6U] = 0x2e2e2f62U;
-    VL_READMEM_N(true, 8, 8192, 0, VL_CVT_PACK_STR_NW(7, __Vtemp1)
+    VL_READMEM_N(true, 8, 8192, 0, VL_CVT_PACK_STR_NW(8, __Vconst1)
                  ,  &(vlTOPp->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d)
                  , 0U, ~0ULL);
     vlTOPp->top__DOT__ioctl_wait = vlTOPp->ioctl_wait;
@@ -685,4 +677,12 @@ void Vtop::_ctor_var_reset(Vtop* self) {
     for (int __Vi0=0; __Vi0<1; ++__Vi0) {
         self->__Vm_traceActivity[__Vi0] = 0;
     }
+    self->__Vconst1[0] = 778593656U;
+    self->__Vconst1[1] = 1818196017U;
+    self->__Vconst1[2] = 1764714864U;
+    self->__Vconst1[3] = 1935635312U;
+    self->__Vconst1[4] = 1600285039U;
+    self->__Vconst1[5] = 1932486263U;
+    self->__Vconst1[6] = 794978671U;
+    self->__Vconst1[7] = 11822U;
 }

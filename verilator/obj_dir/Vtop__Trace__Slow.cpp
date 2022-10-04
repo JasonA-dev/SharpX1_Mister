@@ -116,13 +116,13 @@ void Vtop::traceInitSub0(void* userp, VerilatedVcd* tracep) {
         tracep->declBus(c+70,"top sharpx1 video", false,-1, 7,0);
         tracep->declBus(c+119,"top sharpx1 bios_fw_spi DW", false,-1, 31,0);
         tracep->declBus(c+120,"top sharpx1 bios_fw_spi AW", false,-1, 31,0);
-        tracep->declArray(c+121,"top sharpx1 bios_fw_spi FN", false,-1, 223,0);
+        tracep->declArray(c+121,"top sharpx1 bios_fw_spi FN", false,-1, 239,0);
         tracep->declBit(c+71,"top sharpx1 bios_fw_spi clock", false,-1);
         tracep->declBit(c+72,"top sharpx1 bios_fw_spi ce", false,-1);
         tracep->declBus(c+73,"top sharpx1 bios_fw_spi data_out", false,-1, 7,0);
         tracep->declBus(c+74,"top sharpx1 bios_fw_spi a", false,-1, 12,0);
         tracep->declBus(c+119,"top sharpx1 RAM data_width_g", false,-1, 31,0);
-        tracep->declBus(c+128,"top sharpx1 RAM addr_width_g", false,-1, 31,0);
+        tracep->declBus(c+129,"top sharpx1 RAM addr_width_g", false,-1, 31,0);
         tracep->declBit(c+75,"top sharpx1 RAM clock", false,-1);
         tracep->declBit(c+76,"top sharpx1 RAM ram_cs", false,-1);
         tracep->declBit(c+77,"top sharpx1 RAM wren_a", false,-1);
@@ -135,7 +135,7 @@ void Vtop::traceInitSub0(void* userp, VerilatedVcd* tracep) {
         tracep->declBus(c+84,"top sharpx1 RAM data_b", false,-1, 7,0);
         tracep->declBus(c+85,"top sharpx1 RAM q_b", false,-1, 7,0);
         tracep->declBus(c+119,"top sharpx1 VRAM data_width_g", false,-1, 31,0);
-        tracep->declBus(c+129,"top sharpx1 VRAM addr_width_g", false,-1, 31,0);
+        tracep->declBus(c+130,"top sharpx1 VRAM addr_width_g", false,-1, 31,0);
         tracep->declBit(c+86,"top sharpx1 VRAM clock", false,-1);
         tracep->declBit(c+87,"top sharpx1 VRAM ram_cs", false,-1);
         tracep->declBit(c+88,"top sharpx1 VRAM wren_a", false,-1);
@@ -161,7 +161,7 @@ void Vtop::traceInitSub0(void* userp, VerilatedVcd* tracep) {
         tracep->declBus(c+106,"top sharpx1 PCGRAM data_b", false,-1, 7,0);
         tracep->declBus(c+107,"top sharpx1 PCGRAM q_b", false,-1, 7,0);
         tracep->declBus(c+119,"top sharpx1 GRAM data_width_g", false,-1, 31,0);
-        tracep->declBus(c+128,"top sharpx1 GRAM addr_width_g", false,-1, 31,0);
+        tracep->declBus(c+129,"top sharpx1 GRAM addr_width_g", false,-1, 31,0);
         tracep->declBit(c+108,"top sharpx1 GRAM clock", false,-1);
         tracep->declBit(c+109,"top sharpx1 GRAM ram_cs", false,-1);
         tracep->declBit(c+110,"top sharpx1 GRAM wren_a", false,-1);
@@ -199,8 +199,6 @@ void Vtop::traceFullSub0(void* userp, VerilatedVcd* tracep) {
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     vluint32_t* const oldp = tracep->oldp(vlSymsp->__Vm_baseCode);
     if (false && oldp) {}  // Prevent unused
-    // Variables
-    VlWide<7>/*223:0*/ __Vtemp2;
     // Body
     {
         tracep->fullBit(oldp+1,(vlTOPp->clk_48));
@@ -323,15 +321,8 @@ void Vtop::traceFullSub0(void* userp, VerilatedVcd* tracep) {
         tracep->fullCData(oldp+118,(vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__q_b),8);
         tracep->fullIData(oldp+119,(8U),32);
         tracep->fullIData(oldp+120,(0xdU),32);
-        __Vtemp2[0U] = 0x2e686578U;
-        __Vtemp2[1U] = 0x626f6f74U;
-        __Vtemp2[2U] = 0x7370692fU;
-        __Vtemp2[3U] = 0x696f735fU;
-        __Vtemp2[4U] = 0x66775f62U;
-        __Vtemp2[5U] = 0x696f732fU;
-        __Vtemp2[6U] = 0x2e2e2f62U;
-        tracep->fullWData(oldp+121,(__Vtemp2),224);
-        tracep->fullIData(oldp+128,(0x10U),32);
-        tracep->fullIData(oldp+129,(0xcU),32);
+        tracep->fullWData(oldp+121,(__Vconst1),240);
+        tracep->fullIData(oldp+129,(0x10U),32);
+        tracep->fullIData(oldp+130,(0xcU),32);
     }
 }

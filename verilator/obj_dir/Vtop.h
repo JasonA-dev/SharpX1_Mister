@@ -158,6 +158,7 @@ VL_MODULE(Vtop) {
     CData/*7:0*/ top__DOT____Vcellout__sharpx1__video;
     CData/*0:0*/ __Vclklast__TOP__clk_48;
     CData/*0:0*/ __Vclklast__TOP__clk_12;
+    static VlWide<8>/*255:0*/ __Vconst1;
     VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
 
     // INTERNAL VARIABLES

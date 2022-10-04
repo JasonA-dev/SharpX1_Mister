@@ -252,7 +252,7 @@ int main(int argc, char** argv, char** env) {
 	// Setup video output
 	if (video.Initialise(windowTitle) == 1) { return 1; }
 
-	bus.QueueDownload("./boot.hex", 0, true);
+	bus.QueueDownload("./ipl_x1.hex", 0, true);
 
 
 #ifdef WIN32
