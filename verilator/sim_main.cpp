@@ -333,19 +333,19 @@ int main(int argc, char** argv, char** env) {
 
 		// Debug CPU
 		ImGui::Begin("Cpu");
-		ImGui::Text("cep:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cep);	
-		ImGui::Text("cen:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cen);
-		ImGui::Text("reset: 0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__reset);
-		ImGui::Text("rfsh:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rfsh);		
-		ImGui::Text("mreq:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__mreq);	
-		ImGui::Text("iorq:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__iorq);	
-		ImGui::Text("nmi:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__nmi);	
-		ImGui::Text("wr:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__wr);	
-		ImGui::Text("rd:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rd);	
-		ImGui::Text("m1:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__m1);	
-		ImGui::Text("d:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__d);	
-		ImGui::Text("q:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__q);	
-		ImGui::Text("a:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__a);																			
+		ImGui::Text("I cep:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cep);	
+		ImGui::Text("I cen:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cen);
+		ImGui::Text("I reset: 0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__reset);
+		ImGui::Text("O rfsh:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rfsh);		
+		ImGui::Text("O mreq:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__mreq);	
+		ImGui::Text("O iorq:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__iorq);	
+		ImGui::Text("I nmi:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__nmi);	
+		ImGui::Text("O wr:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__wr);	
+		ImGui::Text("O rd:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rd);	
+		ImGui::Text("O m1:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__m1);	
+		ImGui::Text("I d:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__d);	
+		ImGui::Text("O q:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__q);	
+		ImGui::Text("O a:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__a);																			
 		ImGui::Spacing();														
 		ImGui::End();
 

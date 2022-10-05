@@ -131,14 +131,14 @@ module sharpx1
 );
 
 // ROM IPL 4KB
-//wire  [7:0]  romDo_Sharpx1;
-//wire [13:0]  romA;
+wire  [7:0]  romDo_Sharpx1;
+wire [13:0]  romA;
 rom #(.AW(13), .FN("../bios/ipl_x1.hex")) bios_fw_spi
 (
 	.clock      (clk_sys       ),
 	.ce         (1'b1          ),
-	.data_out   ( ),
-	.a          (    )
+	.data_out   (romDo_Sharpx1),
+	.a          (romA)
 );
 
 // ROM 2KB CHARACTER GENERATOR
@@ -159,9 +159,9 @@ rom #(.AW(13), .FN("../bios/ipl_x1.hex")) bios_fw_spi
 dpram #(8, 16) RAM
 (
 	.clock(clk_sys),
-	.address_a(),
-	.wren_a(),
-	.data_a(),
+	.address_a(romA),
+	.wren_a(wr),
+	.data_a(q),
 	.q_a(),
 
 	.wren_b(),
@@ -215,25 +215,55 @@ dpram #(8, 16) GRAM
 	.q_b()
 );
 
+/****************************************************************************
+  basic clock divider
+****************************************************************************/
+
+reg [3:0] pris32m;
+reg cpu_clk;     // Z80 clock 4MHz
+
+always @(posedge clk_sys or posedge reset)
+begin
+  if(reset)
+  begin
+  pris32m <= 4'b0000;
+  cpu_clk <= 0;
+  end else begin
+  pris32m  <= pris32m + 1;
+  if(pris32m[0] & (pris32m[1]) )
+    cpu_clk  <= ~cpu_clk;
+  end
+end
+wire clk2M   = pris32m[3];
+
+wire [ 7:0] d;
+wire [ 7:0] q;
+wire [15:0] a;
 wire rfsh, mreq, iorq, rd, wr;
 
 cpu Cpu
 (
-	.clock  (clk_sys  ),  // change to cpu  16/4
-	.cep    (  ),  // pe2M2
-	.cen    (  ), // ne2M2
-	.reset  (reset  ),
-	.rfsh   (rfsh   ),
-	.mreq   (mreq   ),
-	.iorq   (iorq   ),
-	.rd     (rd     ),
-	.wr     (wr     ),
-	.m1     (     ),  // m1
-	.nmi    (    ),  // nmi
-	.d      (      ),  // d
-	.q      (     ),  // q
-	.a      (      ) // a
+	.clock  (cpu_clk ), // I change to cpu  16/4
+	.cep    (1'b1    ), // I pe2M2
+	.cen    (1'b1    ), // I ne2M2
+	.reset  (reset   ), // I
+	.rfsh   (rfsh    ), // O
+	.mreq   (mreq    ), // O
+	.iorq   (iorq    ), // O
+	.rd     (rd      ), // O
+	.wr     (wr      ), // O
+	.m1     (        ), // O m1
+	.nmi    (        ), // I nmi
+	.d      (romDo_Sharpx1  ), // I 7:0  d
+	.q      (q       ), // O 7:0  q
+	.a      (romA    )  // O 15:0 a
 );
+
+
+// chip selects
+wire ipl_cs;
+wire ram_cs;
+
 
 
 endmodule

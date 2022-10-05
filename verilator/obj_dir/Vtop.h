@@ -50,6 +50,7 @@ VL_MODULE(Vtop) {
 
     // LOCAL SIGNALS
     // Internals; generally not touched by application code
+    CData/*0:0*/ top__DOT__sharpx1__DOT__cpu_clk;
     CData/*0:0*/ top__DOT__clk_48;
     CData/*0:0*/ top__DOT__clk_12;
     CData/*0:0*/ top__DOT__reset;
@@ -92,11 +93,18 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__sharpx1__DOT__VBlank;
     CData/*0:0*/ top__DOT__sharpx1__DOT__VSync;
     CData/*7:0*/ top__DOT__sharpx1__DOT__video;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__romDo_Sharpx1;
+    CData/*3:0*/ top__DOT__sharpx1__DOT__pris32m;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__clk2M;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__d;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__q;
     CData/*0:0*/ top__DOT__sharpx1__DOT__rfsh;
     CData/*0:0*/ top__DOT__sharpx1__DOT__mreq;
     CData/*0:0*/ top__DOT__sharpx1__DOT__iorq;
     CData/*0:0*/ top__DOT__sharpx1__DOT__rd;
     CData/*0:0*/ top__DOT__sharpx1__DOT__wr;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__ipl_cs;
+    CData/*0:0*/ top__DOT__sharpx1__DOT__ram_cs;
     CData/*0:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__clock;
     CData/*0:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__ce;
     CData/*7:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__data_out;
@@ -398,6 +406,8 @@ VL_MODULE(Vtop) {
     SData/*15:0*/ top__DOT__AUDIO_R;
     SData/*8:0*/ top__DOT__rgb;
     SData/*9:0*/ top__DOT__playerinput;
+    SData/*13:0*/ top__DOT__sharpx1__DOT__romA;
+    SData/*15:0*/ top__DOT__sharpx1__DOT__a;
     SData/*12:0*/ top__DOT__sharpx1__DOT__bios_fw_spi__DOT__a;
     SData/*15:0*/ top__DOT__sharpx1__DOT__RAM__DOT__address_a;
     SData/*15:0*/ top__DOT__sharpx1__DOT__RAM__DOT__address_b;
@@ -550,13 +560,19 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ __Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__B;
     CData/*0:0*/ __Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Sub;
     CData/*0:0*/ __Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Carry_In;
+    CData/*1:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__XY_State;
     CData/*7:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ACC;
     CData/*7:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F;
+    CData/*0:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Alternate;
     CData/*6:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__tstate;
     CData/*6:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__mcycle;
+    CData/*0:0*/ __VinpClk__TOP__top__DOT__sharpx1__DOT__cpu_clk;
     CData/*0:0*/ __Vclklast__TOP__clk_48;
     CData/*0:0*/ __Vclklast__TOP__clk_12;
     CData/*0:0*/ __Vclklast__TOP__reset;
+    CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1__DOT__cpu_clk;
+    CData/*0:0*/ __Vchglast__TOP__top__DOT__sharpx1__DOT__cpu_clk;
+    SData/*15:0*/ top__DOT__sharpx1__DOT____Vcellout__Cpu__a;
     SData/*15:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__PC;
     SData/*15:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__SP;
     VlUnpacked<CData/*0:0*/, 1> __Vm_traceActivity;
@@ -716,6 +732,7 @@ VL_MODULE(Vtop) {
     static QData _change_request_1(Vtop__Syms* __restrict vlSymsp);
   public:
     static void _combo__TOP__4(Vtop__Syms* __restrict vlSymsp);
+    static void _combo__TOP__9(Vtop__Syms* __restrict vlSymsp);
   private:
     static void _ctor_var_reset(Vtop* self) VL_ATTR_COLD;
   public:
@@ -729,11 +746,13 @@ VL_MODULE(Vtop) {
     static void _eval_settle(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _initial__TOP__1(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _sequent__TOP__10(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__11(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__12(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__13(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__5(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__6(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__7(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__8(Vtop__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__9(Vtop__Syms* __restrict vlSymsp);
     static void _settle__TOP__2(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _settle__TOP__3(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
   private:
