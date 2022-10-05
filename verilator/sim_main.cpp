@@ -331,6 +331,51 @@ int main(int argc, char** argv, char** env) {
 		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem, 65536, 0);
 		ImGui::End();
 
+		// Debug CPU
+		ImGui::Begin("Cpu");
+		ImGui::Text("cep:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cep);	
+		ImGui::Text("cen:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cen);
+		ImGui::Text("reset: 0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__reset);
+		ImGui::Text("rfsh:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rfsh);		
+		ImGui::Text("mreq:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__mreq);	
+		ImGui::Text("iorq:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__iorq);	
+		ImGui::Text("nmi:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__nmi);	
+		ImGui::Text("wr:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__wr);	
+		ImGui::Text("rd:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rd);	
+		ImGui::Text("m1:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__m1);	
+		ImGui::Text("d:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__d);	
+		ImGui::Text("q:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__q);	
+		ImGui::Text("a:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__a);																			
+		ImGui::Spacing();														
+		ImGui::End();
+
+		// tv80_core Registers
+		ImGui::Begin("tv80_core Registers");
+		ImGui::Text("ACC:         0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ACC);	
+		ImGui::Text("F:           0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F);
+		ImGui::Text("Ap:          0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Ap);
+		ImGui::Text("Fp:          0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Fp);		
+		ImGui::Text("I:           0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I);	
+		ImGui::Spacing();
+		ImGui::Text("SP:          0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__SP);	
+		ImGui::Text("PC:          0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__PC);	
+		ImGui::Text("RegDIH:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegDIH);	
+		ImGui::Text("RegDIL:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegDIL);	
+		ImGui::Text("RegBusA:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegBusA);	
+		ImGui::Text("RegBusB:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegBusB);	
+		ImGui::Text("RegBusC:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegBusC);	
+		ImGui::Text("RegAddrA_r:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegAddrA_r);	
+		ImGui::Text("RegAddrA:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegAddrA);
+		ImGui::Text("RegAddrB_r:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegAddrB_r);
+		ImGui::Text("RegAddrB:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegAddrB);
+		ImGui::Text("RegAddrC:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegAddrC);
+		ImGui::Text("RegWEH:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegWEH);
+		ImGui::Text("RegWEL:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegWEL);
+		ImGui::Text("Alternate:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Alternate);												
+
+		ImGui::Spacing();														
+		ImGui::End();
+
 		// Debug ioctl
 		ImGui::Begin("ioctl");
 		ImGui::Text("ioctl_download: 0x%02X", top->top__DOT__sharpx1__DOT__ioctl_download);	

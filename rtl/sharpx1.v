@@ -133,7 +133,7 @@ module sharpx1
 // ROM IPL 4KB
 //wire  [7:0]  romDo_Sharpx1;
 //wire [13:0]  romA;
-rom #(.AW(13), .FN("../bios/fw_bios_spi/ipl_x1.hex")) bios_fw_spi
+rom #(.AW(13), .FN("../bios/ipl_x1.hex")) bios_fw_spi
 (
 	.clock      (clk_sys       ),
 	.ce         (1'b1          ),
@@ -215,6 +215,25 @@ dpram #(8, 16) GRAM
 	.q_b()
 );
 
+wire rfsh, mreq, iorq, rd, wr;
+
+cpu Cpu
+(
+	.clock  (clk_sys  ),  // change to cpu  16/4
+	.cep    (  ),  // pe2M2
+	.cen    (  ), // ne2M2
+	.reset  (reset  ),
+	.rfsh   (rfsh   ),
+	.mreq   (mreq   ),
+	.iorq   (iorq   ),
+	.rd     (rd     ),
+	.wr     (wr     ),
+	.m1     (     ),  // m1
+	.nmi    (    ),  // nmi
+	.d      (      ),  // d
+	.q      (     ),  // q
+	.a      (      ) // a
+);
 
 
 endmodule

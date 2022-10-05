@@ -55,8 +55,13 @@ CC_OPT = -O
 V_SRC = \
 	sim.v \
 	$(RTL)/sharpx1.v \
+	$(RTL)/cpu.v \		
+	$(RTL)/tv80/tv80e.v \	
+	$(RTL)/tv80/tv80_core.v \	
+	$(RTL)/tv80/tv80_mcode.v \	
+	$(RTL)/tv80/tv80_alu.v \			
+	$(RTL)/tv80/tv80_reg.v \				
 	$(RTL)/dpram.sv \	
-	$(RTL)/bootrom.v \
 	$(RTL)/rom.v
 
 C_SRC = \
