@@ -137,6 +137,7 @@ module sharpx1
 // ROM IPL 4KB
 wire  [7:0]  romDo_SharpX1;
 wire [13:0]  romA;
+//rom #(.AW(13), .FN("../bios/reference/fw_bios_spi/boot.hex")) IPL
 rom #(.AW(13), .FN("../bios/ipl_x1.hex")) IPL
 (
 	.clock      (clk_sys       ),
