@@ -130,19 +130,26 @@ module sharpx1
 */
 );
 
+/****************************************************************************
+  IPL ROM
+****************************************************************************/
+
 // ROM IPL 4KB
-wire  [7:0]  romDo_Sharpx1;
+wire  [7:0]  romDo_SharpX1;
 wire [13:0]  romA;
-rom #(.AW(13), .FN("../bios/ipl_x1.hex")) bios_fw_spi
+rom #(.AW(13), .FN("../bios/ipl_x1.hex")) IPL
 (
 	.clock      (clk_sys       ),
 	.ce         (1'b1          ),
-	.data_out   (romDo_Sharpx1),
-	.a          (romA)
+	.data_out   (romDo_SharpX1 ),
+	.a          (romA          )
 );
 
 // ROM 2KB CHARACTER GENERATOR
 
+/****************************************************************************
+  RAM
+****************************************************************************/
 
 /*
     X1 (CZ-800C) - November, 1982
@@ -156,114 +163,159 @@ rom #(.AW(13), .FN("../bios/ipl_x1.hex")) bios_fw_spi
 */
 
 // RAM 64KB
-dpram #(8, 16) RAM
+wire [ 7:0] ramDi;
+wire [ 7:0] ramDo;
+wire [15:0] ramA;
+wire        ramWe;
+dpram #(8, 16) RAM  // (64KB)
 (
-	.clock(clk_sys),
-	.address_a(romA),
-	.wren_a(wr),
-	.data_a(q),
-	.q_a(),
+	.clock      (clk_sys  ),
+	.address_a  (ramA     ),
+	.wren_a     (ramWe   ),
+	.data_a     (ramDi    ),
+	.q_a        (ramDo    ),
 
-	.wren_b(),
-	.address_b(),
-	.data_b(),
-	.q_b()
+	.wren_b     (         ),
+	.address_b  (         ),
+	.data_b     (         ),
+	.q_b        (         )
 );
 
 // VRAM 4KB
-dpram #(8, 12) VRAM
+wire [ 7:0] vramDi;
+wire [ 7:0] vramDo;
+wire [15:0] vramA;
+wire        vramWe;
+dpram #(8, 12) VRAM  // (4KB)
 (
-	.clock(clk_sys),
-	.address_a(),
-	.wren_a(),
-	.data_a(),
-	.q_a(),
+	.clock      (clk_sys  ),
+	.address_a  (vramA    ),
+	.wren_a     (vramWe   ),
+	.data_a     (vramDi   ),
+	.q_a        (vramDo   ),
 
-	.wren_b(),
-	.address_b(),
-	.data_b(),
-	.q_b()
+	.wren_b     (         ),
+	.address_b  (         ),
+	.data_b     (         ),
+	.q_b        (         )
 );
 
 // PCG RAM 6KB
-dpram #(8, 13) PCGRAM
+wire [ 7:0] pcgramDi;
+wire [ 7:0] pcgramDo;
+wire [15:0] pcgvramA;
+wire        pcgramWe;
+dpram #(8, 13) PCGRAM  // (8KB)
 (
-	.clock(clk_sys),
-	.address_a(),
-	.wren_a(),
-	.data_a(),
-	.q_a(),
+	.clock      (clk_sys  ),
+	.address_a  (pcgvramA ),
+	.wren_a     (pcgramWe ),
+	.data_a     (pcgramDi ),
+	.q_a        (pcgramDo ),
 
-	.wren_b(),
-	.address_b(),
-	.data_b(),
-	.q_b()
+	.wren_b     (         ),
+	.address_b  (         ),
+	.data_b     (         ),
+	.q_b        (         )
 );
 
 // GRAM 48KB
-dpram #(8, 16) GRAM
+wire [ 7:0] gramDi;
+wire [ 7:0] gramDo;
+wire [15:0] gramA;
+wire        gramWe;
+dpram #(8, 16) GRAM  // (64KB)
 (
-	.clock(clk_sys),
-	.address_a(),
-	.wren_a(),
-	.data_a(),
-	.q_a(),
+	.clock      (clk_sys  ),
+	.address_a  (gramA    ),
+	.wren_a     (gramWe   ),
+	.data_a     (gramDi   ),
+	.q_a        (gramDo   ),
 
-	.wren_b(),
-	.address_b(),
-	.data_b(),
-	.q_b()
+	.wren_b     (         ),
+	.address_b  (         ),
+	.data_b     (         ),
+	.q_b        (         )
 );
 
 /****************************************************************************
-  basic clock divider
+  Basic Clock Divider
 ****************************************************************************/
 
 reg [3:0] pris32m;
 reg cpu_clk;     // Z80 clock 4MHz
 
-always @(posedge clk_sys or posedge reset)
+always @(negedge clk_sys or negedge reset)
 begin
+  /*
   if(reset)
   begin
-  pris32m <= 4'b0000;
-  cpu_clk <= 0;
-  end else begin
-  pris32m  <= pris32m + 1;
-  if(pris32m[0] & (pris32m[1]) )
-    cpu_clk  <= ~cpu_clk;
-  end
+    pris32m <= 4'b0000;
+    cpu_clk <= 0;
+  end 
+  else 
+  begin*/
+    pris32m <= pris32m + 1;
+    if(pris32m[0] & (pris32m[1]))  // 2'b11;
+      cpu_clk <= ~cpu_clk;
+  //end
 end
-wire clk2M   = pris32m[3];
 
-wire [ 7:0] d;
-wire [ 7:0] q;
-wire [15:0] a;
-wire rfsh, mreq, iorq, rd, wr;
+/****************************************************************************
+  Z80A CPU
+****************************************************************************/
+
+reg[5:0] ce = 0;
+always @(negedge clk_sys) ce <= ce + 1'd1;
+
+reg[3:0] ce4 = 0;
+always @(negedge clk_sys) if(ce400p) ce4 <= 4'd0; else ce4 <= ce4 + 4'd1;
+
+`ifdef VERILATOR
+wire ce400p =           ce4[1];
+wire ce400n = ce4[0] & ~ce4[1];
+`else
+wire ce400p = ce4[0] &  ce4[1]          &  ce4[3];
+wire ce400n = ce4[0] & ~ce4[1] & ce4[2] & ~ce4[3];
+`endif
+
+wire  [ 7:0] di;
+wire  [ 7:0] data_out;
+wire  [15:0] a;
+wire         mreq;
+wire         iorq;
+wire         wr;
+reg   [15:0] dir;
+reg          dirset;
 
 cpu Cpu
 (
-	.clock  (cpu_clk ), // I change to cpu  16/4
-	.cep    (1'b1    ), // I pe2M2
-	.cen    (1'b1    ), // I ne2M2
-	.reset  (reset   ), // I
-	.rfsh   (rfsh    ), // O
-	.mreq   (mreq    ), // O
-	.iorq   (iorq    ), // O
-	.rd     (rd      ), // O
-	.wr     (wr      ), // O
-	.m1     (        ), // O m1
-	.nmi    (        ), // I nmi
-	.d      (romDo_Sharpx1  ), // I 7:0  d
-	.q      (q       ), // O 7:0  q
-	.a      (romA    )  // O 15:0 a
+	.reset_n  (~reset   ), // I
+	.clock    (cpu_clk  ), // I change to cpu  16/4
+	.cep      (ce400p   ), // I 
+	.cen      (ce400n   ), // I 
+	.int_n    (1        ), // I
+	.halt_n   (         ), // O
+	.mreq     (mreq     ), // O
+	.iorq     (iorq     ), // O
+	.wr       (wr       ), // O
+	.di       (di       ), // I 7:0
+	.data_out (data_out ), // O 7:0
+	.a        (a        ), // O 15:0
+	.dir 	    (dir	    ), // I
+	.dirset   (dirset	  )  // I
 );
 
+/****************************************************************************
+  Data & Address Buses
+****************************************************************************/
 
-// chip selects
-wire ipl_cs;
-wire ram_cs;
+assign romA = a;
 
+assign ramWe = !(!mreq && !wr);
+assign ramDi = data_out;
+assign ramA  = a;
 
+assign di = mreq ? ramDo : romDo_SharpX1;
 
 endmodule

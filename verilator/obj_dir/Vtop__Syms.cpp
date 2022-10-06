@@ -49,7 +49,6 @@ Vtop__Syms::Vtop__Syms(VerilatedContext* contextp, Vtop* topp, const char* namep
         __Vscope_TOP.varInsert(__Vfinal,"clk_12", &(TOPp->clk_12), false, VLVT_UINT8,VLVD_IN|VLVF_PUB_RW,0);
         __Vscope_TOP.varInsert(__Vfinal,"clk_48", &(TOPp->clk_48), false, VLVT_UINT8,VLVD_IN|VLVF_PUB_RW,0);
         __Vscope_TOP.varInsert(__Vfinal,"inputs", &(TOPp->inputs), false, VLVT_UINT16,VLVD_IN|VLVF_PUB_RW,1 ,11,0);
-        __Vscope_TOP.varInsert(__Vfinal,"reset", &(TOPp->reset), false, VLVT_UINT8,VLVD_IN|VLVF_PUB_RW,0);
         __Vscope_top.varInsert(__Vfinal,"VGA_B", &(TOPp->top__DOT__VGA_B), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,7,0);
         __Vscope_top.varInsert(__Vfinal,"VGA_G", &(TOPp->top__DOT__VGA_G), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,7,0);
         __Vscope_top.varInsert(__Vfinal,"VGA_R", &(TOPp->top__DOT__VGA_R), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,7,0);
@@ -59,7 +58,6 @@ Vtop__Syms::Vtop__Syms(VerilatedContext* contextp, Vtop* topp, const char* namep
         __Vscope_top.varInsert(__Vfinal,"joystick", &(TOPp->top__DOT__joystick), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,7,0);
         __Vscope_top.varInsert(__Vfinal,"led", &(TOPp->top__DOT__led), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,3,0);
         __Vscope_top.varInsert(__Vfinal,"playerinput", &(TOPp->top__DOT__playerinput), false, VLVT_UINT16,VLVD_NODIR|VLVF_PUB_RW,1 ,9,0);
-        __Vscope_top.varInsert(__Vfinal,"reset", &(TOPp->top__DOT__reset), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,0);
         __Vscope_top.varInsert(__Vfinal,"trakball", &(TOPp->top__DOT__trakball), false, VLVT_UINT8,VLVD_NODIR|VLVF_PUB_RW,1 ,7,0);
     }
 }
