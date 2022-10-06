@@ -102,6 +102,7 @@ module tv80e (/*AUTOARG*/
     begin
       if (!reset_n)
         begin
+          //$display("!reset_n");        
           rd_n   <= #1 1'b1;
           wr_n   <= #1 1'b1;
           iorq_n <= #1 1'b1;
@@ -110,6 +111,7 @@ module tv80e (/*AUTOARG*/
         end
       else if(cen)
         begin
+          //$display("cen");               
           rd_n <= #1 1'b1;
           wr_n <= #1 1'b1;
           iorq_n <= #1 1'b1;

@@ -137,13 +137,39 @@ module sharpx1
 // ROM IPL 4KB
 wire  [7:0]  romDo_SharpX1;
 wire [13:0]  romA;
+
+/*
 //rom #(.AW(13), .FN("../bios/reference/fw_bios_spi/boot.hex")) IPL
 rom #(.AW(13), .FN("../bios/ipl_x1.hex")) IPL
+//rom #(.AW(13), .FN("../bios/ipl_x1.hex")) IPL
 (
 	.clock      (clk_sys       ),
 	.ce         (1'b1          ),
 	.data_out   (romDo_SharpX1 ),
 	.a          (romA          )
+);
+*/
+
+/*
+always @(posedge clk_sys) begin
+  if (ioctl_download) begin
+    $display("ioctl_download %h ioctl_index %h ioctl_addr %h ioctl_wr %h ioctl_dout %h", ioctl_download, ioctl_index, ioctl_addr[12:0], ioctl_wr, ioctl_dout);
+  end
+end
+*/
+
+dpram #(8, 13) IPL  // (4KB)
+(
+	.clock     (clk_sys          ),
+	.address_a (ioctl_addr[12:0] ),
+	.wren_a    (ioctl_wr         ),
+	.data_a    (ioctl_dout       ),
+	.q_a       (                 ),
+
+	.wren_b    (                 ), 
+	.address_b (romA             ), 
+	.data_b    (                 ),
+	.q_b       (romDo_SharpX1    ) 
 );
 
 // ROM 2KB CHARACTER GENERATOR
@@ -172,7 +198,7 @@ dpram #(8, 16) RAM  // (64KB)
 (
 	.clock      (clk_sys  ),
 	.address_a  (ramA     ),
-	.wren_a     (ramWe   ),
+	.wren_a     (ramWe    ),
 	.data_a     (ramDi    ),
 	.q_a        (ramDo    ),
 
@@ -240,44 +266,39 @@ dpram #(8, 16) GRAM  // (64KB)
 );
 
 /****************************************************************************
-  Basic Clock Divider
-****************************************************************************/
-
-reg [3:0] pris32m;
-reg cpu_clk;     // Z80 clock 4MHz
-
-always @(negedge clk_sys or negedge reset)
-begin
-  /*
-  if(reset)
-  begin
-    pris32m <= 4'b0000;
-    cpu_clk <= 0;
-  end 
-  else 
-  begin*/
-    pris32m <= pris32m + 1;
-    if(pris32m[0] & (pris32m[1]))  // 2'b11;
-      cpu_clk <= ~cpu_clk;
-  //end
-end
-
-/****************************************************************************
   Z80A CPU
 ****************************************************************************/
 
-reg[5:0] ce = 0;
-always @(negedge clk_sys) ce <= ce + 1'd1;
-
-reg[3:0] ce4 = 0;
-always @(negedge clk_sys) if(ce400p) ce4 <= 4'd0; else ce4 <= ce4 + 4'd1;
+always @(negedge clk_sys) ce <= ce+1'd1;
 
 `ifdef VERILATOR
-wire ce400p =           ce4[1];
-wire ce400n = ce4[0] & ~ce4[1];
+reg [ 3:0] ce;
+assign ce_pix = pe8M8;
+wire pe8M8 =  ce[0];
+wire ne8M8 = ~ce[0];
+
+wire pe4M4 = ~ce[0] &  ce[1];
+wire ne4M4 = ~ce[0] & ~ce[1];
+
+wire pe2M2 = ~ce[0] & ~ce[1] &  ce[2];
+wire ne2M2 = ~ce[0] & ~ce[1] & ~ce[2];
+
+wire pe1M1 = ~ce[0] & ~ce[1] & ~ce[2] &  ce[3];
+wire ne1M1 = ~ce[0] & ~ce[1] & ~ce[2] & ~ce[3];
 `else
-wire ce400p = ce4[0] &  ce4[1]          &  ce4[3];
-wire ce400n = ce4[0] & ~ce4[1] & ce4[2] & ~ce4[3];
+reg [ 4:0] ce;
+assign ce_pix = pe8M8;
+wire pe8M8 = ~ce[0] &  ce[1];
+wire ne8M8 = ~ce[0] & ~ce[1];
+
+wire pe4M4 = ~ce[0] & ~ce[1] &  ce[2];
+wire ne4M4 = ~ce[0] & ~ce[1] & ~ce[2];
+
+wire pe2M2 = ~ce[0] & ~ce[1] & ~ce[2] &  ce[3];
+wire ne2M2 = ~ce[0] & ~ce[1] & ~ce[2] & ~ce[3];
+
+wire pe1M1 = ~ce[0] & ~ce[1] & ~ce[2] & ~ce[3] &  ce[4];
+wire ne1M1 = ~ce[0] & ~ce[1] & ~ce[2] & ~ce[3] & ~ce[4];
 `endif
 
 wire  [ 7:0] di;
@@ -286,25 +307,31 @@ wire  [15:0] a;
 wire         mreq;
 wire         iorq;
 wire         wr;
+wire         rd;
 reg   [15:0] dir;
 reg          dirset;
 
 cpu Cpu
 (
-	.reset_n  (~reset   ), // I
-	.clock    (cpu_clk  ), // I change to cpu  16/4
-	.cep      (ce400p   ), // I 
-	.cen      (ce400n   ), // I 
+	.reset_n  (reset    ), // I
+	.clock    (clk_sys  ), // I 
+	.cep      (pe4M4    ), // I 
+	.cen      (ne4M4    ), // I 
 	.int_n    (1        ), // I
+
+	.di       (di       ), // I 7:0
+	.dir 	    (dir	    ), // I
+	.dirset   (dirset	  ), // I
+
 	.halt_n   (         ), // O
 	.mreq     (mreq     ), // O
 	.iorq     (iorq     ), // O
 	.wr       (wr       ), // O
-	.di       (di       ), // I 7:0
+	.rd       (rd       ), // O
+	.m1       (m1       ), // O
+
 	.data_out (data_out ), // O 7:0
-	.a        (a        ), // O 15:0
-	.dir 	    (dir	    ), // I
-	.dirset   (dirset	  )  // I
+	.a        (a        )  // O 15:0
 );
 
 /****************************************************************************
@@ -317,6 +344,6 @@ assign ramWe = !(!mreq && !wr);
 assign ramDi = data_out;
 assign ramA  = a;
 
-assign di = mreq ? ramDo : romDo_SharpX1;
+assign di = !mreq ? ramDo : romDo_SharpX1;
 
 endmodule

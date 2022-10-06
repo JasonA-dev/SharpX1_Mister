@@ -251,7 +251,7 @@ int main(int argc, char** argv, char** env) {
 	// Setup video output
 	if (video.Initialise(windowTitle) == 1) { return 1; }
 
-	bus.QueueDownload("./ipl_x1.hex", 0, true);
+	bus.QueueDownload("./ipl_x1.rom", 0, true);
 	//bus.QueueDownload("./boot.hex", 0, true);
 
 #ifdef WIN32
@@ -312,7 +312,7 @@ int main(int argc, char** argv, char** env) {
 
 		// Memory debug
 		ImGui::Begin("BOOTROM IPL");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__IPL__DOT__d, 8192, 0);
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__IPL__DOT__mem, 8192, 0);
 		ImGui::End();		
 		//ImGui::Begin("BOOTROM CHARGEN");
 		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d, 8192, 0);
@@ -332,7 +332,7 @@ int main(int argc, char** argv, char** env) {
 
 		// Debug CPU
 		ImGui::Begin("Cpu");
-		ImGui::Text("I reset:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__reset);	
+		ImGui::Text("I reset_n:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__reset_n);	
 		ImGui::Text("I cep:       0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cep);
 		ImGui::Text("I cen:       0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cen);
 		ImGui::Text("I int_n:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__int_n);
@@ -343,7 +343,9 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("O halt_n:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__halt_n);		
 		ImGui::Text("O mreq:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__mreq);		
 		ImGui::Text("O iorq:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__iorq);		
-		ImGui::Text("O wr:        0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__wr);		
+		ImGui::Text("O wr:        0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__wr);	
+		ImGui::Text("O rd:        0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rd);	
+		ImGui::Text("O m1:        0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__m1);						
 		ImGui::Text("O data_out:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__data_out);		
 		ImGui::Text("O a:         0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__a);		
 		ImGui::Spacing();					
@@ -425,14 +427,21 @@ int main(int argc, char** argv, char** env) {
 
 		// Debug top
 		ImGui::Begin("top");
-		//ImGui::Text("io7F:    0x%04X", top->top__DOT__sharpx1__DOT__io7F);	
-		//ImGui::Text("reg7F:   0x%04X", top->top__DOT__sharpx1__DOT__reg7F);
 		ImGui::Text("romA:    0x%04X", top->top__DOT__sharpx1__DOT__romA);
 		ImGui::Text("ramWe:   0x%04X", top->top__DOT__sharpx1__DOT__ramWe);	
 		ImGui::Text("ramDi:   0x%04X", top->top__DOT__sharpx1__DOT__ramDi);	
 		ImGui::Text("ramA:    0x%04X", top->top__DOT__sharpx1__DOT__ramA);
 		ImGui::Text("di:      0x%04X", top->top__DOT__sharpx1__DOT__di);
-		ImGui::Spacing();														
+		ImGui::Spacing();			
+		ImGui::Text("ce:      0x%02X", top->top__DOT__sharpx1__DOT__ce);
+		ImGui::Text("pe4M4:   0x%02X", top->top__DOT__sharpx1__DOT__pe4M4);
+		ImGui::Text("ne4M4:   0x%02X", top->top__DOT__sharpx1__DOT__ne4M4);	
+		ImGui::Spacing();	
+		ImGui::Text("rd:      0x%02X", top->top__DOT__sharpx1__DOT__rd);	
+		ImGui::Text("wr:      0x%02X", top->top__DOT__sharpx1__DOT__wr);		
+		ImGui::Text("m1:      0x%02X", top->top__DOT__sharpx1__DOT__m1);	
+		//ImGui::Text("ior:     0x%02X", top->top__DOT__sharpx1__DOT__ior);	
+		//ImGui::Text("iow:     0x%02X", top->top__DOT__sharpx1__DOT__iow);																														
 		ImGui::End();
 
 		// Debug RAM

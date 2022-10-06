@@ -5,7 +5,6 @@ module top(
 
    input clk_48 /*verilator public_flat*/,
    input clk_12 /*verilator public_flat*/,
-   //input reset  /*verilator public_flat*/,
    input [11:0]  inputs/*verilator public_flat*/,
 
    output [7:0] VGA_R/*verilator public_flat*/,
@@ -77,11 +76,11 @@ module top(
       ce_pix <= old_clk & ~clk_12;
    end
 
-wire reset = ioctl_download;
+wire reset = ~ioctl_download;
 
 sharpx1 sharpx1
 (
-   .clk_sys(clk_12),
+   .clk_sys(clk_48),
 	.reset(reset),
 
 	.pal(),
@@ -91,7 +90,7 @@ sharpx1 sharpx1
 	.ioctl_index(ioctl_index),
 	.ioctl_wr(ioctl_wr),
 	.ioctl_addr(ioctl_addr),
-	.ioctl_dout(ioctl_data),
+	.ioctl_dout(ioctl_dout),
 
 	.ce_pix(),
 
