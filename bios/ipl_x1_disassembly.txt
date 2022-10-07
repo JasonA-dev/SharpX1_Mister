@@ -1,0 +1,2300 @@
+                           .data:00000000 c3 06 00                         jp 0x0006
+                           .data:00000003 c3 00 07                         jp 0x0700
+                           .data:00000006 f3                               di
+                           .data:00000007 01 00 40                         ld bc,0x4000
+                           .data:0000000a 21 00 80                         ld hl,0x8000
+                           .data:0000000d 16 ff                            ld d,0xff
+                           .data:0000000f ed 78                            in a,(c)
+                           .data:00000011 7e                               ld a,(hl)
+                           .data:00000012 15                               dec d
+                           .data:00000013 20 fa                            jr nz,0x000f
+                           .data:00000015 31 00 00                         ld sp,0x0000
+                           .data:00000018 01 03 1a                         ld bc,0x1a03
+                           .data:0000001b 3e 82                            ld a,0x82
+                           .data:0000001d ed 79                            out (c),a
+                           .data:0000001f 0b                               dec bc
+                           .data:00000020 ed 78                            in a,(c)
+                           .data:00000022 3e 72                            ld a,0x72
+                           .data:00000024 ed 79                            out (c),a
+                           .data:00000026 0b                               dec bc
+                           .data:00000027 ed 78                            in a,(c)
+                           .data:00000029 cd 51 04                         call 0x0451
+                           .data:0000002c cd 2b 04                         call 0x042b
+                           .data:0000002f 3e 07                            ld a,0x07
+                           .data:00000031 32 86 ff                         ld (0xff86),a
+                           .data:00000034 af                               xor a
+                           .data:00000035 32 87 ff                         ld (0xff87),a
+                           .data:00000038 cd 26 0f                         call 0x0f26
+                           .data:0000003b 3e e4                            ld a,0xe4
+                           .data:0000003d cd 2e 05                         call 0x052e
+                           .data:00000040 af                               xor a
+                           .data:00000041 cd 2e 05                         call 0x052e
+                           .data:00000044 cd 0e 01                         call 0x010e
+                           .data:00000047 cd a1 01                         call 0x01a1
+                           .data:0000004a 01 00 0e                         ld bc,0x0e00
+                           .data:0000004d cd 53 01                         call 0x0153
+                           .data:00000050 28 42                            jr z,0x0094
+                           .data:00000052 cd c5 00                         call 0x00c5
+                           .data:00000055 11 ec 0b                         ld de,0x0bec
+                           .data:00000058 cd 6f 01                         call 0x016f
+                           .data:0000005b 21 00 ff                         ld hl,0xff00
+                           .data:0000005e 01 20 00                         ld bc,0x0020
+                           .data:00000061 cd 67 05                         call 0x0567
+                           .data:00000064 18 03                            jr 0x0069
+                           .data:00000066 c3 06 00                         jp 0x0006
+                           .data:00000069 3a 00 ff                         ld a,(0xff00)
+                           .data:0000006c fe 01                            cp 0x01
+                           .data:0000006e c2 eb 00                         jp nz,0x00eb
+                           .data:00000071 cd 4f 05                         call 0x054f
+                           .data:00000074 2a 14 ff                         ld hl,(0xff14)
+                           .data:00000077 ed 4b 12 ff                      ld bc,(0xff12)
+                           .data:0000007b c3 95 0f                         jp 0x0f95
+                           .data:0000007e 3e 04                            ld a,0x04
+                           .data:00000080 cd 48 06                         call 0x0648
+                           .data:00000083 21 40 01                         ld hl,0x0140
+                           .data:00000086 11 78 ff                         ld de,0xff78
+                           .data:00000089 01 06 00                         ld bc,0x0006
+                           .data:0000008c ed b0                            ldir
+                           .data:0000008e 2a 16 ff                         ld hl,(0xff16)
+                           .data:00000091 c3 78 ff                         jp 0xff78
+                           .data:00000094 01 00 0e                         ld bc,0x0e00
+                           .data:00000097 cd 53 01                         call 0x0153
+                           .data:0000009a 20 59                            jr nz,0x00f5
+                           .data:0000009c 2e 00                            ld l,0x00
+                           .data:0000009e d9                               exx
+                           .data:0000009f 21 00 ff                         ld hl,0xff00
+                           .data:000000a2 01 20 00                         ld bc,0x0020
+                           .data:000000a5 cd 46 01                         call 0x0146
+                           .data:000000a8 cd 4f 05                         call 0x054f
+                           .data:000000ab d9                               exx
+                           .data:000000ac 2a 1d ff                         ld hl,(0xff1d)
+                           .data:000000af ed 5b 1e ff                      ld de,(0xff1e)
+                           .data:000000b3 d9                               exx
+                           .data:000000b4 2a 14 ff                         ld hl,(0xff14)
+                           .data:000000b7 ed 4b 12 ff                      ld bc,(0xff12)
+                           .data:000000bb cd 46 01                         call 0x0146
+                           .data:000000be 18 c3                            jr 0x0083
+                           .data:000000c0 cd 00 07                         call 0x0700
+                           .data:000000c3 18 30                            jr 0x00f5
+                           .data:000000c5 cd 52 06                         call 0x0652
+                           .data:000000c8 e6 02                            and 0x02
+                           .data:000000ca c0                               ret nz
+                           .data:000000cb af                               xor a
+                           .data:000000cc cd 48 06                         call 0x0648
+                           .data:000000cf 11 08 0c                         ld de,0x0c08
+                           .data:000000d2 31 00 00                         ld sp,0x0000
+                           .data:000000d5 cd cb 03                         call 0x03cb
+                           .data:000000d8 11 65 0b                         ld de,0x0b65
+                           .data:000000db cd cb 03                         call 0x03cb
+                           .data:000000de cd 0e 01                         call 0x010e
+                           .data:000000e1 cd 52 06                         call 0x0652
+                           .data:000000e4 e6 02                            and 0x02
+                           .data:000000e6 c2 52 00                         jp nz,0x0052
+                           .data:000000e9 18 f3                            jr 0x00de
+                           .data:000000eb 3e 04                            ld a,0x04
+                           .data:000000ed cd 48 06                         call 0x0648
+                           .data:000000f0 11 20 0c                         ld de,0x0c20
+                           .data:000000f3 18 08                            jr 0x00fd
+                           .data:000000f5 11 08 0c                         ld de,0x0c08
+                           .data:000000f8 18 03                            jr 0x00fd
+                           .data:000000fa 11 f3 0b                         ld de,0x0bf3
+                           .data:000000fd 31 00 00                         ld sp,0x0000
+                           .data:00000100 cd cb 03                         call 0x03cb
+                           .data:00000103 11 65 0b                         ld de,0x0b65
+                           .data:00000106 cd cb 03                         call 0x03cb
+                           .data:00000109 cd 0e 01                         call 0x010e
+                           .data:0000010c 18 fb                            jr 0x0109
+                           .data:0000010e e1                               pop hl
+                           .data:0000010f cd 8a 03                         call 0x038a
+                           .data:00000112 fe 46                            cp 0x46
+                           .data:00000114 ca 7a 01                         jp z,0x017a
+                           .data:00000117 fe ca                            cp 0xca
+                           .data:00000119 ca 7a 01                         jp z,0x017a
+                           .data:0000011c fe 52                            cp 0x52
+                           .data:0000011e ca 94 00                         jp z,0x0094
+                           .data:00000121 fe bd                            cp 0xbd
+                           .data:00000123 ca 94 00                         jp z,0x0094
+                           .data:00000126 fe 43                            cp 0x43
+                           .data:00000128 ca 52 00                         jp z,0x0052
+                           .data:0000012b fe bf                            cp 0xbf
+                           .data:0000012d ca 52 00                         jp z,0x0052
+                           .data:00000130 fe 54                            cp 0x54
+                           .data:00000132 ca c0 00                         jp z,0x00c0
+                           .data:00000135 fe b6                            cp 0xb6
+                           .data:00000137 ca c0 00                         jp z,0x00c0
+                           .data:0000013a fe 03                            cp 0x03
+                           .data:0000013c ca f5 00                         jp z,0x00f5
+                           .data:0000013f e9                               jp (hl)
+                           .data:00000140 01 00 1e                         ld bc,0x1e00
+                           .data:00000143 ed 79                            out (c),a
+                           .data:00000145 e9                               jp (hl)
+                           .data:00000146 d9                               exx
+                           .data:00000147 cd 5d 01                         call 0x015d
+                           .data:0000014a d9                               exx
+                           .data:0000014b 77                               ld (hl),a
+                           .data:0000014c 23                               inc hl
+                           .data:0000014d 0b                               dec bc
+                           .data:0000014e 78                               ld a,b
+                           .data:0000014f b1                               or c
+                           .data:00000150 20 f4                            jr nz,0x0146
+                           .data:00000152 c9                               ret
+                           .data:00000153 2e 00                            ld l,0x00
+                           .data:00000155 55                               ld d,l
+                           .data:00000156 5d                               ld e,l
+                           .data:00000157 cd 5d 01                         call 0x015d
+                           .data:0000015a fe 01                            cp 0x01
+                           .data:0000015c c9                               ret
+                           .data:0000015d c5                               push bc
+                           .data:0000015e ed 51                            out (c),d
+                           .data:00000160 03                               inc bc
+                           .data:00000161 ed 59                            out (c),e
+                           .data:00000163 03                               inc bc
+                           .data:00000164 ed 69                            out (c),l
+                           .data:00000166 03                               inc bc
+                           .data:00000167 2c                               inc l
+                           .data:00000168 20 01                            jr nz,0x016b
+                           .data:0000016a 13                               inc de
+                           .data:0000016b ed 78                            in a,(c)
+                           .data:0000016d c1                               pop bc
+                           .data:0000016e c9                               ret
+                           .data:0000016f d5                               push de
+                           .data:00000170 11 c8 0b                         ld de,0x0bc8
+                           .data:00000173 cd cb 03                         call 0x03cb
+                           .data:00000176 d1                               pop de
+                           .data:00000177 c3 cb 03                         jp 0x03cb
+                           .data:0000017a 21 f5 00                         ld hl,0x00f5
+                           .data:0000017d e5                               push hl
+                           .data:0000017e 22 8a ff                         ld (0xff8a),hl
+                           .data:00000181 ed 73 88 ff                      ld (0xff88),sp
+                           .data:00000185 cd d1 02                         call 0x02d1
+                           .data:00000188 11 a0 0b                         ld de,0x0ba0
+                           .data:0000018b cd cb 03                         call 0x03cb
+                           .data:0000018e cd 8a 03                         call 0x038a
+                           .data:00000191 fe 03                            cp 0x03
+                           .data:00000193 ca f5 00                         jp z,0x00f5
+                           .data:00000196 d6 30                            sub 0x30
+                           .data:00000198 38 f4                            jr c,0x018e
+                           .data:0000019a fe 04                            cp 0x04
+                           .data:0000019c 30 f0                            jr nc,0x018e
+                           .data:0000019e 32 87 ff                         ld (0xff87),a
+                           .data:000001a1 11 f0 0b                         ld de,0x0bf0
+                           .data:000001a4 cd 6f 01                         call 0x016f
+                           .data:000001a7 3a 87 ff                         ld a,(0xff87)
+                           .data:000001aa c6 30                            add a,0x30
+                           .data:000001ac cd d9 03                         call 0x03d9
+                           .data:000001af cd 8a 03                         call 0x038a
+                           .data:000001b2 fe 03                            cp 0x03
+                           .data:000001b4 ca f5 00                         jp z,0x00f5
+                           .data:000001b7 cd ed 01                         call 0x01ed
+                           .data:000001ba d8                               ret c
+                           .data:000001bb 21 00 fe                         ld hl,0xfe00
+                           .data:000001be cd 02 02                         call 0x0202
+                           .data:000001c1 c2 f0 00                         jp nz,0x00f0
+                           .data:000001c4 21 00 fe                         ld hl,0xfe00
+                           .data:000001c7 01 20 00                         ld bc,0x0020
+                           .data:000001ca 11 00 ff                         ld de,0xff00
+                           .data:000001cd ed b0                            ldir
+                           .data:000001cf cd 4f 05                         call 0x054f
+                           .data:000001d2 21 ec 01                         ld hl,0x01ec
+                           .data:000001d5 22 8a ff                         ld (0xff8a),hl
+                           .data:000001d8 ed 5b 1e ff                      ld de,(0xff1e)
+                           .data:000001dc 2a 14 ff                         ld hl,(0xff14)
+                           .data:000001df ed 4b 12 ff                      ld bc,(0xff12)
+                           .data:000001e3 0b                               dec bc
+                           .data:000001e4 78                               ld a,b
+                           .data:000001e5 3c                               inc a
+                           .data:000001e6 cd 1a 02                         call 0x021a
+                           .data:000001e9 c3 83 00                         jp 0x0083
+                           .data:000001ec c9                               ret
+                           .data:000001ed 21 00 02                         ld hl,0x0200
+                           .data:000001f0 22 8a ff                         ld (0xff8a),hl
+                           .data:000001f3 21 00 fe                         ld hl,0xfe00
+                           .data:000001f6 11 00 00                         ld de,0x0000
+                           .data:000001f9 3e 01                            ld a,0x01
+                           .data:000001fb cd 1a 02                         call 0x021a
+                           .data:000001fe b7                               or a
+                           .data:000001ff c9                               ret
+                           .data:00000200 37                               scf
+                           .data:00000201 c9                               ret
+                           .data:00000202 7e                               ld a,(hl)
+                           .data:00000203 fe 01                            cp 0x01
+                           .data:00000205 c0                               ret nz
+                           .data:00000206 11 0e 00                         ld de,0x000e
+                           .data:00000209 eb                               ex de,hl
+                           .data:0000020a 19                               add hl,de
+                           .data:0000020b eb                               ex de,hl
+                           .data:0000020c 1a                               ld a,(de)
+                           .data:0000020d fe 53                            cp 0x53
+                           .data:0000020f c0                               ret nz
+                           .data:00000210 13                               inc de
+                           .data:00000211 1a                               ld a,(de)
+                           .data:00000212 fe 79                            cp 0x79
+                           .data:00000214 c0                               ret nz
+                           .data:00000215 13                               inc de
+                           .data:00000216 1a                               ld a,(de)
+                           .data:00000217 fe 73                            cp 0x73
+                           .data:00000219 c9                               ret
+                           .data:0000021a 08                               ex af,af'
+                           .data:0000021b ed 73 88 ff                      ld (0xff88),sp
+                           .data:0000021f e5                               push hl
+                           .data:00000220 21 87 ff                         ld hl,0xff87
+                           .data:00000223 7e                               ld a,(hl)
+                           .data:00000224 e6 0f                            and 0x0f
+                           .data:00000226 77                               ld (hl),a
+                           .data:00000227 7b                               ld a,e
+                           .data:00000228 07                               rlca
+                           .data:00000229 cb 12                            rl d
+                           .data:0000022b 07                               rlca
+                           .data:0000022c cb 12                            rl d
+                           .data:0000022e 07                               rlca
+                           .data:0000022f cb 12                            rl d
+                           .data:00000231 07                               rlca
+                           .data:00000232 30 04                            jr nc,0x0238
+                           .data:00000234 7e                               ld a,(hl)
+                           .data:00000235 f6 10                            or 0x10
+                           .data:00000237 77                               ld (hl),a
+                           .data:00000238 7b                               ld a,e
+                           .data:00000239 e6 0f                            and 0x0f
+                           .data:0000023b 3c                               inc a
+                           .data:0000023c 5f                               ld e,a
+                           .data:0000023d e1                               pop hl
+                           .data:0000023e cd e5 02                         call 0x02e5
+                           .data:00000241 cd 0b 03                         call 0x030b
+                           .data:00000244 cd 18 03                         call 0x0318
+                           .data:00000247 3e 05                            ld a,0x05
+                           .data:00000249 f5                               push af
+                           .data:0000024a e5                               push hl
+                           .data:0000024b 3e 80                            ld a,0x80
+                           .data:0000024d cd ae 02                         call 0x02ae
+                           .data:00000250 d5                               push de
+                           .data:00000251 11 fb f8                         ld de,0xf8fb
+                           .data:00000254 4b                               ld c,e
+                           .data:00000255 ed 78                            in a,(c)
+                           .data:00000257 4a                               ld c,d
+                           .data:00000258 ed 78                            in a,(c)
+                           .data:0000025a 0f                               rrca
+                           .data:0000025b 30 0c                            jr nc,0x0269
+                           .data:0000025d 0f                               rrca
+                           .data:0000025e 30 f8                            jr nc,0x0258
+                           .data:00000260 4b                               ld c,e
+                           .data:00000261 ed 78                            in a,(c)
+                           .data:00000263 77                               ld (hl),a
+                           .data:00000264 23                               inc hl
+                           .data:00000265 4a                               ld c,d
+                           .data:00000266 c3 58 02                         jp 0x0258
+                           .data:00000269 e6 4e                            and 0x4e
+                           .data:0000026b d1                               pop de
+                           .data:0000026c 28 0b                            jr z,0x0279
+                           .data:0000026e e1                               pop hl
+                           .data:0000026f f1                               pop af
+                           .data:00000270 3d                               dec a
+                           .data:00000271 ca 3b 03                         jp z,0x033b
+                           .data:00000274 cd 0b 03                         call 0x030b
+                           .data:00000277 18 d0                            jr 0x0249
+                           .data:00000279 f1                               pop af
+                           .data:0000027a f1                               pop af
+                           .data:0000027b 08                               ex af,af'
+                           .data:0000027c 3d                               dec a
+                           .data:0000027d 28 3d                            jr z,0x02bc
+                           .data:0000027f 08                               ex af,af'
+                           .data:00000280 cd 87 02                         call 0x0287
+                           .data:00000283 30 c2                            jr nc,0x0247
+                           .data:00000285 18 bd                            jr 0x0244
+                           .data:00000287 1c                               inc e
+                           .data:00000288 3e 10                            ld a,0x10
+                           .data:0000028a bb                               cp e
+                           .data:0000028b d0                               ret nc
+                           .data:0000028c 1e 01                            ld e,0x01
+                           .data:0000028e 3a 87 ff                         ld a,(0xff87)
+                           .data:00000291 e6 10                            and 0x10
+                           .data:00000293 3a 87 ff                         ld a,(0xff87)
+                           .data:00000296 20 0a                            jr nz,0x02a2
+                           .data:00000298 f6 90                            or 0x90
+                           .data:0000029a 32 87 ff                         ld (0xff87),a
+                           .data:0000029d 0e fc                            ld c,0xfc
+                           .data:0000029f ed 79                            out (c),a
+                           .data:000002a1 c9                               ret
+                           .data:000002a2 14                               inc d
+                           .data:000002a3 e6 ef                            and 0xef
+                           .data:000002a5 32 87 ff                         ld (0xff87),a
+                           .data:000002a8 0e fc                            ld c,0xfc
+                           .data:000002aa ed 79                            out (c),a
+                           .data:000002ac 37                               scf
+                           .data:000002ad c9                               ret
+                           .data:000002ae 0e fa                            ld c,0xfa
+                           .data:000002b0 ed 59                            out (c),e
+                           .data:000002b2 0e f8                            ld c,0xf8
+                           .data:000002b4 ed 79                            out (c),a
+                           .data:000002b6 3e 07                            ld a,0x07
+                           .data:000002b8 3d                               dec a
+                           .data:000002b9 20 fd                            jr nz,0x02b8
+                           .data:000002bb c9                               ret
+                           .data:000002bc 01 f8 0f                         ld bc,0x0ff8
+                           .data:000002bf 3e 02                            ld a,0x02
+                           .data:000002c1 ed 79                            out (c),a
+                           .data:000002c3 cd 22 03                         call 0x0322
+                           .data:000002c6 01 fc 0f                         ld bc,0x0ffc
+                           .data:000002c9 3a 87 ff                         ld a,(0xff87)
+                           .data:000002cc e6 0f                            and 0x0f
+                           .data:000002ce ed 79                            out (c),a
+                           .data:000002d0 c9                               ret
+                           .data:000002d1 01 fb 0f                         ld bc,0x0ffb
+                           .data:000002d4 3e a5                            ld a,0xa5
+                           .data:000002d6 ed 79                            out (c),a
+                           .data:000002d8 3e 0a                            ld a,0x0a
+                           .data:000002da cd 33 03                         call 0x0333
+                           .data:000002dd ed 78                            in a,(c)
+                           .data:000002df fe a5                            cp 0xa5
+                           .data:000002e1 c8                               ret z
+                           .data:000002e2 c3 3b 03                         jp 0x033b
+                           .data:000002e5 e5                               push hl
+                           .data:000002e6 d5                               push de
+                           .data:000002e7 cd d1 02                         call 0x02d1
+                           .data:000002ea 3a 87 ff                         ld a,(0xff87)
+                           .data:000002ed f6 80                            or 0x80
+                           .data:000002ef 0e fc                            ld c,0xfc
+                           .data:000002f1 ed 79                            out (c),a
+                           .data:000002f3 1e 03                            ld e,0x03
+                           .data:000002f5 21 00 00                         ld hl,0x0000
+                           .data:000002f8 01 f8 0f                         ld bc,0x0ff8
+                           .data:000002fb ed 78                            in a,(c)
+                           .data:000002fd f2 30 03                         jp p,0x0330
+                           .data:00000300 2b                               dec hl
+                           .data:00000301 7c                               ld a,h
+                           .data:00000302 b5                               or l
+                           .data:00000303 20 f6                            jr nz,0x02fb
+                           .data:00000305 1d                               dec e
+                           .data:00000306 20 f3                            jr nz,0x02fb
+                           .data:00000308 c3 3b 03                         jp 0x033b
+                           .data:0000030b f5                               push af
+                           .data:0000030c 3e 02                            ld a,0x02
+                           .data:0000030e ed 79                            out (c),a
+                           .data:00000310 cd 22 03                         call 0x0322
+                           .data:00000313 cd 18 03                         call 0x0318
+                           .data:00000316 f1                               pop af
+                           .data:00000317 c9                               ret
+                           .data:00000318 0e fb                            ld c,0xfb
+                           .data:0000031a ed 51                            out (c),d
+                           .data:0000031c 0e f8                            ld c,0xf8
+                           .data:0000031e 3e 1e                            ld a,0x1e
+                           .data:00000320 ed 79                            out (c),a
+                           .data:00000322 e5                               push hl
+                           .data:00000323 d5                               push de
+                           .data:00000324 06 14                            ld b,0x14
+                           .data:00000326 10 fe                            djnz 0x0326
+                           .data:00000328 01 f8 0f                         ld bc,0x0ff8
+                           .data:0000032b ed 78                            in a,(c)
+                           .data:0000032d 0f                               rrca
+                           .data:0000032e 38 fb                            jr c,0x032b
+                           .data:00000330 d1                               pop de
+                           .data:00000331 e1                               pop hl
+                           .data:00000332 c9                               ret
+                           .data:00000333 3d                               dec a
+                           .data:00000334 2a 35 02                         ld hl,(0x0235)
+                           .data:00000337 c2 33 03                         jp nz,0x0333
+                           .data:0000033a c9                               ret
+                           .data:0000033b cd c6 02                         call 0x02c6
+                           .data:0000033e 2a 8a ff                         ld hl,(0xff8a)
+                           .data:00000341 ed 7b 88 ff                      ld sp,(0xff88)
+                           .data:00000345 e3                               ex (sp),hl
+                           .data:00000346 c9                               ret
+                           .data:00000347 f5                               push af
+                           .data:00000348 dd e5                            push ix
+                           .data:0000034a dd e1                            pop ix
+                           .data:0000034c fd e5                            push iy
+                           .data:0000034e fd e1                            pop iy
+                           .data:00000350 3d                               dec a
+                           .data:00000351 20 f5                            jr nz,0x0348
+                           .data:00000353 f1                               pop af
+                           .data:00000354 c9                               ret
+                           .data:00000355 c5                               push bc
+                           .data:00000356 d5                               push de
+                           .data:00000357 e5                               push hl
+                           .data:00000358 cd f3 0e                         call 0x0ef3
+                           .data:0000035b 3e 0f                            ld a,0x0f
+                           .data:0000035d ed 79                            out (c),a
+                           .data:0000035f 21 00 00                         ld hl,0x0000
+                           .data:00000362 3a 82 ff                         ld a,(0xff82)
+                           .data:00000365 b7                               or a
+                           .data:00000366 cc 47 03                         call z,0x0347
+                           .data:00000369 c4 73 06                         call nz,0x0673
+                           .data:0000036c 3e 64                            ld a,0x64
+                           .data:0000036e cd 47 03                         call 0x0347
+                           .data:00000371 23                               inc hl
+                           .data:00000372 cb 75                            bit 6,l
+                           .data:00000374 3e 07                            ld a,0x07
+                           .data:00000376 20 02                            jr nz,0x037a
+                           .data:00000378 3e 0f                            ld a,0x0f
+                           .data:0000037a ed 79                            out (c),a
+                           .data:0000037c cd 8a 03                         call 0x038a
+                           .data:0000037f b7                               or a
+                           .data:00000380 28 e0                            jr z,0x0362
+                           .data:00000382 26 07                            ld h,0x07
+                           .data:00000384 ed 61                            out (c),h
+                           .data:00000386 e1                               pop hl
+                           .data:00000387 d1                               pop de
+                           .data:00000388 c1                               pop bc
+                           .data:00000389 c9                               ret
+                           .data:0000038a 3e e6                            ld a,0xe6
+                           .data:0000038c cd 2e 05                         call 0x052e
+                           .data:0000038f e5                               push hl
+                           .data:00000390 cd 23 05                         call 0x0523
+                           .data:00000393 6f                               ld l,a
+                           .data:00000394 cd 23 05                         call 0x0523
+                           .data:00000397 67                               ld h,a
+                           .data:00000398 7d                               ld a,l
+                           .data:00000399 cb 77                            bit 6,a
+                           .data:0000039b 20 18                            jr nz,0x03b5
+                           .data:0000039d e6 82                            and 0x82
+                           .data:0000039f 28 23                            jr z,0x03c4
+                           .data:000003a1 7c                               ld a,h
+                           .data:000003a2 fe 61                            cp 0x61
+                           .data:000003a4 38 06                            jr c,0x03ac
+                           .data:000003a6 fe 7b                            cp 0x7b
+                           .data:000003a8 30 12                            jr nc,0x03bc
+                           .data:000003aa d6 20                            sub 0x20
+                           .data:000003ac 21 85 ff                         ld hl,0xff85
+                           .data:000003af 96                               sub (hl)
+                           .data:000003b0 28 08                            jr z,0x03ba
+                           .data:000003b2 86                               add a,(hl)
+                           .data:000003b3 18 01                            jr 0x03b6
+                           .data:000003b5 af                               xor a
+                           .data:000003b6 21 85 ff                         ld hl,0xff85
+                           .data:000003b9 77                               ld (hl),a
+                           .data:000003ba e1                               pop hl
+                           .data:000003bb c9                               ret
+                           .data:000003bc 7d                               ld a,l
+                           .data:000003bd e6 80                            and 0x80
+                           .data:000003bf 28 f4                            jr z,0x03b5
+                           .data:000003c1 7c                               ld a,h
+                           .data:000003c2 18 e8                            jr 0x03ac
+                           .data:000003c4 7c                               ld a,h
+                           .data:000003c5 fe 0c                            cp 0x0c
+                           .data:000003c7 28 e3                            jr z,0x03ac
+                           .data:000003c9 18 ea                            jr 0x03b5
+                           .data:000003cb 1a                               ld a,(de)
+                           .data:000003cc b7                               or a
+                           .data:000003cd c8                               ret z
+                           .data:000003ce cd d9 03                         call 0x03d9
+                           .data:000003d1 13                               inc de
+                           .data:000003d2 18 f7                            jr 0x03cb
+                           .data:000003d4 3e 58                            ld a,0x58
+                           .data:000003d6 cd d9 03                         call 0x03d9
+                           .data:000003d9 c5                               push bc
+                           .data:000003da d5                               push de
+                           .data:000003db e5                               push hl
+                           .data:000003dc f5                               push af
+                           .data:000003dd cd e3 03                         call 0x03e3
+                           .data:000003e0 f1                               pop af
+                           .data:000003e1 18 a3                            jr 0x0386
+                           .data:000003e3 fe 20                            cp 0x20
+                           .data:000003e5 38 29                            jr c,0x0410
+                           .data:000003e7 f5                               push af
+                           .data:000003e8 cd fb 03                         call 0x03fb
+                           .data:000003eb 3a 86 ff                         ld a,(0xff86)
+                           .data:000003ee ed 79                            out (c),a
+                           .data:000003f0 cb e0                            set 4,b
+                           .data:000003f2 f1                               pop af
+                           .data:000003f3 ed 79                            out (c),a
+                           .data:000003f5 2a 80 ff                         ld hl,(0xff80)
+                           .data:000003f8 2c                               inc l
+                           .data:000003f9 18 52                            jr 0x044d
+                           .data:000003fb 2a 80 ff                         ld hl,(0xff80)
+                           .data:000003fe 5d                               ld e,l
+                           .data:000003ff 6c                               ld l,h
+                           .data:00000400 26 00                            ld h,0x00
+                           .data:00000402 4d                               ld c,l
+                           .data:00000403 44                               ld b,h
+                           .data:00000404 29                               add hl,hl
+                           .data:00000405 29                               add hl,hl
+                           .data:00000406 09                               add hl,bc
+                           .data:00000407 29                               add hl,hl
+                           .data:00000408 29                               add hl,hl
+                           .data:00000409 29                               add hl,hl
+                           .data:0000040a 16 20                            ld d,0x20
+                           .data:0000040c 19                               add hl,de
+                           .data:0000040d 4d                               ld c,l
+                           .data:0000040e 44                               ld b,h
+                           .data:0000040f c9                               ret
+                           .data:00000410 2a 80 ff                         ld hl,(0xff80)
+                           .data:00000413 fe 0d                            cp 0x0d
+                           .data:00000415 28 33                            jr z,0x044a
+                           .data:00000417 2e 07                            ld l,0x07
+                           .data:00000419 fe 14                            cp 0x14
+                           .data:0000041b 28 30                            jr z,0x044d
+                           .data:0000041d 2c                               inc l
+                           .data:0000041e fe 09                            cp 0x09
+                           .data:00000420 28 2b                            jr z,0x044d
+                           .data:00000422 2e 0d                            ld l,0x0d
+                           .data:00000424 fe 19                            cp 0x19
+                           .data:00000426 28 25                            jr z,0x044d
+                           .data:00000428 fe 0c                            cp 0x0c
+                           .data:0000042a c0                               ret nz
+                           .data:0000042b 21 00 00                         ld hl,0x0000
+                           .data:0000042e 22 80 ff                         ld (0xff80),hl
+                           .data:00000431 01 00 20                         ld bc,0x2000
+                           .data:00000434 26 07                            ld h,0x07
+                           .data:00000436 cd 3e 04                         call 0x043e
+                           .data:00000439 01 00 30                         ld bc,0x3000
+                           .data:0000043c 26 20                            ld h,0x20
+                           .data:0000043e 11 00 04                         ld de,0x0400
+                           .data:00000441 ed 61                            out (c),h
+                           .data:00000443 03                               inc bc
+                           .data:00000444 1b                               dec de
+                           .data:00000445 7a                               ld a,d
+                           .data:00000446 b3                               or e
+                           .data:00000447 20 f8                            jr nz,0x0441
+                           .data:00000449 c9                               ret
+                           .data:0000044a 2e 00                            ld l,0x00
+                           .data:0000044c 24                               inc h
+                           .data:0000044d 22 80 ff                         ld (0xff80),hl
+                           .data:00000450 c9                               ret
+                           .data:00000451 11 0e 00                         ld de,0x000e
+                           .data:00000454 21 3e 0b                         ld hl,0x0b3e
+                           .data:00000457 01 00 18                         ld bc,0x1800
+                           .data:0000045a ed 51                            out (c),d
+                           .data:0000045c 03                               inc bc
+                           .data:0000045d 7e                               ld a,(hl)
+                           .data:0000045e ed 79                            out (c),a
+                           .data:00000460 23                               inc hl
+                           .data:00000461 14                               inc d
+                           .data:00000462 1d                               dec e
+                           .data:00000463 20 f2                            jr nz,0x0457
+                           .data:00000465 01 00 10                         ld bc,0x1000
+                           .data:00000468 16 04                            ld d,0x04
+                           .data:0000046a af                               xor a
+                           .data:0000046b ed 79                            out (c),a
+                           .data:0000046d 04                               inc b
+                           .data:0000046e 15                               dec d
+                           .data:0000046f 20 f9                            jr nz,0x046a
+                           .data:00000471 01 00 1c                         ld bc,0x1c00
+                           .data:00000474 3e 07                            ld a,0x07
+                           .data:00000476 ed 79                            out (c),a
+                           .data:00000478 3e 3f                            ld a,0x3f
+                           .data:0000047a 05                               dec b
+                           .data:0000047b ed 79                            out (c),a
+                           .data:0000047d c9                               ret
+                           .data:0000047e 11 35 0c                         ld de,0x0c35
+                           .data:00000481 cd cb 03                         call 0x03cb
+                           .data:00000484 21 20 05                         ld hl,0x0520
+                           .data:00000487 01 00 19                         ld bc,0x1900
+                           .data:0000048a 3e e4                            ld a,0xe4
+                           .data:0000048c ed 79                            out (c),a
+                           .data:0000048e d9                               exx
+                           .data:0000048f 06 14                            ld b,0x14
+                           .data:00000491 d9                               exx
+                           .data:00000492 11 00 00                         ld de,0x0000
+                           .data:00000495 01 01 1a                         ld bc,0x1a01
+                           .data:00000498 ed 78                            in a,(c)
+                           .data:0000049a e6 40                            and 0x40
+                           .data:0000049c 20 12                            jr nz,0x04b0
+                           .data:0000049e 7e                               ld a,(hl)
+                           .data:0000049f fe ff                            cp 0xff
+                           .data:000004a1 20 04                            jr nz,0x04a7
+                           .data:000004a3 21 20 05                         ld hl,0x0520
+                           .data:000004a6 7e                               ld a,(hl)
+                           .data:000004a7 01 00 19                         ld bc,0x1900
+                           .data:000004aa ed 79                            out (c),a
+                           .data:000004ac 23                               inc hl
+                           .data:000004ad 01 01 1a                         ld bc,0x1a01
+                           .data:000004b0 ed 78                            in a,(c)
+                           .data:000004b2 e6 20                            and 0x20
+                           .data:000004b4 28 07                            jr z,0x04bd
+                           .data:000004b6 1b                               dec de
+                           .data:000004b7 7a                               ld a,d
+                           .data:000004b8 b3                               or e
+                           .data:000004b9 20 da                            jr nz,0x0495
+                           .data:000004bb 18 10                            jr 0x04cd
+                           .data:000004bd 01 00 19                         ld bc,0x1900
+                           .data:000004c0 ed 78                            in a,(c)
+                           .data:000004c2 d9                               exx
+                           .data:000004c3 10 cc                            djnz 0x0491
+                           .data:000004c5 11 4d 0c                         ld de,0x0c4d
+                           .data:000004c8 cd cb 03                         call 0x03cb
+                           .data:000004cb 18 fe                            jr 0x04cb
+                           .data:000004cd 16 0a                            ld d,0x0a
+                           .data:000004cf 01 01 1a                         ld bc,0x1a01
+                           .data:000004d2 21 10 27                         ld hl,0x2710
+                           .data:000004d5 ed 78                            in a,(c)
+                           .data:000004d7 e6 40                            and 0x40
+                           .data:000004d9 28 0a                            jr z,0x04e5
+                           .data:000004db 2b                               dec hl
+                           .data:000004dc 7c                               ld a,h
+                           .data:000004dd b5                               or l
+                           .data:000004de 20 f5                            jr nz,0x04d5
+                           .data:000004e0 15                               dec d
+                           .data:000004e1 20 ef                            jr nz,0x04d2
+                           .data:000004e3 18 e0                            jr 0x04c5
+                           .data:000004e5 06 04                            ld b,0x04
+                           .data:000004e7 af                               xor a
+                           .data:000004e8 cd 2e 05                         call 0x052e
+                           .data:000004eb 10 fa                            djnz 0x04e7
+                           .data:000004ed 3e e7                            ld a,0xe7
+                           .data:000004ef cd 2e 05                         call 0x052e
+                           .data:000004f2 3e 04                            ld a,0x04
+                           .data:000004f4 cd 2e 05                         call 0x052e
+                           .data:000004f7 3e e8                            ld a,0xe8
+                           .data:000004f9 cd 2e 05                         call 0x052e
+                           .data:000004fc 16 0a                            ld d,0x0a
+                           .data:000004fe 01 01 1a                         ld bc,0x1a01
+                           .data:00000501 21 10 27                         ld hl,0x2710
+                           .data:00000504 ed 78                            in a,(c)
+                           .data:00000506 e6 20                            and 0x20
+                           .data:00000508 28 0a                            jr z,0x0514
+                           .data:0000050a 2b                               dec hl
+                           .data:0000050b 7c                               ld a,h
+                           .data:0000050c b5                               or l
+                           .data:0000050d 20 f5                            jr nz,0x0504
+                           .data:0000050f 15                               dec d
+                           .data:00000510 20 ef                            jr nz,0x0501
+                           .data:00000512 18 b1                            jr 0x04c5
+                           .data:00000514 01 00 19                         ld bc,0x1900
+                           .data:00000517 ed 78                            in a,(c)
+                           .data:00000519 fe 04                            cp 0x04
+                           .data:0000051b ca 2b 04                         jp z,0x042b
+                           .data:0000051e 18 a5                            jr 0x04c5
+                           .data:00000520 00                               nop
+                           .data:00000521 e4 ff c5                         call po,0xc5ff
+                           .data:00000524 cd 3b 05                         call 0x053b
+                           .data:00000527 01 00 19                         ld bc,0x1900
+                           .data:0000052a ed 78                            in a,(c)
+                           .data:0000052c c1                               pop bc
+                           .data:0000052d c9                               ret
+                           .data:0000052e c5                               push bc
+                           .data:0000052f f5                               push af
+                           .data:00000530 cd 45 05                         call 0x0545
+                           .data:00000533 f1                               pop af
+                           .data:00000534 01 00 19                         ld bc,0x1900
+                           .data:00000537 ed 79                            out (c),a
+                           .data:00000539 c1                               pop bc
+                           .data:0000053a c9                               ret
+                           .data:0000053b 01 01 1a                         ld bc,0x1a01
+                           .data:0000053e ed 78                            in a,(c)
+                           .data:00000540 e6 20                            and 0x20
+                           .data:00000542 20 fa                            jr nz,0x053e
+                           .data:00000544 c9                               ret
+                           .data:00000545 01 01 1a                         ld bc,0x1a01
+                           .data:00000548 ed 78                            in a,(c)
+                           .data:0000054a e6 40                            and 0x40
+                           .data:0000054c 20 fa                            jr nz,0x0548
+                           .data:0000054e c9                               ret
+                           .data:0000054f 11 b7 0b                         ld de,0x0bb7
+                           .data:00000552 cd cb 03                         call 0x03cb
+                           .data:00000555 11 01 ff                         ld de,0xff01
+                           .data:00000558 c5                               push bc
+                           .data:00000559 06 0d                            ld b,0x0d
+                           .data:0000055b 1a                               ld a,(de)
+                           .data:0000055c cd d9 03                         call 0x03d9
+                           .data:0000055f 13                               inc de
+                           .data:00000560 10 f9                            djnz 0x055b
+                           .data:00000562 c1                               pop bc
+                           .data:00000563 c9                               ret
+                           .data:00000564 16 08                            ld d,0x08
+                           .data:00000566 3a 16 04                         ld a,(0x0416)
+                           .data:00000569 3e 02                            ld a,0x02
+                           .data:0000056b cd 48 06                         call 0x0648
+                           .data:0000056e cd f9 05                         call 0x05f9
+                           .data:00000571 d4 85 05                         call nc,0x0585
+                           .data:00000574 da f5 00                         jp c,0x00f5
+                           .data:00000577 cb 5a                            bit 3,d
+                           .data:00000579 c8                               ret z
+                           .data:0000057a 3e 01                            ld a,0x01
+                           .data:0000057c cd 48 06                         call 0x0648
+                           .data:0000057f af                               xor a
+                           .data:00000580 c9                               ret
+                           .data:00000581 37                               scf
+                           .data:00000582 e1                               pop hl
+                           .data:00000583 c1                               pop bc
+                           .data:00000584 c9                               ret
+                           .data:00000585 c5                               push bc
+                           .data:00000586 e5                               push hl
+                           .data:00000587 01 01 1a                         ld bc,0x1a01
+                           .data:0000058a cd 30 06                         call 0x0630
+                           .data:0000058d 38 f2                            jr c,0x0581
+                           .data:0000058f cd 41 06                         call 0x0641
+                           .data:00000592 ed 78                            in a,(c)
+                           .data:00000594 e6 02                            and 0x02
+                           .data:00000596 28 ef                            jr z,0x0587
+                           .data:00000598 21 00 00                         ld hl,0x0000
+                           .data:0000059b 22 83 ff                         ld (0xff83),hl
+                           .data:0000059e e1                               pop hl
+                           .data:0000059f c1                               pop bc
+                           .data:000005a0 c5                               push bc
+                           .data:000005a1 e5                               push hl
+                           .data:000005a2 cd cb 05                         call 0x05cb
+                           .data:000005a5 38 da                            jr c,0x0581
+                           .data:000005a7 77                               ld (hl),a
+                           .data:000005a8 23                               inc hl
+                           .data:000005a9 0b                               dec bc
+                           .data:000005aa 78                               ld a,b
+                           .data:000005ab b1                               or c
+                           .data:000005ac 20 f4                            jr nz,0x05a2
+                           .data:000005ae 2a 83 ff                         ld hl,(0xff83)
+                           .data:000005b1 cd cb 05                         call 0x05cb
+                           .data:000005b4 38 cb                            jr c,0x0581
+                           .data:000005b6 4f                               ld c,a
+                           .data:000005b7 cd cb 05                         call 0x05cb
+                           .data:000005ba 38 c5                            jr c,0x0581
+                           .data:000005bc bd                               cp l
+                           .data:000005bd 20 04                            jr nz,0x05c3
+                           .data:000005bf 79                               ld a,c
+                           .data:000005c0 bc                               cp h
+                           .data:000005c1 28 bf                            jr z,0x0582
+                           .data:000005c3 3e 04                            ld a,0x04
+                           .data:000005c5 cd 48 06                         call 0x0648
+                           .data:000005c8 c3 fa 00                         jp 0x00fa
+                           .data:000005cb e5                               push hl
+                           .data:000005cc c5                               push bc
+                           .data:000005cd d5                               push de
+                           .data:000005ce ed 5b 83 ff                      ld de,(0xff83)
+                           .data:000005d2 01 01 1a                         ld bc,0x1a01
+                           .data:000005d5 21 00 08                         ld hl,0x0800
+                           .data:000005d8 cd 30 06                         call 0x0630
+                           .data:000005db 38 18                            jr c,0x05f5
+                           .data:000005dd cd 41 06                         call 0x0641
+                           .data:000005e0 ed 78                            in a,(c)
+                           .data:000005e2 e6 02                            and 0x02
+                           .data:000005e4 28 02                            jr z,0x05e8
+                           .data:000005e6 13                               inc de
+                           .data:000005e7 37                               scf
+                           .data:000005e8 cb 15                            rl l
+                           .data:000005ea 25                               dec h
+                           .data:000005eb 20 eb                            jr nz,0x05d8
+                           .data:000005ed cd 30 06                         call 0x0630
+                           .data:000005f0 7d                               ld a,l
+                           .data:000005f1 ed 53 83 ff                      ld (0xff83),de
+                           .data:000005f5 d1                               pop de
+                           .data:000005f6 c1                               pop bc
+                           .data:000005f7 e1                               pop hl
+                           .data:000005f8 c9                               ret
+                           .data:000005f9 e5                               push hl
+                           .data:000005fa c5                               push bc
+                           .data:000005fb 01 01 1a                         ld bc,0x1a01
+                           .data:000005fe 2e 14                            ld l,0x14
+                           .data:00000600 cb 5a                            bit 3,d
+                           .data:00000602 20 02                            jr nz,0x0606
+                           .data:00000604 cb 05                            rlc l
+                           .data:00000606 65                               ld h,l
+                           .data:00000607 cd 30 06                         call 0x0630
+                           .data:0000060a 38 21                            jr c,0x062d
+                           .data:0000060c cd 41 06                         call 0x0641
+                           .data:0000060f ed 78                            in a,(c)
+                           .data:00000611 e6 02                            and 0x02
+                           .data:00000613 20 f1                            jr nz,0x0606
+                           .data:00000615 25                               dec h
+                           .data:00000616 20 ef                            jr nz,0x0607
+                           .data:00000618 65                               ld h,l
+                           .data:00000619 cd 30 06                         call 0x0630
+                           .data:0000061c 38 0f                            jr c,0x062d
+                           .data:0000061e cd 41 06                         call 0x0641
+                           .data:00000621 ed 78                            in a,(c)
+                           .data:00000623 e6 02                            and 0x02
+                           .data:00000625 28 df                            jr z,0x0606
+                           .data:00000627 25                               dec h
+                           .data:00000628 20 ef                            jr nz,0x0619
+                           .data:0000062a cd 30 06                         call 0x0630
+                           .data:0000062d c1                               pop bc
+                           .data:0000062e e1                               pop hl
+                           .data:0000062f c9                               ret
+                           .data:00000630 ed 78                            in a,(c)
+                           .data:00000632 2f                               cpl
+                           .data:00000633 0f                               rrca
+                           .data:00000634 d8                               ret c
+                           .data:00000635 0f                               rrca
+                           .data:00000636 30 f8                            jr nc,0x0630
+                           .data:00000638 ed 78                            in a,(c)
+                           .data:0000063a 2f                               cpl
+                           .data:0000063b 0f                               rrca
+                           .data:0000063c d8                               ret c
+                           .data:0000063d 0f                               rrca
+                           .data:0000063e 38 f8                            jr c,0x0638
+                           .data:00000640 c9                               ret
+                           .data:00000641 3e 23                            ld a,0x23
+                           .data:00000643 3d                               dec a
+                           .data:00000644 c2 43 06                         jp nz,0x0643
+                           .data:00000647 c9                               ret
+                           .data:00000648 f5                               push af
+                           .data:00000649 3e e9                            ld a,0xe9
+                           .data:0000064b cd 2e 05                         call 0x052e
+                           .data:0000064e f1                               pop af
+                           .data:0000064f c3 2e 05                         jp 0x052e
+                           .data:00000652 3e eb                            ld a,0xeb
+                           .data:00000654 cd 2e 05                         call 0x052e
+                           .data:00000657 c3 23 05                         jp 0x0523
+                           .data:0000065a 21 18 ff                         ld hl,0xff18
+                           .data:0000065d 3e ed                            ld a,0xed
+                           .data:0000065f 06 03                            ld b,0x03
+                           .data:00000661 cd 2e 05                         call 0x052e
+                           .data:00000664 cd 23 05                         call 0x0523
+                           .data:00000667 77                               ld (hl),a
+                           .data:00000668 23                               inc hl
+                           .data:00000669 10 f9                            djnz 0x0664
+                           .data:0000066b c9                               ret
+                           .data:0000066c 21 1b ff                         ld hl,0xff1b
+                           .data:0000066f 3e ef                            ld a,0xef
+                           .data:00000671 18 ec                            jr 0x065f
+                           .data:00000673 c5                               push bc
+                           .data:00000674 d5                               push de
+                           .data:00000675 e5                               push hl
+                           .data:00000676 cd 5a 06                         call 0x065a
+                           .data:00000679 cd 6c 06                         call 0x066c
+                           .data:0000067c 2a 80 ff                         ld hl,(0xff80)
+                           .data:0000067f e5                               push hl
+                           .data:00000680 21 08 04                         ld hl,0x0408
+                           .data:00000683 22 80 ff                         ld (0xff80),hl
+                           .data:00000686 21 18 ff                         ld hl,0xff18
+                           .data:00000689 cd 8b 0f                         call 0x0f8b
+                           .data:0000068c cd a3 06                         call 0x06a3
+                           .data:0000068f cd b5 06                         call 0x06b5
+                           .data:00000692 23                               inc hl
+                           .data:00000693 cd ad 06                         call 0x06ad
+                           .data:00000696 cd ad 06                         call 0x06ad
+                           .data:00000699 cd a8 06                         call 0x06a8
+                           .data:0000069c e1                               pop hl
+                           .data:0000069d 22 80 ff                         ld (0xff80),hl
+                           .data:000006a0 c3 86 03                         jp 0x0386
+                           .data:000006a3 3e 2f                            ld a,0x2f
+                           .data:000006a5 c3 d9 03                         jp 0x03d9
+                           .data:000006a8 7e                               ld a,(hl)
+                           .data:000006a9 23                               inc hl
+                           .data:000006aa c3 e9 06                         jp 0x06e9
+                           .data:000006ad cd a8 06                         call 0x06a8
+                           .data:000006b0 3e 3a                            ld a,0x3a
+                           .data:000006b2 c3 d9 03                         jp 0x03d9
+                           .data:000006b5 7e                               ld a,(hl)
+                           .data:000006b6 f5                               push af
+                           .data:000006b7 07                               rlca
+                           .data:000006b8 07                               rlca
+                           .data:000006b9 07                               rlca
+                           .data:000006ba 07                               rlca
+                           .data:000006bb e6 0f                            and 0x0f
+                           .data:000006bd c6 00                            add a,0x00
+                           .data:000006bf 27                               daa
+                           .data:000006c0 cd e5 06                         call 0x06e5
+                           .data:000006c3 cd a3 06                         call 0x06a3
+                           .data:000006c6 23                               inc hl
+                           .data:000006c7 7e                               ld a,(hl)
+                           .data:000006c8 cd e5 06                         call 0x06e5
+                           .data:000006cb cd e0 06                         call 0x06e0
+                           .data:000006ce f1                               pop af
+                           .data:000006cf e6 07                            and 0x07
+                           .data:000006d1 e5                               push hl
+                           .data:000006d2 6f                               ld l,a
+                           .data:000006d3 26 00                            ld h,0x00
+                           .data:000006d5 29                               add hl,hl
+                           .data:000006d6 29                               add hl,hl
+                           .data:000006d7 11 87 0e                         ld de,0x0e87
+                           .data:000006da 19                               add hl,de
+                           .data:000006db eb                               ex de,hl
+                           .data:000006dc cd cb 03                         call 0x03cb
+                           .data:000006df e1                               pop hl
+                           .data:000006e0 3e 20                            ld a,0x20
+                           .data:000006e2 c3 d9 03                         jp 0x03d9
+                           .data:000006e5 b7                               or a
+                           .data:000006e6 ca d4 03                         jp z,0x03d4
+                           .data:000006e9 f5                               push af
+                           .data:000006ea 07                               rlca
+                           .data:000006eb 07                               rlca
+                           .data:000006ec 07                               rlca
+                           .data:000006ed 07                               rlca
+                           .data:000006ee cd f2 06                         call 0x06f2
+                           .data:000006f1 f1                               pop af
+                           .data:000006f2 e6 0f                            and 0x0f
+                           .data:000006f4 c6 30                            add a,0x30
+                           .data:000006f6 fe 3a                            cp 0x3a
+                           .data:000006f8 da d9 03                         jp c,0x03d9
+                           .data:000006fb c6 07                            add a,0x07
+                           .data:000006fd c3 d9 03                         jp 0x03d9
+                           .data:00000700 cd 2b 04                         call 0x042b
+                           .data:00000703 3e 85                            ld a,0x85
+                           .data:00000705 32 86 ff                         ld (0xff86),a
+                           .data:00000708 21 04 01                         ld hl,0x0104
+                           .data:0000070b 22 80 ff                         ld (0xff80),hl
+                           .data:0000070e 11 94 0c                         ld de,0x0c94
+                           .data:00000711 cd cb 03                         call 0x03cb
+                           .data:00000714 3e 07                            ld a,0x07
+                           .data:00000716 32 86 ff                         ld (0xff86),a
+                           .data:00000719 cd 73 06                         call 0x0673
+                           .data:0000071c 01 01 07                         ld bc,0x0701
+                           .data:0000071f 79                               ld a,c
+                           .data:00000720 87                               add a,a
+                           .data:00000721 c6 05                            add a,0x05
+                           .data:00000723 67                               ld h,a
+                           .data:00000724 2e 02                            ld l,0x02
+                           .data:00000726 22 80 ff                         ld (0xff80),hl
+                           .data:00000729 11 ad 0e                         ld de,0x0ead
+                           .data:0000072c cd cb 03                         call 0x03cb
+                           .data:0000072f 79                               ld a,c
+                           .data:00000730 c6 30                            add a,0x30
+                           .data:00000732 cd d9 03                         call 0x03d9
+                           .data:00000735 2e 09                            ld l,0x09
+                           .data:00000737 22 80 ff                         ld (0xff80),hl
+                           .data:0000073a c5                               push bc
+                           .data:0000073b cd a0 0a                         call 0x0aa0
+                           .data:0000073e cd ab 0a                         call 0x0aab
+                           .data:00000741 c1                               pop bc
+                           .data:00000742 0c                               inc c
+                           .data:00000743 10 da                            djnz 0x071f
+                           .data:00000745 21 03 18                         ld hl,0x1803
+                           .data:00000748 22 80 ff                         ld (0xff80),hl
+                           .data:0000074b 3e 04                            ld a,0x04
+                           .data:0000074d 32 86 ff                         ld (0xff86),a
+                           .data:00000750 11 cf 0e                         ld de,0x0ecf
+                           .data:00000753 cd cb 03                         call 0x03cb
+                           .data:00000756 3e 07                            ld a,0x07
+                           .data:00000758 32 86 ff                         ld (0xff86),a
+                           .data:0000075b 21 0b 07                         ld hl,0x070b
+                           .data:0000075e 22 80 ff                         ld (0xff80),hl
+                           .data:00000761 3e 01                            ld a,0x01
+                           .data:00000763 32 82 ff                         ld (0xff82),a
+                           .data:00000766 cd 60 08                         call 0x0860
+                           .data:00000769 3a 80 ff                         ld a,(0xff80)
+                           .data:0000076c 57                               ld d,a
+                           .data:0000076d 21 dc 0c                         ld hl,0x0cdc
+                           .data:00000770 7e                               ld a,(hl)
+                           .data:00000771 b7                               or a
+                           .data:00000772 28 0e                            jr z,0x0782
+                           .data:00000774 23                               inc hl
+                           .data:00000775 ba                               cp d
+                           .data:00000776 28 04                            jr z,0x077c
+                           .data:00000778 23                               inc hl
+                           .data:00000779 23                               inc hl
+                           .data:0000077a 18 f4                            jr 0x0770
+                           .data:0000077c 5e                               ld e,(hl)
+                           .data:0000077d 23                               inc hl
+                           .data:0000077e 56                               ld d,(hl)
+                           .data:0000077f cd 9b 08                         call 0x089b
+                           .data:00000782 cd 55 03                         call 0x0355
+                           .data:00000785 fe 0d                            cp 0x0d
+                           .data:00000787 ca b7 08                         jp z,0x08b7
+                           .data:0000078a fe 1c                            cp 0x1c
+                           .data:0000078c ca fa 07                         jp z,0x07fa
+                           .data:0000078f fe 1d                            cp 0x1d
+                           .data:00000791 ca 10 08                         jp z,0x0810
+                           .data:00000794 fe 1f                            cp 0x1f
+                           .data:00000796 ca 33 0f                         jp z,0x0f33
+                           .data:00000799 fe 1e                            cp 0x1e
+                           .data:0000079b ca 50 0f                         jp z,0x0f50
+                           .data:0000079e fe 0c                            cp 0x0c
+                           .data:000007a0 ca 41 08                         jp z,0x0841
+                           .data:000007a3 fe 1b                            cp 0x1b
+                           .data:000007a5 c8                               ret z
+                           .data:000007a6 fe 0b                            cp 0x0b
+                           .data:000007a8 28 bc                            jr z,0x0766
+                           .data:000007aa 08                               ex af,af'
+                           .data:000007ab 3a 80 ff                         ld a,(0xff80)
+                           .data:000007ae fe 1e                            cp 0x1e
+                           .data:000007b0 20 0a                            jr nz,0x07bc
+                           .data:000007b2 08                               ex af,af'
+                           .data:000007b3 fe 59                            cp 0x59
+                           .data:000007b5 28 3a                            jr z,0x07f1
+                           .data:000007b7 fe 4e                            cp 0x4e
+                           .data:000007b9 28 2d                            jr z,0x07e8
+                           .data:000007bb 08                               ex af,af'
+                           .data:000007bc 08                               ex af,af'
+                           .data:000007bd cd 6f 0f                         call 0x0f6f
+                           .data:000007c0 3a 80 ff                         ld a,(0xff80)
+                           .data:000007c3 57                               ld d,a
+                           .data:000007c4 fe 20                            cp 0x20
+                           .data:000007c6 28 17                            jr z,0x07df
+                           .data:000007c8 fe 25                            cp 0x25
+                           .data:000007ca 28 44                            jr z,0x0810
+                           .data:000007cc 21 f8 0c                         ld hl,0x0cf8
+                           .data:000007cf 7e                               ld a,(hl)
+                           .data:000007d0 b7                               or a
+                           .data:000007d1 28 96                            jr z,0x0769
+                           .data:000007d3 23                               inc hl
+                           .data:000007d4 ba                               cp d
+                           .data:000007d5 20 f8                            jr nz,0x07cf
+                           .data:000007d7 11 60 0e                         ld de,0x0e60
+                           .data:000007da cd 9b 08                         call 0x089b
+                           .data:000007dd 18 1b                            jr 0x07fa
+                           .data:000007df 11 a9 0e                         ld de,0x0ea9
+                           .data:000007e2 cd cb 03                         call 0x03cb
+                           .data:000007e5 c3 69 07                         jp 0x0769
+                           .data:000007e8 11 c6 0e                         ld de,0x0ec6
+                           .data:000007eb cd cb 03                         call 0x03cb
+                           .data:000007ee c3 b7 08                         jp 0x08b7
+                           .data:000007f1 11 a7 0e                         ld de,0x0ea7
+                           .data:000007f4 cd cb 03                         call 0x03cb
+                           .data:000007f7 c3 69 07                         jp 0x0769
+                           .data:000007fa cd 20 08                         call 0x0820
+                           .data:000007fd 3a 80 ff                         ld a,(0xff80)
+                           .data:00000800 23                               inc hl
+                           .data:00000801 be                               cp (hl)
+                           .data:00000802 30 fc                            jr nc,0x0800
+                           .data:00000804 7e                               ld a,(hl)
+                           .data:00000805 fe ff                            cp 0xff
+                           .data:00000807 ca 69 07                         jp z,0x0769
+                           .data:0000080a 32 80 ff                         ld (0xff80),a
+                           .data:0000080d c3 69 07                         jp 0x0769
+                           .data:00000810 cd 20 08                         call 0x0820
+                           .data:00000813 3a 80 ff                         ld a,(0xff80)
+                           .data:00000816 3d                               dec a
+                           .data:00000817 23                               inc hl
+                           .data:00000818 be                               cp (hl)
+                           .data:00000819 30 fc                            jr nc,0x0817
+                           .data:0000081b 2b                               dec hl
+                           .data:0000081c 7e                               ld a,(hl)
+                           .data:0000081d b7                               or a
+                           .data:0000081e 18 e7                            jr 0x0807
+                           .data:00000820 3a 82 ff                         ld a,(0xff82)
+                           .data:00000823 b7                               or a
+                           .data:00000824 21 4b 0b                         ld hl,0x0b4b
+                           .data:00000827 c8                               ret z
+                           .data:00000828 21 54 0b                         ld hl,0x0b54
+                           .data:0000082b c9                               ret
+                           .data:0000082c 3a 82 ff                         ld a,(0xff82)
+                           .data:0000082f 3c                               inc a
+                           .data:00000830 e6 07                            and 0x07
+                           .data:00000832 32 82 ff                         ld (0xff82),a
+                           .data:00000835 cd 57 08                         call 0x0857
+                           .data:00000838 c3 69 07                         jp 0x0769
+                           .data:0000083b 3a 82 ff                         ld a,(0xff82)
+                           .data:0000083e 3d                               dec a
+                           .data:0000083f 18 ef                            jr 0x0830
+                           .data:00000841 3a 82 ff                         ld a,(0xff82)
+                           .data:00000844 b7                               or a
+                           .data:00000845 ca 69 07                         jp z,0x0769
+                           .data:00000848 cd 60 08                         call 0x0860
+                           .data:0000084b 11 b3 0e                         ld de,0x0eb3
+                           .data:0000084e cd cb 03                         call 0x03cb
+                           .data:00000851 11 00 00                         ld de,0x0000
+                           .data:00000854 c3 0a 09                         jp 0x090a
+                           .data:00000857 ed 5b 80 ff                      ld de,(0xff80)
+                           .data:0000085b 3a 82 ff                         ld a,(0xff82)
+                           .data:0000085e 18 0a                            jr 0x086a
+                           .data:00000860 3a 82 ff                         ld a,(0xff82)
+                           .data:00000863 b7                               or a
+                           .data:00000864 1e 08                            ld e,0x08
+                           .data:00000866 28 02                            jr z,0x086a
+                           .data:00000868 1e 0b                            ld e,0x0b
+                           .data:0000086a 4f                               ld c,a
+                           .data:0000086b 06 00                            ld b,0x00
+                           .data:0000086d 21 5d 0b                         ld hl,0x0b5d
+                           .data:00000870 09                               add hl,bc
+                           .data:00000871 56                               ld d,(hl)
+                           .data:00000872 ed 53 80 ff                      ld (0xff80),de
+                           .data:00000876 c9                               ret
+                           .data:00000877 06 c1                            ld b,0xc1
+                           .data:00000879 af                               xor a
+                           .data:0000087a cd 47 03                         call 0x0347
+                           .data:0000087d cd 47 03                         call 0x0347
+                           .data:00000880 78                               ld a,b
+                           .data:00000881 e6 1f                            and 0x1f
+                           .data:00000883 3d                               dec a
+                           .data:00000884 cc 8c 08                         call z,0x088c
+                           .data:00000887 10 f0                            djnz 0x0879
+                           .data:00000889 c3 69 07                         jp 0x0769
+                           .data:0000088c 78                               ld a,b
+                           .data:0000088d cb 68                            bit 5,b
+                           .data:0000088f 11 b5 0c                         ld de,0x0cb5
+                           .data:00000892 3e 02                            ld a,0x02
+                           .data:00000894 20 07                            jr nz,0x089d
+                           .data:00000896 11 60 0e                         ld de,0x0e60
+                           .data:00000899 18 02                            jr 0x089d
+                           .data:0000089b 3e 06                            ld a,0x06
+                           .data:0000089d 32 86 ff                         ld (0xff86),a
+                           .data:000008a0 2a 80 ff                         ld hl,(0xff80)
+                           .data:000008a3 e5                               push hl
+                           .data:000008a4 21 00 16                         ld hl,0x1600
+                           .data:000008a7 22 80 ff                         ld (0xff80),hl
+                           .data:000008aa cd cb 03                         call 0x03cb
+                           .data:000008ad 3e 07                            ld a,0x07
+                           .data:000008af 32 86 ff                         ld (0xff86),a
+                           .data:000008b2 e1                               pop hl
+                           .data:000008b3 22 80 ff                         ld (0xff80),hl
+                           .data:000008b6 c9                               ret
+                           .data:000008b7 3a 82 ff                         ld a,(0xff82)
+                           .data:000008ba b7                               or a
+                           .data:000008bb ca 53 09                         jp z,0x0953
+                           .data:000008be cd 60 08                         call 0x0860
+                           .data:000008c1 cd fb 03                         call 0x03fb
+                           .data:000008c4 cb e0                            set 4,b
+                           .data:000008c6 21 19 ff                         ld hl,0xff19
+                           .data:000008c9 cd e0 09                         call 0x09e0
+                           .data:000008cc 38 a9                            jr c,0x0877
+                           .data:000008ce 28 a7                            jr z,0x0877
+                           .data:000008d0 cd d9 09                         call 0x09d9
+                           .data:000008d3 ed 78                            in a,(c)
+                           .data:000008d5 16 40                            ld d,0x40
+                           .data:000008d7 fe 46                            cp 0x46
+                           .data:000008d9 1e 0d                            ld e,0x0d
+                           .data:000008db 28 2d                            jr z,0x090a
+                           .data:000008dd 3e 1e                            ld a,0x1e
+                           .data:000008df 32 80 ff                         ld (0xff80),a
+                           .data:000008e2 ed 78                            in a,(c)
+                           .data:000008e4 fe 4e                            cp 0x4e
+                           .data:000008e6 20 8f                            jr nz,0x0877
+                           .data:000008e8 cd d9 09                         call 0x09d9
+                           .data:000008eb cd 97 0a                         call 0x0a97
+                           .data:000008ee 38 5a                            jr c,0x094a
+                           .data:000008f0 03                               inc bc
+                           .data:000008f1 5f                               ld e,a
+                           .data:000008f2 cd 97 0a                         call 0x0a97
+                           .data:000008f5 38 0a                            jr c,0x0901
+                           .data:000008f7 00                               nop
+                           .data:000008f8 00                               nop
+                           .data:000008f9 00                               nop
+                           .data:000008fa 1d                               dec e
+                           .data:000008fb 20 4d                            jr nz,0x094a
+                           .data:000008fd 00                               nop
+                           .data:000008fe c6 0a                            add a,0x0a
+                           .data:00000900 5f                               ld e,a
+                           .data:00000901 7b                               ld a,e
+                           .data:00000902 3d                               dec a
+                           .data:00000903 fe 0c                            cp 0x0c
+                           .data:00000905 30 43                            jr nc,0x094a
+                           .data:00000907 c6 90                            add a,0x90
+                           .data:00000909 5f                               ld e,a
+                           .data:0000090a 21 20 ff                         ld hl,0xff20
+                           .data:0000090d 72                               ld (hl),d
+                           .data:0000090e 23                               inc hl
+                           .data:0000090f 73                               ld (hl),e
+                           .data:00000910 23                               inc hl
+                           .data:00000911 ed 5b 1b ff                      ld de,(0xff1b)
+                           .data:00000915 72                               ld (hl),d
+                           .data:00000916 23                               inc hl
+                           .data:00000917 73                               ld (hl),e
+                           .data:00000918 23                               inc hl
+                           .data:00000919 ed 5b 19 ff                      ld de,(0xff19)
+                           .data:0000091d 73                               ld (hl),e
+                           .data:0000091e 23                               inc hl
+                           .data:0000091f 72                               ld (hl),d
+                           .data:00000920 3a 82 ff                         ld a,(0xff82)
+                           .data:00000923 c6 d0                            add a,0xd0
+                           .data:00000925 21 20 ff                         ld hl,0xff20
+                           .data:00000928 06 06                            ld b,0x06
+                           .data:0000092a cd ce 09                         call 0x09ce
+                           .data:0000092d cd 60 08                         call 0x0860
+                           .data:00000930 cd a0 0a                         call 0x0aa0
+                           .data:00000933 3e 09                            ld a,0x09
+                           .data:00000935 32 80 ff                         ld (0xff80),a
+                           .data:00000938 cd ab 0a                         call 0x0aab
+                           .data:0000093b 3a 82 ff                         ld a,(0xff82)
+                           .data:0000093e 3c                               inc a
+                           .data:0000093f e6 07                            and 0x07
+                           .data:00000941 20 01                            jr nz,0x0944
+                           .data:00000943 3c                               inc a
+                           .data:00000944 32 82 ff                         ld (0xff82),a
+                           .data:00000947 c3 66 07                         jp 0x0766
+                           .data:0000094a 11 a7 0e                         ld de,0x0ea7
+                           .data:0000094d cd cb 03                         call 0x03cb
+                           .data:00000950 c3 77 08                         jp 0x0877
+                           .data:00000953 21 08 04                         ld hl,0x0408
+                           .data:00000956 22 80 ff                         ld (0xff80),hl
+                           .data:00000959 cd fb 03                         call 0x03fb
+                           .data:0000095c cb e0                            set 4,b
+                           .data:0000095e 21 18 ff                         ld hl,0xff18
+                           .data:00000961 cd 6a 0a                         call 0x0a6a
+                           .data:00000964 fe ff                            cp 0xff
+                           .data:00000966 ca 77 08                         jp z,0x0877
+                           .data:00000969 77                               ld (hl),a
+                           .data:0000096a 23                               inc hl
+                           .data:0000096b 03                               inc bc
+                           .data:0000096c cd e0 09                         call 0x09e0
+                           .data:0000096f da 77 08                         jp c,0x0877
+                           .data:00000972 3e 0b                            ld a,0x0b
+                           .data:00000974 32 80 ff                         ld (0xff80),a
+                           .data:00000977 3a 19 ff                         ld a,(0xff19)
+                           .data:0000097a e6 f0                            and 0xf0
+                           .data:0000097c ca 77 08                         jp z,0x0877
+                           .data:0000097f 3e 0e                            ld a,0x0e
+                           .data:00000981 32 80 ff                         ld (0xff80),a
+                           .data:00000984 3a 1a ff                         ld a,(0xff1a)
+                           .data:00000987 b7                               or a
+                           .data:00000988 ca 77 08                         jp z,0x0877
+                           .data:0000098b 3e 11                            ld a,0x11
+                           .data:0000098d 32 80 ff                         ld (0xff80),a
+                           .data:00000990 3a 19 ff                         ld a,(0xff19)
+                           .data:00000993 e6 0f                            and 0x0f
+                           .data:00000995 fe 0f                            cp 0x0f
+                           .data:00000997 ca 77 08                         jp z,0x0877
+                           .data:0000099a 3e 15                            ld a,0x15
+                           .data:0000099c 32 80 ff                         ld (0xff80),a
+                           .data:0000099f 3a 1b ff                         ld a,(0xff1b)
+                           .data:000009a2 fe ff                            cp 0xff
+                           .data:000009a4 ca 77 08                         jp z,0x0877
+                           .data:000009a7 3e 1b                            ld a,0x1b
+                           .data:000009a9 32 80 ff                         ld (0xff80),a
+                           .data:000009ac cd 6a 0a                         call 0x0a6a
+                           .data:000009af fe 60                            cp 0x60
+                           .data:000009b1 d2 77 08                         jp nc,0x0877
+                           .data:000009b4 23                               inc hl
+                           .data:000009b5 77                               ld (hl),a
+                           .data:000009b6 3e ec                            ld a,0xec
+                           .data:000009b8 21 18 ff                         ld hl,0xff18
+                           .data:000009bb cd cc 09                         call 0x09cc
+                           .data:000009be 3e ee                            ld a,0xee
+                           .data:000009c0 21 1b ff                         ld hl,0xff1b
+                           .data:000009c3 cd cc 09                         call 0x09cc
+                           .data:000009c6 cd 73 06                         call 0x0673
+                           .data:000009c9 c3 3b 09                         jp 0x093b
+                           .data:000009cc 06 03                            ld b,0x03
+                           .data:000009ce cd 2e 05                         call 0x052e
+                           .data:000009d1 7e                               ld a,(hl)
+                           .data:000009d2 cd 2e 05                         call 0x052e
+                           .data:000009d5 23                               inc hl
+                           .data:000009d6 10 f9                            djnz 0x09d1
+                           .data:000009d8 c9                               ret
+                           .data:000009d9 21 04 00                         ld hl,0x0004
+                           .data:000009dc 09                               add hl,bc
+                           .data:000009dd 4d                               ld c,l
+                           .data:000009de 44                               ld b,h
+                           .data:000009df c9                               ret
+                           .data:000009e0 3e 0b                            ld a,0x0b
+                           .data:000009e2 32 80 ff                         ld (0xff80),a
+                           .data:000009e5 cd 6f 0a                         call 0x0a6f
+                           .data:000009e8 cd 33 0b                         call 0x0b33
+                           .data:000009eb fe 0d                            cp 0x0d
+                           .data:000009ed 3f                               ccf
+                           .data:000009ee d8                               ret c
+                           .data:000009ef 07                               rlca
+                           .data:000009f0 07                               rlca
+                           .data:000009f1 07                               rlca
+                           .data:000009f2 07                               rlca
+                           .data:000009f3 77                               ld (hl),a
+                           .data:000009f4 03                               inc bc
+                           .data:000009f5 3e 0e                            ld a,0x0e
+                           .data:000009f7 32 80 ff                         ld (0xff80),a
+                           .data:000009fa cd 6f 0a                         call 0x0a6f
+                           .data:000009fd fe 32                            cp 0x32
+                           .data:000009ff 3f                               ccf
+                           .data:00000a00 d8                               ret c
+                           .data:00000a01 23                               inc hl
+                           .data:00000a02 77                               ld (hl),a
+                           .data:00000a03 03                               inc bc
+                           .data:00000a04 3e 11                            ld a,0x11
+                           .data:00000a06 32 80 ff                         ld (0xff80),a
+                           .data:00000a09 11 26 ff                         ld de,0xff26
+                           .data:00000a0c e5                               push hl
+                           .data:00000a0d 2e 03                            ld l,0x03
+                           .data:00000a0f ed 78                            in a,(c)
+                           .data:00000a11 12                               ld (de),a
+                           .data:00000a12 03                               inc bc
+                           .data:00000a13 13                               inc de
+                           .data:00000a14 2d                               dec l
+                           .data:00000a15 20 f8                            jr nz,0x0a0f
+                           .data:00000a17 af                               xor a
+                           .data:00000a18 12                               ld (de),a
+                           .data:00000a19 c5                               push bc
+                           .data:00000a1a 21 87 0e                         ld hl,0x0e87
+                           .data:00000a1d 0e 08                            ld c,0x08
+                           .data:00000a1f 11 26 ff                         ld de,0xff26
+                           .data:00000a22 06 04                            ld b,0x04
+                           .data:00000a24 1a                               ld a,(de)
+                           .data:00000a25 be                               cp (hl)
+                           .data:00000a26 28 0a                            jr z,0x0a32
+                           .data:00000a28 13                               inc de
+                           .data:00000a29 23                               inc hl
+                           .data:00000a2a 10 fc                            djnz 0x0a28
+                           .data:00000a2c 0d                               dec c
+                           .data:00000a2d 20 f0                            jr nz,0x0a1f
+                           .data:00000a2f 0c                               inc c
+                           .data:00000a30 18 04                            jr 0x0a36
+                           .data:00000a32 13                               inc de
+                           .data:00000a33 23                               inc hl
+                           .data:00000a34 10 ee                            djnz 0x0a24
+                           .data:00000a36 3e 08                            ld a,0x08
+                           .data:00000a38 91                               sub c
+                           .data:00000a39 fe 07                            cp 0x07
+                           .data:00000a3b 20 02                            jr nz,0x0a3f
+                           .data:00000a3d 3e 0f                            ld a,0x0f
+                           .data:00000a3f c1                               pop bc
+                           .data:00000a40 e1                               pop hl
+                           .data:00000a41 2b                               dec hl
+                           .data:00000a42 b6                               or (hl)
+                           .data:00000a43 77                               ld (hl),a
+                           .data:00000a44 23                               inc hl
+                           .data:00000a45 03                               inc bc
+                           .data:00000a46 3e 15                            ld a,0x15
+                           .data:00000a48 32 80 ff                         ld (0xff80),a
+                           .data:00000a4b cd 6a 0a                         call 0x0a6a
+                           .data:00000a4e 3c                               inc a
+                           .data:00000a4f fe 25                            cp 0x25
+                           .data:00000a51 3f                               ccf
+                           .data:00000a52 d8                               ret c
+                           .data:00000a53 3d                               dec a
+                           .data:00000a54 23                               inc hl
+                           .data:00000a55 77                               ld (hl),a
+                           .data:00000a56 03                               inc bc
+                           .data:00000a57 3e 18                            ld a,0x18
+                           .data:00000a59 32 80 ff                         ld (0xff80),a
+                           .data:00000a5c cd 6a 0a                         call 0x0a6a
+                           .data:00000a5f fe ff                            cp 0xff
+                           .data:00000a61 c8                               ret z
+                           .data:00000a62 fe 60                            cp 0x60
+                           .data:00000a64 3f                               ccf
+                           .data:00000a65 d8                               ret c
+                           .data:00000a66 23                               inc hl
+                           .data:00000a67 77                               ld (hl),a
+                           .data:00000a68 03                               inc bc
+                           .data:00000a69 c9                               ret
+                           .data:00000a6a e5                               push hl
+                           .data:00000a6b 26 0f                            ld h,0x0f
+                           .data:00000a6d 18 03                            jr 0x0a72
+                           .data:00000a6f e5                               push hl
+                           .data:00000a70 26 00                            ld h,0x00
+                           .data:00000a72 cd 77 0a                         call 0x0a77
+                           .data:00000a75 e1                               pop hl
+                           .data:00000a76 c9                               ret
+                           .data:00000a77 cd 90 0a                         call 0x0a90
+                           .data:00000a7a 38 0c                            jr c,0x0a88
+                           .data:00000a7c 07                               rlca
+                           .data:00000a7d 07                               rlca
+                           .data:00000a7e 07                               rlca
+                           .data:00000a7f 07                               rlca
+                           .data:00000a80 6f                               ld l,a
+                           .data:00000a81 cd 90 0a                         call 0x0a90
+                           .data:00000a84 38 03                            jr c,0x0a89
+                           .data:00000a86 b5                               or l
+                           .data:00000a87 c9                               ret
+                           .data:00000a88 03                               inc bc
+                           .data:00000a89 7c                               ld a,h
+                           .data:00000a8a 07                               rlca
+                           .data:00000a8b 07                               rlca
+                           .data:00000a8c 07                               rlca
+                           .data:00000a8d 07                               rlca
+                           .data:00000a8e b4                               or h
+                           .data:00000a8f c9                               ret
+                           .data:00000a90 cd 97 0a                         call 0x0a97
+                           .data:00000a93 03                               inc bc
+                           .data:00000a94 d0                               ret nc
+                           .data:00000a95 7c                               ld a,h
+                           .data:00000a96 c9                               ret
+                           .data:00000a97 ed 78                            in a,(c)
+                           .data:00000a99 d6 30                            sub 0x30
+                           .data:00000a9b d8                               ret c
+                           .data:00000a9c fe 0a                            cp 0x0a
+                           .data:00000a9e 3f                               ccf
+                           .data:00000a9f c9                               ret
+                           .data:00000aa0 21 20 ff                         ld hl,0xff20
+                           .data:00000aa3 79                               ld a,c
+                           .data:00000aa4 c6 d8                            add a,0xd8
+                           .data:00000aa6 06 06                            ld b,0x06
+                           .data:00000aa8 c3 61 06                         jp 0x0661
+                           .data:00000aab 21 20 ff                         ld hl,0xff20
+                           .data:00000aae 7e                               ld a,(hl)
+                           .data:00000aaf e6 c0                            and 0xc0
+                           .data:00000ab1 fe 40                            cp 0x40
+                           .data:00000ab3 f5                               push af
+                           .data:00000ab4 cd c3 0a                         call 0x0ac3
+                           .data:00000ab7 cd e0 06                         call 0x06e0
+                           .data:00000aba f1                               pop af
+                           .data:00000abb 28 1c                            jr z,0x0ad9
+                           .data:00000abd 11 b3 0e                         ld de,0x0eb3
+                           .data:00000ac0 c3 cb 03                         jp 0x03cb
+                           .data:00000ac3 3e 20                            ld a,0x20
+                           .data:00000ac5 20 02                            jr nz,0x0ac9
+                           .data:00000ac7 3e 2a                            ld a,0x2a
+                           .data:00000ac9 08                               ex af,af'
+                           .data:00000aca 3e 02                            ld a,0x02
+                           .data:00000acc 32 86 ff                         ld (0xff86),a
+                           .data:00000acf 08                               ex af,af'
+                           .data:00000ad0 cd d9 03                         call 0x03d9
+                           .data:00000ad3 3e 07                            ld a,0x07
+                           .data:00000ad5 32 86 ff                         ld (0xff86),a
+                           .data:00000ad8 c9                               ret
+                           .data:00000ad9 23                               inc hl
+                           .data:00000ada 23                               inc hl
+                           .data:00000adb 23                               inc hl
+                           .data:00000adc 23                               inc hl
+                           .data:00000add cd b5 06                         call 0x06b5
+                           .data:00000ae0 2b                               dec hl
+                           .data:00000ae1 2b                               dec hl
+                           .data:00000ae2 7e                               ld a,(hl)
+                           .data:00000ae3 fe ff                            cp 0xff
+                           .data:00000ae5 cc d4 03                         call z,0x03d4
+                           .data:00000ae8 c4 e9 06                         call nz,0x06e9
+                           .data:00000aeb cd b0 06                         call 0x06b0
+                           .data:00000aee 2b                               dec hl
+                           .data:00000aef 7e                               ld a,(hl)
+                           .data:00000af0 e6 7f                            and 0x7f
+                           .data:00000af2 cd e9 06                         call 0x06e9
+                           .data:00000af5 11 ca 0e                         ld de,0x0eca
+                           .data:00000af8 cd cb 03                         call 0x03cb
+                           .data:00000afb 2b                               dec hl
+                           .data:00000afc 7e                               ld a,(hl)
+                           .data:00000afd fe 0d                            cp 0x0d
+                           .data:00000aff 20 06                            jr nz,0x0b07
+                           .data:00000b01 11 c6 0e                         ld de,0x0ec6
+                           .data:00000b04 c3 cb 03                         jp 0x03cb
+                           .data:00000b07 d6 90                            sub 0x90
+                           .data:00000b09 fe 0c                            cp 0x0c
+                           .data:00000b0b 30 20                            jr nc,0x0b2d
+                           .data:00000b0d f5                               push af
+                           .data:00000b0e 11 a7 0e                         ld de,0x0ea7
+                           .data:00000b11 cd cb 03                         call 0x03cb
+                           .data:00000b14 f1                               pop af
+                           .data:00000b15 fe 09                            cp 0x09
+                           .data:00000b17 38 09                            jr c,0x0b22
+                           .data:00000b19 d6 0a                            sub 0x0a
+                           .data:00000b1b f5                               push af
+                           .data:00000b1c 3e 31                            ld a,0x31
+                           .data:00000b1e cd d9 03                         call 0x03d9
+                           .data:00000b21 f1                               pop af
+                           .data:00000b22 c6 31                            add a,0x31
+                           .data:00000b24 cd d9 03                         call 0x03d9
+                           .data:00000b27 cd e0 06                         call 0x06e0
+                           .data:00000b2a c3 e0 06                         jp 0x06e0
+                           .data:00000b2d 11 7e 0e                         ld de,0x0e7e
+                           .data:00000b30 c3 cb 03                         jp 0x03cb
+                           .data:00000b33 fe 13                            cp 0x13
+                           .data:00000b35 d0                               ret nc
+                           .data:00000b36 fe 0a                            cp 0x0a
+                           .data:00000b38 d8                               ret c
+                           .data:00000b39 e6 0f                            and 0x0f
+                           .data:00000b3b c6 0a                            add a,0x0a
+                           .data:00000b3d c9                               ret
+                           .data:00000b3e 37                               scf
+                           .data:00000b3f 28 2d                            jr z,0x0b6e
+                           .data:00000b41 34                               inc (hl)
+                           .data:00000b42 1f                               rra
+                           .data:00000b43 02                               ld (bc),a
+                           .data:00000b44 19                               add hl,de
+                           .data:00000b45 1c                               inc e
+                           .data:00000b46 00                               nop
+                           .data:00000b47 07                               rlca
+                           .data:00000b48 60                               ld h,b
+                           .data:00000b49 07                               rlca
+                           .data:00000b4a 00                               nop
+                           .data:00000b4b 00                               nop
+                           .data:00000b4c 08                               ex af,af'
+                           .data:00000b4d 0b                               dec bc
+                           .data:00000b4e 0e 11                            ld c,0x11
+                           .data:00000b50 15                               dec d
+                           .data:00000b51 18 1b                            jr 0x0b6e
+                           .data:00000b53 ff                               rst 0x38
+                           .data:00000b54 00                               nop
+                           .data:00000b55 0b                               dec bc
+                           .data:00000b56 0e 11                            ld c,0x11
+                           .data:00000b58 15                               dec d
+                           .data:00000b59 18 1e                            jr 0x0b79
+                           .data:00000b5b 23                               inc hl
+                           .data:00000b5c ff                               rst 0x38
+                           .data:00000b5d 04                               inc b
+                           .data:00000b5e 07                               rlca
+                           .data:00000b5f 09                               add hl,bc
+                           .data:00000b60 0b                               dec bc
+                           .data:00000b61 0d                               dec c
+                           .data:00000b62 0f                               rrca
+                           .data:00000b63 11 13 0d                         ld de,0x0d13
+                           .data:00000b66 0d                               dec c
+                           .data:00000b67 14                               inc d
+                           .data:00000b68 50                               ld d,b
+                           .data:00000b69 75                               ld (hl),l
+                           .data:00000b6a 73                               ld (hl),e
+                           .data:00000b6b 68                               ld l,b
+                           .data:00000b6c 20 28                            jr nz,0x0b96
+                           .data:00000b6e 46                               ld b,(hl)
+                           .data:00000b6f 2c                               inc l
+                           .data:00000b70 52                               ld d,d
+                           .data:00000b71 2c                               inc l
+                           .data:00000b72 43                               ld b,e
+                           .data:00000b73 20 6f                            jr nz,0x0be4
+                           .data:00000b75 72                               ld (hl),d
+                           .data:00000b76 20 54                            jr nz,0x0bcc
+                           .data:00000b78 29                               add hl,hl
+                           .data:00000b79 20 6b                            jr nz,0x0be6
+                           .data:00000b7b 65                               ld h,l
+                           .data:00000b7c 79                               ld a,c
+                           .data:00000b7d 0d                               dec c
+                           .data:00000b7e 0d                               dec c
+                           .data:00000b7f 19                               add hl,de
+                           .data:00000b80 46                               ld b,(hl)
+                           .data:00000b81 3a 46 6c                         ld a,(0x6c46)
+                           .data:00000b84 6f                               ld l,a
+                           .data:00000b85 70                               ld (hl),b
+                           .data:00000b86 70                               ld (hl),b
+                           .data:00000b87 79                               ld a,c
+                           .data:00000b88 0d                               dec c
+                           .data:00000b89 19                               add hl,de
+                           .data:00000b8a 52                               ld d,d
+                           .data:00000b8b 3a 52 4f                         ld a,(0x4f52)
+                           .data:00000b8e 4d                               ld c,l
+                           .data:00000b8f 0d                               dec c
+                           .data:00000b90 19                               add hl,de
+                           .data:00000b91 43                               ld b,e
+                           .data:00000b92 3a 43 4d                         ld a,(0x4d43)
+                           .data:00000b95 54                               ld d,h
+                           .data:00000b96 0d                               dec c
+                           .data:00000b97 19                               add hl,de
+                           .data:00000b98 54                               ld d,h
+                           .data:00000b99 3a 54 69                         ld a,(0x6954)
+                           .data:00000b9c 6d                               ld l,l
+                           .data:00000b9d 65                               ld h,l
+                           .data:00000b9e 72                               ld (hl),d
+                           .data:00000b9f 00                               nop
+                           .data:00000ba0 0c                               inc c
+                           .data:00000ba1 0d                               dec c
+                           .data:00000ba2 0d                               dec c
+                           .data:00000ba3 14                               inc d
+                           .data:00000ba4 20 20                            jr nz,0x0bc6
+                           .data:00000ba6 20 44                            jr nz,0x0bec
+                           .data:00000ba8 72                               ld (hl),d
+                           .data:00000ba9 69                               ld l,c
+                           .data:00000baa 76                               halt
+                           .data:00000bab 65                               ld h,l
+                           .data:00000bac 20 4e                            jr nz,0x0bfc
+                           .data:00000bae 6f                               ld l,a
+                           .data:00000baf 3f                               ccf
+                           .data:00000bb0 20 28                            jr nz,0x0bda
+                           .data:00000bb2 30 2d                            jr nc,0x0be1
+                           .data:00000bb4 33                               inc sp
+                           .data:00000bb5 29                               add hl,hl
+                           .data:00000bb6 00                               nop
+                           .data:00000bb7 0c                               inc c
+                           .data:00000bb8 49                               ld c,c
+                           .data:00000bb9 50                               ld d,b
+                           .data:00000bba 4c                               ld c,h
+                           .data:00000bbb 20 69                            jr nz,0x0c26
+                           .data:00000bbd 73                               ld (hl),e
+                           .data:00000bbe 20 6c                            jr nz,0x0c2c
+                           .data:00000bc0 6f                               ld l,a
+                           .data:00000bc1 61                               ld h,c
+                           .data:00000bc2 64                               ld h,h
+                           .data:00000bc3 69                               ld l,c
+                           .data:00000bc4 6e                               ld l,(hl)
+                           .data:00000bc5 67                               ld h,a
+                           .data:00000bc6 20 00                            jr nz,0x0bc8
+                           .data:00000bc8 0c                               inc c
+                           .data:00000bc9 49                               ld c,c
+                           .data:00000bca 50                               ld d,b
+                           .data:00000bcb 4c                               ld c,h
+                           .data:00000bcc 20 69                            jr nz,0x0c37
+                           .data:00000bce 73                               ld (hl),e
+                           .data:00000bcf 20 6c                            jr nz,0x0c3d
+                           .data:00000bd1 6f                               ld l,a
+                           .data:00000bd2 6f                               ld l,a
+                           .data:00000bd3 6b                               ld l,e
+                           .data:00000bd4 69                               ld l,c
+                           .data:00000bd5 6e                               ld l,(hl)
+                           .data:00000bd6 67                               ld h,a
+                           .data:00000bd7 20 66                            jr nz,0x0c3f
+                           .data:00000bd9 6f                               ld l,a
+                           .data:00000bda 72                               ld (hl),d
+                           .data:00000bdb 20 61                            jr nz,0x0c3e
+                           .data:00000bdd 20 70                            jr nz,0x0c4f
+                           .data:00000bdf 72                               ld (hl),d
+                           .data:00000be0 6f                               ld l,a
+                           .data:00000be1 67                               ld h,a
+                           .data:00000be2 72                               ld (hl),d
+                           .data:00000be3 61                               ld h,c
+                           .data:00000be4 6d                               ld l,l
+                           .data:00000be5 20 66                            jr nz,0x0c4d
+                           .data:00000be7 72                               ld (hl),d
+                           .data:00000be8 6f                               ld l,a
+                           .data:00000be9 6d                               ld l,l
+                           .data:00000bea 20 00                            jr nz,0x0bec
+                           .data:00000bec 43                               ld b,e
+                           .data:00000bed 4d                               ld c,l
+                           .data:00000bee 54                               ld d,h
+                           .data:00000bef 00                               nop
+                           .data:00000bf0 46                               ld b,(hl)
+                           .data:00000bf1 44                               ld b,h
+                           .data:00000bf2 00                               nop
+                           .data:00000bf3 0c                               inc c
+                           .data:00000bf4 09                               add hl,bc
+                           .data:00000bf5 50                               ld d,b
+                           .data:00000bf6 72                               ld (hl),d
+                           .data:00000bf7 6f                               ld l,a
+                           .data:00000bf8 67                               ld h,a
+                           .data:00000bf9 72                               ld (hl),d
+                           .data:00000bfa 61                               ld h,c
+                           .data:00000bfb 6d                               ld l,l
+                           .data:00000bfc 20 6c                            jr nz,0x0c6a
+                           .data:00000bfe 6f                               ld l,a
+                           .data:00000bff 61                               ld h,c
+                           .data:00000c00 64                               ld h,h
+                           .data:00000c01 20 65                            jr nz,0x0c68
+                           .data:00000c03 72                               ld (hl),d
+                           .data:00000c04 72                               ld (hl),d
+                           .data:00000c05 6f                               ld l,a
+                           .data:00000c06 72                               ld (hl),d
+                           .data:00000c07 00                               nop
+                           .data:00000c08 0c                               inc c
+                           .data:00000c09 14                               inc d
+                           .data:00000c0a 4d                               ld c,l
+                           .data:00000c0b 61                               ld h,c
+                           .data:00000c0c 6b                               ld l,e
+                           .data:00000c0d 65                               ld h,l
+                           .data:00000c0e 20 72                            jr nz,0x0c82
+                           .data:00000c10 65                               ld h,l
+                           .data:00000c11 61                               ld h,c
+                           .data:00000c12 64                               ld h,h
+                           .data:00000c13 79                               ld a,c
+                           .data:00000c14 20 61                            jr nz,0x0c77
+                           .data:00000c16 6e                               ld l,(hl)
+                           .data:00000c17 79                               ld a,c
+                           .data:00000c18 20 64                            jr nz,0x0c7e
+                           .data:00000c1a 65                               ld h,l
+                           .data:00000c1b 76                               halt
+                           .data:00000c1c 69                               ld l,c
+                           .data:00000c1d 63                               ld h,e
+                           .data:00000c1e 65                               ld h,l
+                           .data:00000c1f 00                               nop
+                           .data:00000c20 0c                               inc c
+                           .data:00000c21 14                               inc d
+                           .data:00000c22 20 20                            jr nz,0x0c44
+                           .data:00000c24 20 46                            jr nz,0x0c6c
+                           .data:00000c26 69                               ld l,c
+                           .data:00000c27 6c                               ld l,h
+                           .data:00000c28 65                               ld h,l
+                           .data:00000c29 20 6d                            jr nz,0x0c98
+                           .data:00000c2b 6f                               ld l,a
+                           .data:00000c2c 64                               ld h,h
+                           .data:00000c2d 65                               ld h,l
+                           .data:00000c2e 20 65                            jr nz,0x0c95
+                           .data:00000c30 72                               ld (hl),d
+                           .data:00000c31 72                               ld (hl),d
+                           .data:00000c32 6f                               ld l,a
+                           .data:00000c33 72                               ld (hl),d
+                           .data:00000c34 00                               nop
+                           .data:00000c35 0c                               inc c
+                           .data:00000c36 49                               ld c,c
+                           .data:00000c37 50                               ld d,b
+                           .data:00000c38 4c                               ld c,h
+                           .data:00000c39 20 69                            jr nz,0x0ca4
+                           .data:00000c3b 73                               ld (hl),e
+                           .data:00000c3c 20 75                            jr nz,0x0cb3
+                           .data:00000c3e 6e                               ld l,(hl)
+                           .data:00000c3f 64                               ld h,h
+                           .data:00000c40 65                               ld h,l
+                           .data:00000c41 72                               ld (hl),d
+                           .data:00000c42 20 70                            jr nz,0x0cb4
+                           .data:00000c44 72                               ld (hl),d
+                           .data:00000c45 65                               ld h,l
+                           .data:00000c46 70                               ld (hl),b
+                           .data:00000c47 61                               ld h,c
+                           .data:00000c48 72                               ld (hl),d
+                           .data:00000c49 69                               ld l,c
+                           .data:00000c4a 6e                               ld l,(hl)
+                           .data:00000c4b 67                               ld h,a
+                           .data:00000c4c 00                               nop
+                           .data:00000c4d 0c                               inc c
+                           .data:00000c4e 0d                               dec c
+                           .data:00000c4f 20 20                            jr nz,0x0c71
+                           .data:00000c51 20 50                            jr nz,0x0ca3
+                           .data:00000c53 6c                               ld l,h
+                           .data:00000c54 65                               ld h,l
+                           .data:00000c55 61                               ld h,c
+                           .data:00000c56 73                               ld (hl),e
+                           .data:00000c57 65                               ld h,l
+                           .data:00000c58 20 74                            jr nz,0x0cce
+                           .data:00000c5a 75                               ld (hl),l
+                           .data:00000c5b 72                               ld (hl),d
+                           .data:00000c5c 6e                               ld l,(hl)
+                           .data:00000c5d 20 6f                            jr nz,0x0cce
+                           .data:00000c5f 6e                               ld l,(hl)
+                           .data:00000c60 20 74                            jr nz,0x0cd6
+                           .data:00000c62 68                               ld l,b
+                           .data:00000c63 65                               ld h,l
+                           .data:00000c64 20 50                            jr nz,0x0cb6
+                           .data:00000c66 6f                               ld l,a
+                           .data:00000c67 77                               ld (hl),a
+                           .data:00000c68 65                               ld h,l
+                           .data:00000c69 72                               ld (hl),d
+                           .data:00000c6a 20 53                            jr nz,0x0cbf
+                           .data:00000c6c 57                               ld d,a
+                           .data:00000c6d 0d                               dec c
+                           .data:00000c6e 0d                               dec c
+                           .data:00000c6f 20 20                            jr nz,0x0c91
+                           .data:00000c71 20 20                            jr nz,0x0c93
+                           .data:00000c73 20 20                            jr nz,0x0c95
+                           .data:00000c75 20 20                            jr nz,0x0c97
+                           .data:00000c77 20 20                            jr nz,0x0c99
+                           .data:00000c79 20 20                            jr nz,0x0c9b
+                           .data:00000c7b 20 20                            jr nz,0x0c9d
+                           .data:00000c7d 20 20                            jr nz,0x0c9f
+                           .data:00000c7f 20 20                            jr nz,0x0ca1
+                           .data:00000c81 20 20                            jr nz,0x0ca3
+                           .data:00000c83 20 20                            jr nz,0x0ca5
+                           .data:00000c85 73                               ld (hl),e
+                           .data:00000c86 6c                               ld l,h
+                           .data:00000c87 6f                               ld l,a
+                           .data:00000c88 77                               ld (hl),a
+                           .data:00000c89 6c                               ld l,h
+                           .data:00000c8a 79                               ld a,c
+                           .data:00000c8b 20 61                            jr nz,0x0cee
+                           .data:00000c8d 67                               ld h,a
+                           .data:00000c8e 61                               ld h,c
+                           .data:00000c8f 69                               ld l,c
+                           .data:00000c90 6e                               ld l,(hl)
+                           .data:00000c91 20 21                            jr nz,0x0cb4
+                           .data:00000c93 00                               nop
+                           .data:00000c94 54                               ld d,h
+                           .data:00000c95 54                               ld d,h
+                           .data:00000c96 56                               ld d,(hl)
+                           .data:00000c97 56                               ld d,(hl)
+                           .data:00000c98 20 20                            jr nz,0x0cba
+                           .data:00000c9a 54                               ld d,h
+                           .data:00000c9b 54                               ld d,h
+                           .data:00000c9c 69                               ld l,c
+                           .data:00000c9d 69                               ld l,c
+                           .data:00000c9e 6d                               ld l,l
+                           .data:00000c9f 6d                               ld l,l
+                           .data:00000ca0 65                               ld h,l
+                           .data:00000ca1 65                               ld h,l
+                           .data:00000ca2 72                               ld (hl),d
+                           .data:00000ca3 72                               ld (hl),d
+                           .data:00000ca4 20 20                            jr nz,0x0cc6
+                           .data:00000ca6 63                               ld h,e
+                           .data:00000ca7 63                               ld h,e
+                           .data:00000ca8 6f                               ld l,a
+                           .data:00000ca9 6f                               ld l,a
+                           .data:00000caa 6e                               ld l,(hl)
+                           .data:00000cab 6e                               ld l,(hl)
+                           .data:00000cac 74                               ld (hl),h
+                           .data:00000cad 74                               ld (hl),h
+                           .data:00000cae 72                               ld (hl),d
+                           .data:00000caf 72                               ld (hl),d
+                           .data:00000cb0 6f                               ld l,a
+                           .data:00000cb1 6f                               ld l,a
+                           .data:00000cb2 6c                               ld l,h
+                           .data:00000cb3 6c                               ld l,h
+                           .data:00000cb4 00                               nop
+                           .data:00000cb5 20 20                            jr nz,0x0cd7
+                           .data:00000cb7 20 20                            jr nz,0x0cd9
+                           .data:00000cb9 20 20                            jr nz,0x0cdb
+                           .data:00000cbb 20 20                            jr nz,0x0cdd
+                           .data:00000cbd 20 20                            jr nz,0x0cdf
+                           .data:00000cbf 20 20                            jr nz,0x0ce1
+                           .data:00000cc1 20 20                            jr nz,0x0ce3
+                           .data:00000cc3 20 20                            jr nz,0x0ce5
+                           .data:00000cc5 20 20                            jr nz,0x0ce7
+                           .data:00000cc7 20 20                            jr nz,0x0ce9
+                           .data:00000cc9 20 44                            jr nz,0x0d0f
+                           .data:00000ccb 41                               ld b,c
+                           .data:00000ccc 54                               ld d,h
+                           .data:00000ccd 41                               ld b,c
+                           .data:00000cce 20 45                            jr nz,0x0d15
+                           .data:00000cd0 72                               ld (hl),d
+                           .data:00000cd1 72                               ld (hl),d
+                           .data:00000cd2 6f                               ld l,a
+                           .data:00000cd3 72                               ld (hl),d
+                           .data:00000cd4 20 21                            jr nz,0x0cf7
+                           .data:00000cd6 21 20 20                         ld hl,0x2020
+                           .data:00000cd9 20 20                            jr nz,0x0cfb
+                           .data:00000cdb 00                               nop
+                           .data:00000cdc 08                               ex af,af'
+                           .data:00000cdd 01 0d 0b                         ld bc,0x0b0d
+                           .data:00000ce0 28 0d                            jr z,0x0cef
+                           .data:00000ce2 0e 4f                            ld c,0x4f
+                           .data:00000ce4 0d                               dec c
+                           .data:00000ce5 11 76 0d                         ld de,0x0d76
+                           .data:00000ce8 15                               dec d
+                           .data:00000ce9 9d                               sbc a,l
+                           .data:00000cea 0d                               dec c
+                           .data:00000ceb 18 c4                            jr 0x0cb1
+                           .data:00000ced 0d                               dec c
+                           .data:00000cee 1b                               dec de
+                           .data:00000cef eb                               ex de,hl
+                           .data:00000cf0 0d                               dec c
+                           .data:00000cf1 1e 12                            ld e,0x12
+                           .data:00000cf3 0e 23                            ld c,0x23
+                           .data:00000cf5 39                               add hl,sp
+                           .data:00000cf6 0e 00                            ld c,0x00
+                           .data:00000cf8 0a                               ld a,(bc)
+                           .data:00000cf9 0d                               dec c
+                           .data:00000cfa 10 14                            djnz 0x0d10
+                           .data:00000cfc 17                               rla
+                           .data:00000cfd 1a                               ld a,(de)
+                           .data:00000cfe 1d                               dec e
+                           .data:00000cff 20 00                            jr nz,0x0d01
+                           .data:00000d01 20 20                            jr nz,0x0d23
+                           .data:00000d03 20 20                            jr nz,0x0d25
+                           .data:00000d05 20 20                            jr nz,0x0d27
+                           .data:00000d07 20 20                            jr nz,0x0d29
+                           .data:00000d09 20 20                            jr nz,0x0d2b
+                           .data:00000d0b 20 20                            jr nz,0x0d2d
+                           .data:00000d0d 20 20                            jr nz,0x0d2f
+                           .data:00000d0f 59                               ld e,c
+                           .data:00000d10 65                               ld h,l
+                           .data:00000d11 61                               ld h,c
+                           .data:00000d12 72                               ld (hl),d
+                           .data:00000d13 20 20                            jr nz,0x0d35
+                           .data:00000d15 20 30                            jr nz,0x0d47
+                           .data:00000d17 30 20                            jr nc,0x0d39
+                           .data:00000d19 2d                               dec l
+                           .data:00000d1a 20 39                            jr nz,0x0d55
+                           .data:00000d1c 39                               add hl,sp
+                           .data:00000d1d 20 20                            jr nz,0x0d3f
+                           .data:00000d1f 20 20                            jr nz,0x0d41
+                           .data:00000d21 20 20                            jr nz,0x0d43
+                           .data:00000d23 20 20                            jr nz,0x0d45
+                           .data:00000d25 20 20                            jr nz,0x0d47
+                           .data:00000d27 00                               nop
+                           .data:00000d28 20 20                            jr nz,0x0d4a
+                           .data:00000d2a 20 20                            jr nz,0x0d4c
+                           .data:00000d2c 20 20                            jr nz,0x0d4e
+                           .data:00000d2e 20 20                            jr nz,0x0d50
+                           .data:00000d30 20 20                            jr nz,0x0d52
+                           .data:00000d32 20 20                            jr nz,0x0d54
+                           .data:00000d34 20 20                            jr nz,0x0d56
+                           .data:00000d36 4d                               ld c,l
+                           .data:00000d37 6f                               ld l,a
+                           .data:00000d38 6e                               ld l,(hl)
+                           .data:00000d39 74                               ld (hl),h
+                           .data:00000d3a 68                               ld l,b
+                           .data:00000d3b 20 20                            jr nz,0x0d5d
+                           .data:00000d3d 30 31                            jr nc,0x0d70
+                           .data:00000d3f 20 2d                            jr nz,0x0d6e
+                           .data:00000d41 20 31                            jr nz,0x0d74
+                           .data:00000d43 32 20 6f                         ld (0x6f20),a
+                           .data:00000d46 72                               ld (hl),d
+                           .data:00000d47 20 58                            jr nz,0x0da1
+                           .data:00000d49 58                               ld e,b
+                           .data:00000d4a 20 20                            jr nz,0x0d6c
+                           .data:00000d4c 20 20                            jr nz,0x0d6e
+                           .data:00000d4e 00                               nop
+                           .data:00000d4f 20 20                            jr nz,0x0d71
+                           .data:00000d51 20 20                            jr nz,0x0d73
+                           .data:00000d53 20 20                            jr nz,0x0d75
+                           .data:00000d55 20 20                            jr nz,0x0d77
+                           .data:00000d57 20 20                            jr nz,0x0d79
+                           .data:00000d59 20 20                            jr nz,0x0d7b
+                           .data:00000d5b 20 20                            jr nz,0x0d7d
+                           .data:00000d5d 44                               ld b,h
+                           .data:00000d5e 61                               ld h,c
+                           .data:00000d5f 79                               ld a,c
+                           .data:00000d60 20 20                            jr nz,0x0d82
+                           .data:00000d62 20 20                            jr nz,0x0d84
+                           .data:00000d64 30 31                            jr nc,0x0d97
+                           .data:00000d66 20 2d                            jr nz,0x0d95
+                           .data:00000d68 20 33                            jr nz,0x0d9d
+                           .data:00000d6a 31 20 6f                         ld sp,0x6f20
+                           .data:00000d6d 72                               ld (hl),d
+                           .data:00000d6e 20 58                            jr nz,0x0dc8
+                           .data:00000d70 58                               ld e,b
+                           .data:00000d71 20 20                            jr nz,0x0d93
+                           .data:00000d73 20 20                            jr nz,0x0d95
+                           .data:00000d75 00                               nop
+                           .data:00000d76 20 20                            jr nz,0x0d98
+                           .data:00000d78 20 53                            jr nz,0x0dcd
+                           .data:00000d7a 55                               ld d,l
+                           .data:00000d7b 4e                               ld c,(hl)
+                           .data:00000d7c 20 4d                            jr nz,0x0dcb
+                           .data:00000d7e 4f                               ld c,a
+                           .data:00000d7f 4e                               ld c,(hl)
+                           .data:00000d80 20 54                            jr nz,0x0dd6
+                           .data:00000d82 55                               ld d,l
+                           .data:00000d83 45                               ld b,l
+                           .data:00000d84 20 57                            jr nz,0x0ddd
+                           .data:00000d86 45                               ld b,l
+                           .data:00000d87 44                               ld b,h
+                           .data:00000d88 20 54                            jr nz,0x0dde
+                           .data:00000d8a 48                               ld c,b
+                           .data:00000d8b 55                               ld d,l
+                           .data:00000d8c 20 46                            jr nz,0x0dd4
+                           .data:00000d8e 52                               ld d,d
+                           .data:00000d8f 49                               ld c,c
+                           .data:00000d90 20 53                            jr nz,0x0de5
+                           .data:00000d92 41                               ld b,c
+                           .data:00000d93 54                               ld d,h
+                           .data:00000d94 20 6f                            jr nz,0x0e05
+                           .data:00000d96 72                               ld (hl),d
+                           .data:00000d97 20 58                            jr nz,0x0df1
+                           .data:00000d99 58                               ld e,b
+                           .data:00000d9a 58                               ld e,b
+                           .data:00000d9b 20 00                            jr nz,0x0d9d
+                           .data:00000d9d 20 20                            jr nz,0x0dbf
+                           .data:00000d9f 20 20                            jr nz,0x0dc1
+                           .data:00000da1 20 20                            jr nz,0x0dc3
+                           .data:00000da3 20 20                            jr nz,0x0dc5
+                           .data:00000da5 20 20                            jr nz,0x0dc7
+                           .data:00000da7 20 20                            jr nz,0x0dc9
+                           .data:00000da9 20 20                            jr nz,0x0dcb
+                           .data:00000dab 48                               ld c,b
+                           .data:00000dac 6f                               ld l,a
+                           .data:00000dad 75                               ld (hl),l
+                           .data:00000dae 72                               ld (hl),d
+                           .data:00000daf 20 20                            jr nz,0x0dd1
+                           .data:00000db1 20 30                            jr nz,0x0de3
+                           .data:00000db3 30 20                            jr nc,0x0dd5
+                           .data:00000db5 2d                               dec l
+                           .data:00000db6 20 32                            jr nz,0x0dea
+                           .data:00000db8 33                               inc sp
+                           .data:00000db9 20 6f                            jr nz,0x0e2a
+                           .data:00000dbb 72                               ld (hl),d
+                           .data:00000dbc 20 58                            jr nz,0x0e16
+                           .data:00000dbe 58                               ld e,b
+                           .data:00000dbf 20 20                            jr nz,0x0de1
+                           .data:00000dc1 20 20                            jr nz,0x0de3
+                           .data:00000dc3 00                               nop
+                           .data:00000dc4 20 20                            jr nz,0x0de6
+                           .data:00000dc6 20 20                            jr nz,0x0de8
+                           .data:00000dc8 20 20                            jr nz,0x0dea
+                           .data:00000dca 20 20                            jr nz,0x0dec
+                           .data:00000dcc 20 20                            jr nz,0x0dee
+                           .data:00000dce 20 20                            jr nz,0x0df0
+                           .data:00000dd0 20 20                            jr nz,0x0df2
+                           .data:00000dd2 4d                               ld c,l
+                           .data:00000dd3 69                               ld l,c
+                           .data:00000dd4 6e                               ld l,(hl)
+                           .data:00000dd5 75                               ld (hl),l
+                           .data:00000dd6 74                               ld (hl),h
+                           .data:00000dd7 65                               ld h,l
+                           .data:00000dd8 20 30                            jr nz,0x0e0a
+                           .data:00000dda 30 20                            jr nc,0x0dfc
+                           .data:00000ddc 2d                               dec l
+                           .data:00000ddd 20 35                            jr nz,0x0e14
+                           .data:00000ddf 39                               add hl,sp
+                           .data:00000de0 20 20                            jr nz,0x0e02
+                           .data:00000de2 20 20                            jr nz,0x0e04
+                           .data:00000de4 20 20                            jr nz,0x0e06
+                           .data:00000de6 20 20                            jr nz,0x0e08
+                           .data:00000de8 20 20                            jr nz,0x0e0a
+                           .data:00000dea 00                               nop
+                           .data:00000deb 20 20                            jr nz,0x0e0d
+                           .data:00000ded 20 20                            jr nz,0x0e0f
+                           .data:00000def 20 20                            jr nz,0x0e11
+                           .data:00000df1 20 20                            jr nz,0x0e13
+                           .data:00000df3 20 20                            jr nz,0x0e15
+                           .data:00000df5 20 20                            jr nz,0x0e17
+                           .data:00000df7 20 20                            jr nz,0x0e19
+                           .data:00000df9 53                               ld d,e
+                           .data:00000dfa 65                               ld h,l
+                           .data:00000dfb 63                               ld h,e
+                           .data:00000dfc 6f                               ld l,a
+                           .data:00000dfd 6e                               ld l,(hl)
+                           .data:00000dfe 64                               ld h,h
+                           .data:00000dff 20 30                            jr nz,0x0e31
+                           .data:00000e01 30 20                            jr nc,0x0e23
+                           .data:00000e03 2d                               dec l
+                           .data:00000e04 20 35                            jr nz,0x0e3b
+                           .data:00000e06 39                               add hl,sp
+                           .data:00000e07 20 20                            jr nz,0x0e29
+                           .data:00000e09 20 20                            jr nz,0x0e2b
+                           .data:00000e0b 20 20                            jr nz,0x0e2d
+                           .data:00000e0d 20 20                            jr nz,0x0e2f
+                           .data:00000e0f 20 20                            jr nz,0x0e31
+                           .data:00000e11 00                               nop
+                           .data:00000e12 20 20                            jr nz,0x0e34
+                           .data:00000e14 20 20                            jr nz,0x0e36
+                           .data:00000e16 20 20                            jr nz,0x0e38
+                           .data:00000e18 20 20                            jr nz,0x0e3a
+                           .data:00000e1a 20 20                            jr nz,0x0e3c
+                           .data:00000e1c 20 20                            jr nz,0x0e3e
+                           .data:00000e1e 20 20                            jr nz,0x0e40
+                           .data:00000e20 54                               ld d,h
+                           .data:00000e21 56                               ld d,(hl)
+                           .data:00000e22 20 50                            jr nz,0x0e74
+                           .data:00000e24 6f                               ld l,a
+                           .data:00000e25 77                               ld (hl),a
+                           .data:00000e26 65                               ld h,l
+                           .data:00000e27 72                               ld (hl),d
+                           .data:00000e28 20 4f                            jr nz,0x0e79
+                           .data:00000e2a 4e                               ld c,(hl)
+                           .data:00000e2b 3f                               ccf
+                           .data:00000e2c 20 28                            jr nz,0x0e56
+                           .data:00000e2e 59                               ld e,c
+                           .data:00000e2f 20 6f                            jr nz,0x0ea0
+                           .data:00000e31 72                               ld (hl),d
+                           .data:00000e32 20 4e                            jr nz,0x0e82
+                           .data:00000e34 29                               add hl,hl
+                           .data:00000e35 20 20                            jr nz,0x0e57
+                           .data:00000e37 20 00                            jr nz,0x0e39
+                           .data:00000e39 20 20                            jr nz,0x0e5b
+                           .data:00000e3b 20 20                            jr nz,0x0e5d
+                           .data:00000e3d 20 20                            jr nz,0x0e5f
+                           .data:00000e3f 20 20                            jr nz,0x0e61
+                           .data:00000e41 20 20                            jr nz,0x0e63
+                           .data:00000e43 20 20                            jr nz,0x0e65
+                           .data:00000e45 20 20                            jr nz,0x0e67
+                           .data:00000e47 54                               ld d,h
+                           .data:00000e48 56                               ld d,(hl)
+                           .data:00000e49 20 43                            jr nz,0x0e8e
+                           .data:00000e4b 68                               ld l,b
+                           .data:00000e4c 61                               ld h,c
+                           .data:00000e4d 6e                               ld l,(hl)
+                           .data:00000e4e 6e                               ld l,(hl)
+                           .data:00000e4f 65                               ld h,l
+                           .data:00000e50 6c                               ld l,h
+                           .data:00000e51 20 20                            jr nz,0x0e73
+                           .data:00000e53 20 20                            jr nz,0x0e75
+                           .data:00000e55 31 20 2d                         ld sp,0x2d20
+                           .data:00000e58 20 31                            jr nz,0x0e8b
+                           .data:00000e5a 32 20 20                         ld (0x2020),a
+                           .data:00000e5d 20 20                            jr nz,0x0e7f
+                           .data:00000e5f 00                               nop
+                           .data:00000e60 20 20                            jr nz,0x0e82
+                           .data:00000e62 20 20                            jr nz,0x0e84
+                           .data:00000e64 20 20                            jr nz,0x0e86
+                           .data:00000e66 20 20                            jr nz,0x0e88
+                           .data:00000e68 20 20                            jr nz,0x0e8a
+                           .data:00000e6a 20 20                            jr nz,0x0e8c
+                           .data:00000e6c 20 20                            jr nz,0x0e8e
+                           .data:00000e6e 20 20                            jr nz,0x0e90
+                           .data:00000e70 20 20                            jr nz,0x0e92
+                           .data:00000e72 20 20                            jr nz,0x0e94
+                           .data:00000e74 20 20                            jr nz,0x0e96
+                           .data:00000e76 20 20                            jr nz,0x0e98
+                           .data:00000e78 20 20                            jr nz,0x0e9a
+                           .data:00000e7a 20 20                            jr nz,0x0e9c
+                           .data:00000e7c 20 20                            jr nz,0x0e9e
+                           .data:00000e7e 20 20                            jr nz,0x0ea0
+                           .data:00000e80 20 20                            jr nz,0x0ea2
+                           .data:00000e82 20 20                            jr nz,0x0ea4
+                           .data:00000e84 20 20                            jr nz,0x0ea6
+                           .data:00000e86 00                               nop
+                           .data:00000e87 53                               ld d,e
+                           .data:00000e88 55                               ld d,l
+                           .data:00000e89 4e                               ld c,(hl)
+                           .data:00000e8a 00                               nop
+                           .data:00000e8b 4d                               ld c,l
+                           .data:00000e8c 4f                               ld c,a
+                           .data:00000e8d 4e                               ld c,(hl)
+                           .data:00000e8e 00                               nop
+                           .data:00000e8f 54                               ld d,h
+                           .data:00000e90 55                               ld d,l
+                           .data:00000e91 45                               ld b,l
+                           .data:00000e92 00                               nop
+                           .data:00000e93 57                               ld d,a
+                           .data:00000e94 45                               ld b,l
+                           .data:00000e95 44                               ld b,h
+                           .data:00000e96 00                               nop
+                           .data:00000e97 54                               ld d,h
+                           .data:00000e98 48                               ld c,b
+                           .data:00000e99 55                               ld d,l
+                           .data:00000e9a 00                               nop
+                           .data:00000e9b 46                               ld b,(hl)
+                           .data:00000e9c 52                               ld d,d
+                           .data:00000e9d 49                               ld c,c
+                           .data:00000e9e 00                               nop
+                           .data:00000e9f 53                               ld d,e
+                           .data:00000ea0 41                               ld b,c
+                           .data:00000ea1 54                               ld d,h
+                           .data:00000ea2 00                               nop
+                           .data:00000ea3 58                               ld e,b
+                           .data:00000ea4 58                               ld e,b
+                           .data:00000ea5 58                               ld e,b
+                           .data:00000ea6 00                               nop
+                           .data:00000ea7 4f                               ld c,a
+                           .data:00000ea8 4e                               ld c,(hl)
+                           .data:00000ea9 20 43                            jr nz,0x0eee
+                           .data:00000eab 48                               ld c,b
+                           .data:00000eac 00                               nop
+                           .data:00000ead 54                               ld d,h
+                           .data:00000eae 49                               ld c,c
+                           .data:00000eaf 4d                               ld c,l
+                           .data:00000eb0 45                               ld b,l
+                           .data:00000eb1 52                               ld d,d
+                           .data:00000eb2 00                               nop
+                           .data:00000eb3 58                               ld e,b
+                           .data:00000eb4 58                               ld e,b
+                           .data:00000eb5 2f                               cpl
+                           .data:00000eb6 58                               ld e,b
+                           .data:00000eb7 58                               ld e,b
+                           .data:00000eb8 20 58                            jr nz,0x0f12
+                           .data:00000eba 58                               ld e,b
+                           .data:00000ebb 58                               ld e,b
+                           .data:00000ebc 20 58                            jr nz,0x0f16
+                           .data:00000ebe 58                               ld e,b
+                           .data:00000ebf 3a 58 58                         ld a,(0x5858)
+                           .data:00000ec2 20 20                            jr nz,0x0ee4
+                           .data:00000ec4 20 20                            jr nz,0x0ee6
+                           .data:00000ec6 4f                               ld c,a
+                           .data:00000ec7 46                               ld b,(hl)
+                           .data:00000ec8 46                               ld b,(hl)
+                           .data:00000ec9 20 20                            jr nz,0x0eeb
+                           .data:00000ecb 20 20                            jr nz,0x0eed
+                           .data:00000ecd 20 00                            jr nz,0x0ecf
+                           .data:00000ecf 5b                               ld e,e
+                           .data:00000ed0 45                               ld b,l
+                           .data:00000ed1 53                               ld d,e
+                           .data:00000ed2 43                               ld b,e
+                           .data:00000ed3 5d                               ld e,l
+                           .data:00000ed4 3d                               dec a
+                           .data:00000ed5 45                               ld b,l
+                           .data:00000ed6 78                               ld a,b
+                           .data:00000ed7 69                               ld l,c
+                           .data:00000ed8 74                               ld (hl),h
+                           .data:00000ed9 2c                               inc l
+                           .data:00000eda 20 5b                            jr nz,0x0f37
+                           .data:00000edc 43                               ld b,e
+                           .data:00000edd 4c                               ld c,h
+                           .data:00000ede 52                               ld d,d
+                           .data:00000edf 5d                               ld e,l
+                           .data:00000ee0 3d                               dec a
+                           .data:00000ee1 52                               ld d,d
+                           .data:00000ee2 65                               ld h,l
+                           .data:00000ee3 73                               ld (hl),e
+                           .data:00000ee4 65                               ld h,l
+                           .data:00000ee5 74                               ld (hl),h
+                           .data:00000ee6 2c                               inc l
+                           .data:00000ee7 20 5b                            jr nz,0x0f44
+                           .data:00000ee9 43                               ld b,e
+                           .data:00000eea 52                               ld d,d
+                           .data:00000eeb 5d                               ld e,l
+                           .data:00000eec 3d                               dec a
+                           .data:00000eed 53                               ld d,e
+                           .data:00000eee 65                               ld h,l
+                           .data:00000eef 74                               ld (hl),h
+                           .data:00000ef0 00                               nop
+                           .data:00000ef1 23                               inc hl
+                           .data:00000ef2 44                               ld b,h
+                           .data:00000ef3 cd fb 03                         call 0x03fb
+                           .data:00000ef6 3e 0f                            ld a,0x0f
+                           .data:00000ef8 ed 79                            out (c),a
+                           .data:00000efa 21 00 00                         ld hl,0x0000
+                           .data:00000efd 3a 82 ff                         ld a,(0xff82)
+                           .data:00000f00 b7                               or a
+                           .data:00000f01 cc 47 03                         call z,0x0347
+                           .data:00000f04 c4 73 06                         call nz,0x0673
+                           .data:00000f07 3e 64                            ld a,0x64
+                           .data:00000f09 cd 47 03                         call 0x0347
+                           .data:00000f0c 23                               inc hl
+                           .data:00000f0d cb 75                            bit 6,l
+                           .data:00000f0f 3e 07                            ld a,0x07
+                           .data:00000f11 20 02                            jr nz,0x0f15
+                           .data:00000f13 3e 0f                            ld a,0x0f
+                           .data:00000f15 ed 79                            out (c),a
+                           .data:00000f17 3e e6                            ld a,0xe6
+                           .data:00000f19 cd 2e 05                         call 0x052e
+                           .data:00000f1c cd 23 05                         call 0x0523
+                           .data:00000f1f cd 23 05                         call 0x0523
+                           .data:00000f22 b7                               or a
+                           .data:00000f23 20 d8                            jr nz,0x0efd
+                           .data:00000f25 c9                               ret
+                           .data:00000f26 21 00 00                         ld hl,0x0000
+                           .data:00000f29 2b                               dec hl
+                           .data:00000f2a f5                               push af
+                           .data:00000f2b f1                               pop af
+                           .data:00000f2c 7c                               ld a,h
+                           .data:00000f2d b5                               or l
+                           .data:00000f2e 20 f9                            jr nz,0x0f29
+                           .data:00000f30 c3 7e 04                         jp 0x047e
+                           .data:00000f33 3a 81 ff                         ld a,(0xff81)
+                           .data:00000f36 fe 04                            cp 0x04
+                           .data:00000f38 20 0f                            jr nz,0x0f49
+                           .data:00000f3a 3a 80 ff                         ld a,(0xff80)
+                           .data:00000f3d fe 0b                            cp 0x0b
+                           .data:00000f3f 38 05                            jr c,0x0f46
+                           .data:00000f41 fe 1a                            cp 0x1a
+                           .data:00000f43 da 2c 08                         jp c,0x082c
+                           .data:00000f46 c3 82 07                         jp 0x0782
+                           .data:00000f49 fe 13                            cp 0x13
+                           .data:00000f4b c2 2c 08                         jp nz,0x082c
+                           .data:00000f4e 18 ea                            jr 0x0f3a
+                           .data:00000f50 3a 81 ff                         ld a,(0xff81)
+                           .data:00000f53 fe 07                            cp 0x07
+                           .data:00000f55 20 0a                            jr nz,0x0f61
+                           .data:00000f57 3a 80 ff                         ld a,(0xff80)
+                           .data:00000f5a fe 1a                            cp 0x1a
+                           .data:00000f5c da 3b 08                         jp c,0x083b
+                           .data:00000f5f 18 e5                            jr 0x0f46
+                           .data:00000f61 fe 04                            cp 0x04
+                           .data:00000f63 c2 3b 08                         jp nz,0x083b
+                           .data:00000f66 3a 80 ff                         ld a,(0xff80)
+                           .data:00000f69 fe 0b                            cp 0x0b
+                           .data:00000f6b 30 ed                            jr nc,0x0f5a
+                           .data:00000f6d 18 d7                            jr 0x0f46
+                           .data:00000f6f 08                               ex af,af'
+                           .data:00000f70 3a 81 ff                         ld a,(0xff81)
+                           .data:00000f73 fe 04                            cp 0x04
+                           .data:00000f75 20 10                            jr nz,0x0f87
+                           .data:00000f77 3a 80 ff                         ld a,(0xff80)
+                           .data:00000f7a fe 1c                            cp 0x1c
+                           .data:00000f7c 38 09                            jr c,0x0f87
+                           .data:00000f7e cd 87 0f                         call 0x0f87
+                           .data:00000f81 3e 1b                            ld a,0x1b
+                           .data:00000f83 32 80 ff                         ld (0xff80),a
+                           .data:00000f86 c9                               ret
+                           .data:00000f87 08                               ex af,af'
+                           .data:00000f88 c3 d9 03                         jp 0x03d9
+                           .data:00000f8b 7e                               ld a,(hl)
+                           .data:00000f8c fe ff                            cp 0xff
+                           .data:00000f8e c2 a8 06                         jp nz,0x06a8
+                           .data:00000f91 23                               inc hl
+                           .data:00000f92 c3 d4 03                         jp 0x03d4
+                           .data:00000f95 78                               ld a,b
+                           .data:00000f96 b7                               or a
+                           .data:00000f97 20 0d                            jr nz,0x0fa6
+                           .data:00000f99 7c                               ld a,h
+                           .data:00000f9a fe ff                            cp 0xff
+                           .data:00000f9c da a6 0f                         jp c,0x0fa6
+                           .data:00000f9f cd 64 05                         call 0x0564
+                           .data:00000fa2 3e 01                            ld a,0x01
+                           .data:00000fa4 18 05                            jr 0x0fab
+                           .data:00000fa6 cd 64 05                         call 0x0564
+                           .data:00000fa9 3e 04                            ld a,0x04
+                           .data:00000fab cd 48 06                         call 0x0648
+                           .data:00000fae c3 83 00                         jp 0x0083
+                           .data:00000fb1 ff                               rst 0x38
+                           .data:00000fb2 ff                               rst 0x38
+                           .data:00000fb3 ff                               rst 0x38
+                           .data:00000fb4 ff                               rst 0x38
+                           .data:00000fb5 ff                               rst 0x38
+                           .data:00000fb6 ff                               rst 0x38
+                           .data:00000fb7 ff                               rst 0x38
+                           .data:00000fb8 ff                               rst 0x38
+                           .data:00000fb9 ff                               rst 0x38
+                           .data:00000fba ff                               rst 0x38
+                           .data:00000fbb ff                               rst 0x38
+                           .data:00000fbc ff                               rst 0x38
+                           .data:00000fbd ff                               rst 0x38
+                           .data:00000fbe ff                               rst 0x38
+                           .data:00000fbf ff                               rst 0x38
+                           .data:00000fc0 ff                               rst 0x38
+                           .data:00000fc1 ff                               rst 0x38
+                           .data:00000fc2 ff                               rst 0x38
+                           .data:00000fc3 ff                               rst 0x38
+                           .data:00000fc4 ff                               rst 0x38
+                           .data:00000fc5 ff                               rst 0x38
+                           .data:00000fc6 ff                               rst 0x38
+                           .data:00000fc7 ff                               rst 0x38
+                           .data:00000fc8 ff                               rst 0x38
+                           .data:00000fc9 ff                               rst 0x38
+                           .data:00000fca ff                               rst 0x38
+                           .data:00000fcb ff                               rst 0x38
+                           .data:00000fcc ff                               rst 0x38
+                           .data:00000fcd ff                               rst 0x38
+                           .data:00000fce ff                               rst 0x38
+                           .data:00000fcf ff                               rst 0x38
+                           .data:00000fd0 ff                               rst 0x38
+                           .data:00000fd1 ff                               rst 0x38
+                           .data:00000fd2 ff                               rst 0x38
+                           .data:00000fd3 ff                               rst 0x38
+                           .data:00000fd4 ff                               rst 0x38
+                           .data:00000fd5 ff                               rst 0x38
+                           .data:00000fd6 ff                               rst 0x38
+                           .data:00000fd7 ff                               rst 0x38
+                           .data:00000fd8 ff                               rst 0x38
+                           .data:00000fd9 ff                               rst 0x38
+                           .data:00000fda ff                               rst 0x38
+                           .data:00000fdb ff                               rst 0x38
+                           .data:00000fdc ff                               rst 0x38
+                           .data:00000fdd ff                               rst 0x38
+                           .data:00000fde ff                               rst 0x38
+                           .data:00000fdf ff                               rst 0x38
+                           .data:00000fe0 ff                               rst 0x38
+                           .data:00000fe1 ff                               rst 0x38
+                           .data:00000fe2 ff                               rst 0x38
+                           .data:00000fe3 ff                               rst 0x38
+                           .data:00000fe4 ff                               rst 0x38
+                           .data:00000fe5 ff                               rst 0x38
+                           .data:00000fe6 ff                               rst 0x38
+                           .data:00000fe7 ff                               rst 0x38
+                           .data:00000fe8 ff                               rst 0x38
+                           .data:00000fe9 ff                               rst 0x38
+                           .data:00000fea ff                               rst 0x38
+                           .data:00000feb ff                               rst 0x38
+                           .data:00000fec ff                               rst 0x38
+                           .data:00000fed ff                               rst 0x38
+                           .data:00000fee ff                               rst 0x38
+                           .data:00000fef ff                               rst 0x38
+                           .data:00000ff0 ff                               rst 0x38
+                           .data:00000ff1 ff                               rst 0x38
+                           .data:00000ff2 ff                               rst 0x38
+                           .data:00000ff3 ff                               rst 0x38
+                           .data:00000ff4 ff                               rst 0x38
+                           .data:00000ff5 ff                               rst 0x38
+                           .data:00000ff6 ff                               rst 0x38
+                           .data:00000ff7 ff                               rst 0x38
+                           .data:00000ff8 ff                               rst 0x38
+                           .data:00000ff9 ff                               rst 0x38
+                           .data:00000ffa ff                               rst 0x38
+                           .data:00000ffb ff                               rst 0x38
+                           .data:00000ffc ff                               rst 0x38
+                           .data:00000ffd ff                               rst 0x38
+                           .data:00000ffe ff                               rst 0x38
