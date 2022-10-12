@@ -30,24 +30,24 @@ module tv80e (
 */
 tv80e Z80CPU
 (
-	.clk (clock),
-	.cen (cep),
-	.reset_n(reset_n),
-    .m1_n(m1),	
-	.busrq_n(1'b1 ),
-	.wait_n(1'b1 ),
-	.halt_n(halt_n ),
-	.mreq_n(mreq ),
-	.iorq_n(iorq ),
-	.nmi_n(1'b1 ),
-	.int_n(int_n),
-    .rd_n(rd),	
-	.wr_n(wr   ),
-	.A      (a    ),
-	.di(di   ),
-	.dout(data_out),
-	.dir (dir),
-	.dirset (dirset)
+	.clk 	 (clock	  ),
+	.cen 	 (cep	  ),
+	.reset_n (reset_n ),
+    .m1_n	 (m1	  ),	
+	.busrq_n (1'b1 	  ),
+	.wait_n	 (1'b1 	  ),
+	.halt_n	 (halt_n  ),
+	.mreq_n	 (mreq 	  ),
+	.iorq_n	 (iorq 	  ),
+	.nmi_n	 (1'b1 	  ),
+	.int_n	 (int_n	  ),
+    .rd_n	 (rd	  ),	
+	.wr_n	 (wr      ),
+	.A       (a       ),
+	.di		 (di      ),
+	.dout	 (data_out),
+	.dir 	 (dir	  ),
+	.dirset  (dirset  )
 );
 
 /*

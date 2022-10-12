@@ -589,7 +589,6 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ __Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__B;
     CData/*0:0*/ __Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Sub;
     CData/*0:0*/ __Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Carry_In;
-    CData/*0:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Save_ALU_r;
     CData/*7:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ACC;
     CData/*7:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F;
     CData/*6:0*/ __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__tstate;
@@ -756,8 +755,8 @@ VL_MODULE(Vtop) {
     static QData _change_request(Vtop__Syms* __restrict vlSymsp);
     static QData _change_request_1(Vtop__Syms* __restrict vlSymsp);
   public:
+    static void _combo__TOP__11(Vtop__Syms* __restrict vlSymsp);
     static void _combo__TOP__4(Vtop__Syms* __restrict vlSymsp);
-    static void _combo__TOP__9(Vtop__Syms* __restrict vlSymsp);
   private:
     static void _ctor_var_reset(Vtop* self) VL_ATTR_COLD;
   public:
@@ -772,11 +771,11 @@ VL_MODULE(Vtop) {
     static void _initial__TOP__1(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _multiclk__TOP__12(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__10(Vtop__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__11(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__5(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__6(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__7(Vtop__Syms* __restrict vlSymsp);
     static void _sequent__TOP__8(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__9(Vtop__Syms* __restrict vlSymsp);
     static void _settle__TOP__2(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _settle__TOP__3(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
   private:

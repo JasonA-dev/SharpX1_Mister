@@ -452,6 +452,14 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("O q_a:       0x%04X", top->top__DOT__sharpx1__DOT__RAM__DOT__q_a);	
 		ImGui::Spacing();														
 		ImGui::End();
+		// Debug ROM
+		ImGui::Begin("ROM ports");
+		ImGui::Text("I address_b: 0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__address_b);	
+		ImGui::Text("I wren_b:    0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__wren_b);
+		ImGui::Text("I data_b:    0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__data_b);
+		ImGui::Text("O q_b:       0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__q_b);	
+		ImGui::Spacing();														
+		ImGui::End();
 
 		// Debug ioctl
 		ImGui::Begin("ioctl");

@@ -377,6 +377,7 @@ module tv80_core (/*AUTOARG*/
     begin
       if (reset_n == 1'b0 ) 
         begin
+          //$display( "(reset_n PC %x)", PC);
           PC <= #1 0;  // Program Counter
           A <= #1 0;
           TmpAddr <= #1 0;
@@ -409,16 +410,16 @@ module tv80_core (/*AUTOARG*/
         end 
       else if (dirset == 1'b1)
         begin
-            $display( "(before PC %x)", PC);
+            //$display( "(before PC %x)", PC);
             PC <= dir;
-            $display( "(after PC %x)", PC);
+            //$display( "(after PC %x)", PC);
         end
       else 
         begin
 
           if (ClkEn == 1'b1 ) 
             begin
-
+              //$display("ClkEn: PC %h ACC %h Ap %h Fp %h I %h SP %h", PC, ACC, Ap, Fp, I, SP);  
               ALU_Op_r <= #1 4'b0000;
               Save_ALU_r <= #1 1'b0;
               Read_To_Reg_r <= #1 5'b00000;
@@ -1156,6 +1157,7 @@ module tv80_core (/*AUTOARG*/
       IntE = IntE_FF1;
       iorq = iorq_i;
       stop = I_DJNZ;
+      //$display("di %h mcycle %h tstate %h halt_n %h busak_n %h intcycle_n %h IntE %h iorq %h stop %h", di, mcycle, tstate, halt_n, busak_n, intcycle_n, IntE, iorq, stop);      
     end
 
   //-----------------------------------------------------------------------
@@ -1226,12 +1228,14 @@ module tv80_core (/*AUTOARG*/
                 end 
               else 
                 begin
-		  Auto_Wait_t1 <= #1 Auto_Wait || (iorq_i & ~Auto_Wait_t2);
+		              Auto_Wait_t1 <= #1 Auto_Wait || (iorq_i & ~Auto_Wait_t2);
                 end
+
               Auto_Wait_t2 <= #1 Auto_Wait_t1 & !T_Res;
               No_BTR <= #1 (I_BT && (~ IR[4] || ~ F[Flag_P])) ||
                         (I_BC && (~ IR[4] || F[Flag_Z] || ~ F[Flag_P])) ||
                         (I_BTR && (~ IR[4] || F[Flag_Z]));
+              $display("tstate %h ", tstate);     
               if (tstate[2] ) 
                 begin
                   if (SetEI == 1'b1 ) 
@@ -1245,6 +1249,7 @@ module tv80_core (/*AUTOARG*/
                       IntE_FF1 <= #1 IntE_FF2;
                     end
                 end
+
               if (tstate[3] ) 
                 begin
                   if (SetDI == 1'b1 ) 
@@ -1253,14 +1258,17 @@ module tv80_core (/*AUTOARG*/
                       IntE_FF2 <= #1 1'b0;
                     end
                 end
+
               if (IntCycle == 1'b1 || NMICycle == 1'b1 ) 
                 begin
                   Halt_FF <= #1 1'b0;
                 end
+
               if (mcycle[0] && tstate[2] && wait_n == 1'b1 ) 
                 begin
                   m1_n <= #1 1'b1;
                 end
+
               if (BusReq_s == 1'b1 && BusAck == 1'b1 ) 
                 begin
                 end 
@@ -1331,11 +1339,12 @@ module tv80_core (/*AUTOARG*/
                         end
                     end
                 end
+
               if (tstate[0]) 
                 begin
                   m1_n <= #1 1'b0;
                 end
-            end
+            end  // ce
         end
     end
 
