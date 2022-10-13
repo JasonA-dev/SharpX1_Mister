@@ -1235,7 +1235,7 @@ module tv80_core (/*AUTOARG*/
               No_BTR <= #1 (I_BT && (~ IR[4] || ~ F[Flag_P])) ||
                         (I_BC && (~ IR[4] || F[Flag_Z] || ~ F[Flag_P])) ||
                         (I_BTR && (~ IR[4] || F[Flag_Z]));
-              $display("tstate %h ", tstate);     
+              //$display("tstate %h ", tstate);     
               if (tstate[2] ) 
                 begin
                   if (SetEI == 1'b1 ) 

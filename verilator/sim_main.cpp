@@ -452,6 +452,7 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("O q_a:       0x%04X", top->top__DOT__sharpx1__DOT__RAM__DOT__q_a);	
 		ImGui::Spacing();														
 		ImGui::End();
+		
 		// Debug ROM
 		ImGui::Begin("ROM ports");
 		ImGui::Text("I address_b: 0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__address_b);	
@@ -460,7 +461,15 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("O q_b:       0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__q_b);	
 		ImGui::Spacing();														
 		ImGui::End();
-
+		/*
+		// Debug ROM
+		ImGui::Begin("ROM ports");
+		ImGui::Text("I a:        0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__a);	
+		ImGui::Text("I ce:       0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__ce);
+		ImGui::Text("O data_out: 0x%04X", top->top__DOT__sharpx1__DOT__IPL__DOT__data_out);	
+		ImGui::Spacing();														
+		ImGui::End();
+		*/
 		// Debug ioctl
 		ImGui::Begin("ioctl");
 		ImGui::Text("ioctl_download: 0x%02X", top->top__DOT__sharpx1__DOT__ioctl_download);	

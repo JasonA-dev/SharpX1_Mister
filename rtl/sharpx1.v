@@ -161,7 +161,7 @@ end
 dpram #(8, 13) IPL  // (4KB)
 (
 	.clock     (clk_sys          ),
-	.address_a (ioctl_addr[12:0] ),
+	.address_a (ioctl_addr       ),
 	.wren_a    (ioctl_wr         ),
 	.data_a    (ioctl_dout       ),
 	.q_a       (                 ),
@@ -344,6 +344,7 @@ assign ramWe = !(!mreq && !wr);
 assign ramDi = data_out;
 assign ramA  = a;
 
-assign di = !mreq ? ramDo : romDo_SharpX1;
+//assign di = romDo_SharpX1;
+assign di = mreq ? ramDo : romDo_SharpX1;
 
 endmodule
