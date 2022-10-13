@@ -17,4 +17,5 @@ verilator \
 ../rtl/sub_cpu.v \
 ../rtl/sub_rom.v \
 ../rtl/mr16_x1.v \
-../rtl/mr16core.v
+../rtl/mr16core.v \
+../rtl/x1_adec.v

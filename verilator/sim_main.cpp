@@ -391,6 +391,35 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Spacing();
 		ImGui::End();
 
+		// Debug Address Decoder
+		ImGui::Begin("Address Decoder");
+		ImGui::Text("I reset:      0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__I_RESET);	
+		ImGui::Text("I A:          0x%04X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__I_A);
+		ImGui::Text("I MREQ_n:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__I_MREQ_n);
+		ImGui::Spacing();	
+		ImGui::Text("O IPL_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_CS);
+		ImGui::Text("O RAM_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_RAM_CS);
+		ImGui::Text("O MIOCS:      0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_MIOCS);
+		ImGui::Text("O EMM_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EMM_CS);
+		ImGui::Text("O EXTROM_CS:  0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EXTROM_CS);
+		ImGui::Text("O KANROM_CS:  0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_KANROM_CS);
+		ImGui::Text("O FD5_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_FD5_CS);
+		ImGui::Text("O PAL_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PAL_CS);
+		ImGui::Text("O CG_CS:      0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CG_CS);
+		ImGui::Text("O CRTC_CS:    0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CRTC_CS);																		
+		ImGui::Text("O SUB_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_SUB_CS);
+		ImGui::Text("O PIA_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PIA_CS);
+		ImGui::Text("O PSG_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PSG_CS);
+		ImGui::Text("O IPL_SET_CS: 0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_SET_CS);
+		ImGui::Text("O IPL_RES_CS: 0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_RES_CS);
+		ImGui::Text("O ATTR_CS:    0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_ATTR_CS);
+		ImGui::Text("O TEXT_CS:    0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_TEXT_CS);
+		ImGui::Text("O GRB_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRB_CS);
+		ImGui::Text("O GRR_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRR_CS);
+		ImGui::Text("O GRG_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRG_CS);
+		ImGui::Spacing();
+		ImGui::End();
+
 /*
 		// Debug CPU
 		ImGui::Begin("Cpu");

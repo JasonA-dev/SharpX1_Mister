@@ -66,7 +66,8 @@ V_SRC = \
 	$(RTL)/sub_cpu.v \
 	$(RTL)/sub_rom.v \
 	$(RTL)/mr16_x1.v \
-	$(RTL)/mr16core.v
+	$(RTL)/mr16core.v \
+	$(RTL)/x1_adec.v
 
 C_SRC = \
 	sim_main.cpp  \

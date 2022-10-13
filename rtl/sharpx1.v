@@ -338,17 +338,19 @@ cpu Cpu
   Sub CPU 80C49
 ****************************************************************************/
 
+wire  [ 7:0] subDo;
+
 x1_sub subCPU
 (
   .I_reset(~reset),
   .I_clk(clk_sys),  // 32MHz
   // MAIN-SUB communication port
-  .I_cs(),
+  .I_cs(sub_cs),
   .I_rd(),
   .I_wr(),
   .I_M1_n(~m1),
-  .I_D(),
-  .O_D(),
+  .I_D(data_out),
+  .O_D(subDo),
   .O_DOE(),
   // Timer IC Timming Port
   .O_clk1(),
@@ -401,6 +403,75 @@ x1_sub subCPU
 );
 
 /****************************************************************************
+  Address Decoder
+****************************************************************************/
+
+// chip selects
+wire ipl_cs;
+wire ram_cs;
+wire sub_cs;
+wire miocs;
+wire psg_cs;
+wire gram_cs;
+
+x1_adec x1_adec(
+  .I_RESET(~reset),
+  .I_CLK(clk_sys),
+  .I_A(a),
+  .I_MREQ_n(~mreq),
+  .I_IORQ_n(~iorq),
+  .I_RD_n(),
+  .I_WR_n(),
+  // mode select
+  .I_IPL_SEL(),
+  .I_DAM(),
+  .I_DEFCHR(),
+  // memory CS
+  .O_IPL_CS(ipl_cs),
+  .O_RAM_CS(ram_cs),
+  //
+  .O_MIOCS(miocs),
+  // I/O CS
+  .O_EMM_CS(),
+  .O_EXTROM_CS(),
+  .O_KANROM_CS(),
+  .O_FD5_CS(),
+  .O_PAL_CS(),
+  .O_CG_CS(),
+  .O_CRTC_CS(),
+  .O_SUB_CS(sub_cs),
+  .O_PIA_CS(),
+  .O_PSG_CS(),
+  .O_IPL_SET_CS(),
+  .O_IPL_RES_CS(),
+  //
+  .O_ATTR_CS(),
+  .O_TEXT_CS(),
+  .O_GRB_CS(gram_cs),
+  .O_GRR_CS(gram_cs),
+  .O_GRG_CS(gram_cs),
+  // option board
+`ifdef FMBOARD
+  .O_FM_CS(),
+  .O_FMO_CTC_CS(),
+`endif
+  .O_HDD_CS(),
+  .O_FD8_CS(),
+// X1turbo
+`ifdef X1TURBO
+  .O_KANJI_CS(), // 3800-3fff
+  .O_BMEM_CS(),  // 0b00
+  .O_DMA_CS(),   // 1f8x
+  .O_SIO_CS(),   // 1f90-1f93
+  .O_CTC_CS(),   // 1fa0-1fa3
+  .O_P1FDX_CS(),
+  .O_BLACK_CS(), // 1fe0
+  .O_DIPSW_CS(), // 1ff0
+`endif
+  .O_DAM_CLR()  
+);
+
+/****************************************************************************
   Data & Address Buses
 ****************************************************************************/
 
@@ -410,7 +481,12 @@ assign ramWe = !(!mreq && !wr);
 assign ramDi = data_out;
 assign ramA  = a;
 
-//assign di = romDo_SharpX1;
-assign di = mreq ? ramDo : romDo_SharpX1;
+assign gramDi = data_out; 
 
+//assign di = mreq ? ramDo : romDo_SharpX1;
+assign di = ram_cs ? ramDo : 
+            ipl_cs ? romDo_SharpX1 :
+            sub_cs ? subDo :
+            gram_cs ? gramDo :
+            8'hff;
 endmodule
