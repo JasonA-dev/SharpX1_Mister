@@ -62,7 +62,11 @@ V_SRC = \
 	$(RTL)/tv80/tv80_alu.v \			
 	$(RTL)/tv80/tv80_reg.v \				
 	$(RTL)/dpram.sv \	
-	$(RTL)/rom.v
+	$(RTL)/rom.v \
+	$(RTL)/sub_cpu.v \
+	$(RTL)/sub_rom.v \
+	$(RTL)/mr16_x1.v \
+	$(RTL)/mr16core.v
 
 C_SRC = \
 	sim_main.cpp  \

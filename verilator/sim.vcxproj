@@ -76,7 +76,8 @@
     <ClCompile Include="obj_dir\Vtop.cpp" />
     <ClCompile Include="obj_dir\Vtop__Syms.cpp" />
     <ClCompile Include="obj_dir\Vtop__1.cpp" />
-    <ClCompile Include="obj_dir\Vtop__1__Slow.cpp" />    
+    <ClCompile Include="obj_dir\Vtop__1__Slow.cpp" />  
+    <ClCompile Include="obj_dir\Vtop__2.cpp" />      
     <ClCompile Include="obj_dir\Vtop__Slow.cpp" />    
     <ClCompile Include="obj_dir\Vtop__Trace.cpp" />
     <ClCompile Include="obj_dir\Vtop__Trace__Slow.cpp" />

@@ -335,6 +335,72 @@ cpu Cpu
 );
 
 /****************************************************************************
+  Sub CPU 80C49
+****************************************************************************/
+
+x1_sub subCPU
+(
+  .I_reset(~reset),
+  .I_clk(clk_sys),  // 32MHz
+  // MAIN-SUB communication port
+  .I_cs(),
+  .I_rd(),
+  .I_wr(),
+  .I_M1_n(~m1),
+  .I_D(),
+  .O_D(),
+  .O_DOE(),
+  // Timer IC Timming Port
+  .O_clk1(),
+  // FDC emulation
+  .O_FDC_DRQ_n(),
+  // O_FDC_INT_n,
+  .I_FDCS(),
+  .I_RFSH_n(),
+  .I_RFSH_STB_n(),
+  // Z80DMA / FDD memory access
+  .I_DMA_CS(),
+  .O_DMA_BANK(),
+  .O_DMA_A(),
+  .I_DMA_D(),
+  .O_DMA_D(),
+  .O_DMA_MREQ_n(),
+  .O_DMA_IORQ_n(),
+  .O_DMA_RD_n(),
+  .O_DMA_WR_n(),
+  .O_DMA_BUSRQ_n(),
+  .I_DMA_BUSAK_n(),
+  .I_DMA_RDY(),
+  .I_DMA_WAIT_n(),
+  .I_DMA_IEI(),
+  .O_DMA_INT_n(),
+  .O_DMA_IEO(),
+  //
+  .O_PCM(),
+  .O_FD_LAMP(),
+  // SUBCPU Firmware Access Port
+  .I_fa(),
+  .I_fcs(),
+  // PS2 keyboard
+  .I_PS2C(),
+  .I_PS2D(),
+  .O_PS2CT(),
+  .O_PS2DT(),
+  // communication handshake signal 
+  .O_TX_BSY(),
+  .O_RX_BSY(),
+  .O_KEY_BRK_n(),
+  // subcpu int controll
+  .I_SPM1(),
+  .I_RETI(),
+  .I_IEI(),
+  .O_INT_n(),
+  // JOYSTICK EMULATION PORT
+  .O_JOY_A(),
+  .O_JOY_B()
+);
+
+/****************************************************************************
   Data & Address Buses
 ****************************************************************************/
 

@@ -8,6 +8,7 @@
 #include "verilated_dpi.h"
 
 //==========
+VlUnpacked<CData/*3:0*/, 64> Vtop::__Vtable1_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__vector;
 
 const IData Vtop::var_top__DOT__sharpx1__DOT__IPL__DOT__data_width_g(8U);
 const IData Vtop::var_top__DOT__sharpx1__DOT__IPL__DOT__addr_width_g(0xdU);
@@ -64,6 +65,21 @@ const IData Vtop::var_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core
 const IData Vtop::var_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__Flag_Y(5U);
 const IData Vtop::var_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__Flag_Z(6U);
 const IData Vtop::var_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__Flag_S(7U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__RAM_DEPTH(0xbU);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__JOY_EMU(1U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__ivec_depth(4U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__WIDTH(0x10U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__WIDTH(0xfU);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__WIDTH(0xfU);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__WIDTH(0x11U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__WIDTH(0x11U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__WIDTH(0x10U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__WIDTH(5U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__WIDTH(0xbU);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__TIMER_WIDTH(0x10U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__WIDTH(0x10U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__data_width_g(8U);
+const IData Vtop::var_top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__addr_width_g(0xaU);
 
 Vtop::Vtop(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModule{_vcname__}
@@ -90,7 +106,7 @@ Vtop::~Vtop() {
 
 // Savable
 void Vtop::__Vserialize(VerilatedSerialize& os) {
-    vluint64_t __Vcheckval = 0x778527630ffae63fULL;
+    vluint64_t __Vcheckval = 0x880217593a2b6069ULL;
     os << __Vcheckval;
     os << __VlSymsp->_vm_contextp__;
     os<<clk_48;
@@ -562,6 +578,415 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     os<<top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__L;
     os<<top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__IX;
     os<<top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__IY;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_reset;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_clk;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_fa;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_fcs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_PS2C;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_PS2D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2CT;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2DT;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_wr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_rd;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_M1_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DOE;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_clk1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_FDC_DRQ_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_FDCS;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_STB_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_CS;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BANK;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_A;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_MREQ_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IORQ_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_RD_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_WR_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BUSRQ_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_RDY;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_WAIT_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_INT_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IEO;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_PCM;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_FD_LAMP;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_SPM1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_RETI;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__I_IEI;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_INT_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_TX_BSY;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_RX_BSY;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_KEY_BRK_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_A;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_B;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dot_7seg;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__num_7seg;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_ivec_cycle;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_addr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__wdata;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__rdata;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__pgm_data;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__wram_data;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__mem_we;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP3;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP5;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP6;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OP9;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OPA;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__OPB;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IP0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IP1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IP2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IP3;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IA8;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IA9;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IAA;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__IAB;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__iack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__ps2_irq;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__ps2_ack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fdc_irq;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fdc_ack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_irq;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_ack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__mem_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__pgm_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__wwam_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__msel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_cpu__O_ACK;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT____Vcellinp__sub_cpu__I_INT;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__mem_addr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_rd;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_ivec_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__p8255_hs_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fw_wram_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__wram_wr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_wd;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_b;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__joya_emu;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__joyb_emu;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__hwd_full;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__hrd_full;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__hwd_clr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__hrd_set;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__irq_en;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__main_we;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__main_re;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__ps2_ct_r;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_cmd_wr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_set;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_clr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fdc_hlt;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fdc_wprt;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs_r;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__drq_set;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__drq_clr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_r;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_rdy;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_cyc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_req;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_d_r;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_dir;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_res;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_set;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_ena;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_cycle;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_srv;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_acc_port;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_irq;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_acc1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_iack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fd_access;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__fdc_tarp_r;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_tarp_r;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__dma_rw;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__wram_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_RESET;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_CLK;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_CLKEN;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_A;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_MEMCS;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_WR;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_TMRG;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P3;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P5;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P6;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P7;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P8;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P9;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PA;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PB;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P3;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I5;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I6;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I7;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I8;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I9;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IA;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IB;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_INT;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_ACK;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__vector;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_wr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem16_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__tmr_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_ack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_irq;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem_cs_r;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reset;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__clk;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__clk_en;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_in;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_sel8;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_wr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__m_acc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__ivector;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__t_addr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__t_sel;
+    for (int __Vi0=0; __Vi0<16; ++__Vi0) {
+        os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl[__Vi0];
+    }
+    for (int __Vi0=0; __Vi0<16; ++__Vi0) {
+        os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh[__Vi0];
+    }
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_pc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__zflag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vflag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__nflag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iflag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_flag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_addr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_addr;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__stack_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MEM;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDM;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_STM;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__STM_FLG;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_FLG;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_POP_RET;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_BCC;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_JABS;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_CALL;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cond;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__prefix_in;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOADF;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__set_flag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_CF;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_ZF;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_IF;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MLT;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MLTH;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOGICAL;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_ARITHMETIC;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_wc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_sub;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_TEST;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_CMP;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_cycle;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__disp11;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__disp16;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_in;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_in;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regl;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regh;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_flag;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_pc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_load;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_load;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_load;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bl_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bh_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rs_b_mux__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_true;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inc_pc;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rel_pc_sel__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mlth_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mltl_out;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mlt32c;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_cin;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_a_in;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_in;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__atith_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__alu_out_mux__I4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_load;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vector_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_sel;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellout__d_bus_out_l_mux__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellout__d_bus_out_h_mux__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__A;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__B;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__C;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I3;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I3;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I3;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I4;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I2;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_RESET;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_CLK;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_GATE;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_A;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_CS;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_WR;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__O_D;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__O_INT;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_IACK;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__next_timer;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_overflow;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctr_load;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int_load;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt_load;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__S;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__I0;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__I1;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__O;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__CLK;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__A;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__DO;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__clock;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__ram_cs;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__wren_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__address_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__data_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__q_a;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__ram_cs_b;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__wren_b;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__address_b;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__data_b;
+    os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__q_b;
+    for (int __Vi0=0; __Vi0<1024; ++__Vi0) {
+        os<<top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem[__Vi0];
+    }
     os<<__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__is_cc_true__2__Vfuncout;
     os<<__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__is_cc_true__2__FF;
     os<<__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__is_cc_true__2__cc;
@@ -664,6 +1089,163 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     os<<__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__B;
     os<<__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Sub;
     os<<__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Carry_In;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__sel;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__nf;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__vf;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__zf;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__cf;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__i1;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__sel;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__i0;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__i1;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__i2;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__func;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__a;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__b;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__sel;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__i0;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__i1;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__i2;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__sel;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i0;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i1;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i2;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i3;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i4;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__sel;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i0;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i1;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i2;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i3;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__Vfuncout;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__sel;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__i0;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__i1;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__i2;
+    os<<__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__rom__55__Vfuncout;
+    for (int __Vi0=0; __Vi0<64; ++__Vi0) {
+        os<<__Vtablechg1[__Vi0];
+    }
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL__v0;
+    os<<__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__ps2_ct_r;
+    os<<__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req;
+    os<<__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__fdc_tarp_r;
+    os<<__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__dma_tarp_r;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v0;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v0;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v0;
+    os<<__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v1;
+    os<<__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v1;
+    os<<__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v1;
     os<<__Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__PC;
     os<<__Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ACC;
     os<<__Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F;
@@ -680,7 +1262,7 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     __VlSymsp->__Vserialize(os);
 }
 void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
-    vluint64_t __Vcheckval = 0x778527630ffae63fULL;
+    vluint64_t __Vcheckval = 0x880217593a2b6069ULL;
     os.readAssert(__Vcheckval);
     os >> __VlSymsp->_vm_contextp__;
     os>>clk_48;
@@ -1152,6 +1734,415 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
     os>>top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__L;
     os>>top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__IX;
     os>>top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__IY;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_reset;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_clk;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_fa;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_fcs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_PS2C;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_PS2D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2CT;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2DT;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_wr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_rd;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_M1_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DOE;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_clk1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_FDC_DRQ_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_FDCS;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_STB_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_CS;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BANK;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_A;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_MREQ_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IORQ_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_RD_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_WR_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BUSRQ_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_RDY;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_WAIT_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_INT_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IEO;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_PCM;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_FD_LAMP;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_SPM1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_RETI;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__I_IEI;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_INT_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_TX_BSY;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_RX_BSY;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_KEY_BRK_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_A;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_B;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dot_7seg;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__num_7seg;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_ivec_cycle;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_addr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__wdata;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__rdata;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__pgm_data;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__wram_data;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__mem_we;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP3;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP5;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP6;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OP9;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OPA;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__OPB;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IP0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IP1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IP2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IP3;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IA8;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IA9;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IAA;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__IAB;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__iack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__ps2_irq;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__ps2_ack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fdc_irq;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fdc_ack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_irq;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_ack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__mem_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__pgm_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__wwam_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__msel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_cpu__O_ACK;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT____Vcellinp__sub_cpu__I_INT;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__mem_addr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_rd;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_ivec_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__p8255_hs_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fw_wram_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__wram_wr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_wd;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_b;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__joya_emu;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__joyb_emu;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__hwd_full;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__hrd_full;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__hwd_clr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__hrd_set;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__irq_en;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__main_we;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__main_re;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__ps2_ct_r;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_cmd_wr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_set;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_clr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fdc_hlt;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fdc_wprt;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs_r;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__drq_set;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__drq_clr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_r;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_rdy;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_cyc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_req;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_d_r;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_dir;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_res;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_set;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_ena;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_cycle;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_srv;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_acc_port;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_irq;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_acc1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_iack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fd_access;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__fdc_tarp_r;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_tarp_r;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__dma_rw;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__wram_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_RESET;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_CLK;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_CLKEN;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_A;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_MEMCS;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_WR;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_TMRG;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P3;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P5;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P6;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P7;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P8;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P9;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PA;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PB;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P3;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I5;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I6;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I7;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I8;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I9;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IA;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IB;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_INT;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_ACK;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__vector;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_wr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem16_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__tmr_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_ack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_irq;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem_cs_r;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reset;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__clk;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__clk_en;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_in;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_sel8;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_wr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__m_acc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__ivector;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__t_addr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__t_sel;
+    for (int __Vi0=0; __Vi0<16; ++__Vi0) {
+        os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl[__Vi0];
+    }
+    for (int __Vi0=0; __Vi0<16; ++__Vi0) {
+        os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh[__Vi0];
+    }
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_pc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__zflag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vflag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__nflag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iflag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_flag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_addr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_addr;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__stack_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MEM;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDM;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_STM;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__STM_FLG;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_FLG;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_POP_RET;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_BCC;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_JABS;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_CALL;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cond;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__prefix_in;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOADF;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__set_flag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_CF;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_ZF;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_IF;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MLT;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MLTH;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOGICAL;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_ARITHMETIC;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_wc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_sub;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_TEST;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_CMP;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_cycle;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__disp11;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__disp16;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_in;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_in;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regl;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regh;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_flag;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_pc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_load;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_load;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_load;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bl_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bh_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rs_b_mux__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_true;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inc_pc;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rel_pc_sel__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mlth_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mltl_out;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mlt32c;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_cin;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_a_in;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_in;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__atith_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__alu_out_mux__I4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_load;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vector_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_sel;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellout__d_bus_out_l_mux__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellout__d_bus_out_h_mux__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__A;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__B;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__C;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I3;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I3;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I3;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I4;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I2;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_RESET;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_CLK;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_GATE;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_A;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_CS;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_WR;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__O_D;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__O_INT;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_IACK;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__next_timer;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_overflow;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctr_load;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int_load;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt_load;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__S;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__I0;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__I1;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__O;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__CLK;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__A;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__DO;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__clock;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__ram_cs;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__wren_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__address_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__data_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__q_a;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__ram_cs_b;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__wren_b;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__address_b;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__data_b;
+    os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__q_b;
+    for (int __Vi0=0; __Vi0<1024; ++__Vi0) {
+        os>>top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem[__Vi0];
+    }
     os>>__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__is_cc_true__2__Vfuncout;
     os>>__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__is_cc_true__2__FF;
     os>>__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__is_cc_true__2__cc;
@@ -1254,6 +2245,163 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
     os>>__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__B;
     os>>__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Sub;
     os>>__Vfunc_top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__AddSub1__31__Carry_In;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__sel;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__nf;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__vf;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__zf;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_table__32__cf;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__i1;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__sel;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__i0;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__i1;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__sel3__34__i2;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__35__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__36__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__37__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__38__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__39__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__40__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__41__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__42__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__43__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__44__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__45__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__46__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__47__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__48__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__49__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__func;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__a;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__logic1__50__b;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__sel;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__i0;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__i1;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__i2;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__sel;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i0;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i1;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i2;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i3;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__sel5__52__i4;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__sel;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i0;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i1;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i2;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i3;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__Vfuncout;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__sel;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__i0;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__i1;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__sel3__54__i2;
+    os>>__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__rom__55__Vfuncout;
+    for (int __Vi0=0; __Vi0<64; ++__Vi0) {
+        os>>__Vtablechg1[__Vi0];
+    }
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__RAM__DOT__mem__v1;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__PCGRAM__DOT__mem__v1;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__GRAM__DOT__mem__v1;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL__v0;
+    os>>__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__ps2_ct_r;
+    os>>__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req;
+    os>>__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__fdc_tarp_r;
+    os>>__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__dma_tarp_r;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rl__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_rh__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v0;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v0;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v0;
+    os>>__Vdlyvdim0__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v1;
+    os>>__Vdlyvval__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v1;
+    os>>__Vdlyvset__top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__mem__v1;
     os>>__Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__PC;
     os>>__Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ACC;
     os>>__Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F;
@@ -1276,12 +2424,25 @@ void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
     // Body
     vlTOPp->top__DOT__sw1 = 0U;
     vlTOPp->top__DOT__sw2 = 2U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__t_addr = 0U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__O_D = 0U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I0 = 1U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I2 = 0U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I3 = 4U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I4 = 0x1fffcU;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I4 = 0U;
     vlTOPp->ioctl_wait = 0U;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__rfsh_n = 1U;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__wait_n = 1U;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__nmi_n = 1U;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__busrq_n = 1U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_TMRG = 1U;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__int_n = 1U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_hlt = 1U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_wprt = 1U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fw_wram_cs = 0U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem16_cs = 1U;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_iack = 0U;
     vlTOPp->top__DOT__ioctl_wait = vlTOPp->ioctl_wait;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__rfsh_n 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__rfsh_n;
@@ -1291,6 +2452,8 @@ void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__nmi_n;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__busrq_n 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__busrq_n;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_GATE 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_TMRG;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__int_n 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__int_n;
 }
@@ -1320,17 +2483,27 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__gramA;
     vlTOPp->top__DOT__sharpx1__DOT__GRAM__DOT__data_a 
         = vlTOPp->top__DOT__sharpx1__DOT__gramDi;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_wd 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_D;
     vlTOPp->top__DOT__VGA_HS = vlTOPp->VGA_HS;
     vlTOPp->top__DOT__VGA_VS = vlTOPp->VGA_VS;
     vlTOPp->top__DOT__VGA_HB = vlTOPp->VGA_HB;
     vlTOPp->top__DOT__VGA_VB = vlTOPp->VGA_VB;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts_cs 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_FDCS) 
+           & (0U == (7U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_fa))));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__dir = vlTOPp->top__DOT__sharpx1__DOT__dir;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__dirset 
         = vlTOPp->top__DOT__sharpx1__DOT__dirset;
     vlTOPp->AUDIO_L = (0xffffU & (((IData)(vlTOPp->top__DOT__audio) 
                                    << 8U) | (IData)(vlTOPp->top__DOT__audio)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_reset 
+        = (1U & (~ (IData)(vlTOPp->top__DOT__reset)));
     vlTOPp->top__DOT__sharpx1__DOT__reset = vlTOPp->top__DOT__reset;
     vlTOPp->top__DOT__rgb = vlTOPp->top__DOT____Vcellout__sharpx1__video;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_ivec_cycle 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_SPM1) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_IEI));
     vlTOPp->top__DOT__clk_12 = vlTOPp->clk_12;
     vlTOPp->top__DOT__inputs = vlTOPp->inputs;
     vlTOPp->top__DOT__ioctl_upload = vlTOPp->ioctl_upload;
@@ -1406,6 +2579,22 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__ioctl_wr = vlTOPp->ioctl_wr;
     vlTOPp->top__DOT__ioctl_dout = vlTOPp->ioctl_dout;
     vlTOPp->top__DOT__clk_48 = vlTOPp->clk_48;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_cmd_wr 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_FDCS) 
+            & (0U == (7U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_fa)))) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_wr));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rw 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_CS) 
+           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_rd) 
+              | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_wr)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__wram_wr 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_wr;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP2 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_PS2C) 
+            << 1U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_PS2D));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__main_we 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_cs) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_wr));
     vlTOPp->top__DOT__sharpx1__DOT__ne8M8 = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__ce)));
     vlTOPp->top__DOT__sharpx1__DOT__pe2M2 = (IData)(
                                                     (4U 
@@ -1461,6 +2650,98 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__L 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL
         [2U];
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_set 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hwd_clr 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2DT 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2CT 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2) 
+                 >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_FDC_DRQ_n 
+        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_FD_LAMP 
+        = (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP4));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PCM 
+        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_D 
+        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP0));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BANK 
+        = (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_A 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_MREQ_n 
+        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                    >> 0xcU)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IORQ_n 
+        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                    >> 0xdU)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_RD_n 
+        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                    >> 0xeU)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_res 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_set 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 2U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__num_7seg 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P0 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP0;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P1 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P2 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P3 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P4 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP4;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P5 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP5;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P6 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P7 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P8 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P9 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PA 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PB 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I4 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I5 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I6 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I7 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I8 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA8;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I9 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA9;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IA 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IAA;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IB 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IAB;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__ivector 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__vector;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I1 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__S 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem_cs_r;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__I0 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__DO 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__pgm_data;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__q_a 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_a;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__q_b 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_b;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__IX 
         = ((vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH
             [3U] << 8U) | vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL
@@ -1469,6 +2750,10 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         = ((vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsH
             [7U] << 8U) | vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL
            [7U]);
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_WR_n 
+        = (1U & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                     >> 0xfU)) | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n) 
+                                  & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_STB_n))));
     vlTOPp->top__DOT__sharpx1__DOT__pe8M8 = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__ce));
     vlTOPp->top__DOT__sharpx1__DOT__ne4M4 = (IData)(
                                                     (0U 
@@ -1485,12 +2770,57 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__iorq;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__wr = vlTOPp->top__DOT__sharpx1__DOT__wr;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__rd = vlTOPp->top__DOT__sharpx1__DOT__rd;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joya_emu 
+        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joyb_emu 
+        = (0xffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6) 
+                    >> 8U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_set 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 7U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_irq 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl));
     vlTOPp->top__DOT__sharpx1__DOT__ramWe = (1U & (~ 
                                                    ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__mreq)) 
                                                     & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__wr)))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_clr 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_TX_BSY 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hwd_full;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_RX_BSY 
+        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_full)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_FDCS) 
+            & (3U == (7U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_fa)))) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_rd 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_a;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__data_out 
         = vlTOPp->top__DOT__sharpx1__DOT__data_out;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__a = vlTOPp->top__DOT__sharpx1__DOT__a;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__ps2_irq 
+        = (2U == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__ps2_ct_r));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_irq 
+        = (2U == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_tarp_r));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts 
+        = (0xffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3) 
+                    | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq) 
+                       << 1U)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__next_timer 
+        = (0xffffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt) 
+                      - (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl) 
+                               >> 1U))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_KEY_BRK_n 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
+                 >> 2U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_clk1 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
+                 >> 4U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__irq_en 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
+                 >> 3U));
     vlTOPp->top__DOT__sharpx1__DOT__di = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__mreq)
                                            ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__ramDo)
                                            : (IData)(vlTOPp->top__DOT__sharpx1__DOT__romDo_SharpX1));
@@ -1500,14 +2830,59 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT____Vcellout__i_reg__DOCL 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_reg__DOT__RegsL
         [vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__RegAddrC];
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BUSRQ_n 
+        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                    >> 0xbU)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_dir 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 3U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 6U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_req 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                 >> 8U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vector_a 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__vector) 
+           << 1U);
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__zflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 2U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__nflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 3U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 4U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack2 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 0xaU));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 8U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 9U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__wram_data 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT____Vcellout__sub_w_ram__q_b;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_ena 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 5U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_access 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_FDCS) 
+           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_rd) 
+              | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_wr)));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__DI_Reg 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__di_reg;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ISet 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ISet;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__IntCycle 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntCycle;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__ALU_Op 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ALU_Op_r;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__ISet 
@@ -1516,6 +2891,19 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusA;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__BusB 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusB;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_INT_n 
+        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI) 
+                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IEO 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI) 
+            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s))) 
+           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_srv)));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__IntCycle 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntCycle;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_M1_n 
+        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__m1)));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__busak_n 
         = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusAck)));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n 

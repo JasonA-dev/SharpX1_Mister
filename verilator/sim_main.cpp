@@ -379,6 +379,18 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Spacing();														
 		ImGui::End();
 
+		// Debug Sub CPU
+		ImGui::Begin("Sub CPU 80C49");
+		ImGui::Text("I reset:     0x%02X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_reset);	
+		ImGui::Text("I cs:        0x%02X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_cs);
+		ImGui::Text("I rd:        0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_rd);
+		ImGui::Text("I wr:        0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_wr);
+		ImGui::Text("I M1_n:      0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_M1_n);
+		ImGui::Text("I D:         0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_D);
+		ImGui::Text("O D:         0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__O_D);
+		ImGui::Spacing();
+		ImGui::End();
+
 /*
 		// Debug CPU
 		ImGui::Begin("Cpu");

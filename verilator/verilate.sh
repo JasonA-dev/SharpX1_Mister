@@ -13,4 +13,8 @@ verilator \
 ../rtl/tv80/tv80_alu.v \
 ../rtl/tv80/tv80_reg.v \
 ../rtl/dpram.sv \
-../rtl/rom.v
+../rtl/rom.v \
+../rtl/sub_cpu.v \
+../rtl/sub_rom.v \
+../rtl/mr16_x1.v \
+../rtl/mr16core.v
