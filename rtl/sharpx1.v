@@ -227,18 +227,18 @@ dpram #(8, 12) VRAM  // (4KB)
 	.q_b        (         )
 );
 
-// PCG RAM 6KB
-wire [ 7:0] pcgramDi;
-wire [ 7:0] pcgramDo;
-wire [15:0] pcgvramA;
-wire        pcgramWe;
-dpram #(8, 13) PCGRAM  // (8KB)
+// PSG RAM 6KB
+wire [ 7:0] psgramDi;
+wire [ 7:0] psgramDo;
+wire [15:0] psgramA;
+wire        psgramWe;
+dpram #(8, 13) PSGRAM  // (8KB)
 (
 	.clock      (clk_sys  ),
-	.address_a  (pcgvramA ),
-	.wren_a     (pcgramWe ),
-	.data_a     (pcgramDi ),
-	.q_a        (pcgramDo ),
+	.address_a  (psgramA  ),
+	.wren_a     (psgramWe ),
+	.data_a     (psgramDi ),
+	.q_a        (psgramDo ),
 
 	.wren_b     (         ),
 	.address_b  (         ),
@@ -310,6 +310,7 @@ wire         wr;
 wire         rd;
 reg   [15:0] dir;
 reg          dirset;
+wire         halt_n;
 
 cpu Cpu
 (
@@ -323,7 +324,7 @@ cpu Cpu
 	.dir 	    (dir	    ), // I
 	.dirset   (dirset	  ), // I
 
-	.halt_n   (         ), // O
+	.halt_n   (halt_n   ), // O
 	.mreq     (mreq     ), // O
 	.iorq     (iorq     ), // O
 	.wr       (wr       ), // O
@@ -339,6 +340,8 @@ cpu Cpu
 ****************************************************************************/
 
 wire  [ 7:0] subDo;
+reg sub_rd;
+reg sub_wr;
 
 x1_sub subCPU
 (
@@ -346,8 +349,8 @@ x1_sub subCPU
   .I_clk(clk_sys),  // 32MHz
   // MAIN-SUB communication port
   .I_cs(sub_cs),
-  .I_rd(),
-  .I_wr(),
+  .I_rd(sub_rd),
+  .I_wr(sub_wr),
   .I_M1_n(~m1),
   .I_D(data_out),
   .O_D(subDo),
@@ -411,7 +414,7 @@ wire ipl_cs;
 wire ram_cs;
 wire sub_cs;
 wire miocs;
-wire psg_cs;
+wire psgram_cs;
 wire gram_cs;
 
 x1_adec x1_adec(
@@ -441,7 +444,7 @@ x1_adec x1_adec(
   .O_CRTC_CS(),
   .O_SUB_CS(sub_cs),
   .O_PIA_CS(),
-  .O_PSG_CS(),
+  .O_PSG_CS(psgram_cs),
   .O_IPL_SET_CS(),
   .O_IPL_RES_CS(),
   //
@@ -481,12 +484,20 @@ assign ramWe = !(!mreq && !wr);
 assign ramDi = data_out;
 assign ramA  = a;
 
+assign gramWe = !(!mreq && !wr);
 assign gramDi = data_out; 
+assign gramA  = a;
+
+assign psgramWe = !(!mreq && !wr);
+assign psgramDi = data_out; 
+assign psgramA  = a;
 
 //assign di = mreq ? ramDo : romDo_SharpX1;
 assign di = ram_cs ? ramDo : 
             ipl_cs ? romDo_SharpX1 :
             sub_cs ? subDo :
             gram_cs ? gramDo :
+            psgram_cs ? psgramDo :            
             8'hff;
+
 endmodule

@@ -323,11 +323,11 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Begin("VRAM");
 		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__VRAM__DOT__mem, 4096, 0);
 		ImGui::End();
-		ImGui::Begin("PCG RAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem, 8192, 0);
+		ImGui::Begin("PSG RAM");
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PSGRAM__DOT__mem, 8192, 0);
 		ImGui::End();
 		ImGui::Begin("GRAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PCGRAM__DOT__mem, 65536, 0);
+		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__GRAM__DOT__mem, 65536, 0);
 		ImGui::End();
 
 		// Debug CPU
