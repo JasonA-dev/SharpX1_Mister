@@ -121,6 +121,7 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__sharpx1__DOT__dirset;
     CData/*0:0*/ top__DOT__sharpx1__DOT__halt_n;
     CData/*7:0*/ top__DOT__sharpx1__DOT__subDo;
+    CData/*7:0*/ top__DOT__sharpx1__DOT__subDi;
     CData/*0:0*/ top__DOT__sharpx1__DOT__sub_rd;
     CData/*0:0*/ top__DOT__sharpx1__DOT__sub_wr;
     CData/*0:0*/ top__DOT__sharpx1__DOT__ipl_cs;
@@ -1189,6 +1190,7 @@ VL_MODULE(Vtop) {
     SData/*15:0*/ __Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i2;
     SData/*15:0*/ __Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__sel5__53__i3;
     SData/*15:0*/ __Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_rom__DOT__rom__55__Vfuncout;
+    SData/*15:0*/ __Vdly__top__DOT__sharpx1__DOT__ramA;
     SData/*12:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0;
     SData/*12:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1;
     SData/*15:0*/ __Vdlyvdim0__top__DOT__sharpx1__DOT__RAM__DOT__mem__v0;

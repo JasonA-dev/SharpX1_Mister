@@ -190,10 +190,10 @@ dpram #(8, 13) IPL  // (4KB)
 */
 
 // RAM 64KB
-wire [ 7:0] ramDi;
-wire [ 7:0] ramDo;
-wire [15:0] ramA;
-wire        ramWe;
+reg  [ 7:0] ramDi;
+reg  [ 7:0] ramDo;
+reg  [15:0] ramA;
+reg         ramWe;
 dpram #(8, 16) RAM  // (64KB)
 (
 	.clock      (clk_sys  ),
@@ -209,10 +209,10 @@ dpram #(8, 16) RAM  // (64KB)
 );
 
 // VRAM 4KB
-wire [ 7:0] vramDi;
-wire [ 7:0] vramDo;
-wire [15:0] vramA;
-wire        vramWe;
+reg  [ 7:0] vramDi;
+reg  [ 7:0] vramDo;
+reg  [15:0] vramA;
+reg         vramWe;
 dpram #(8, 12) VRAM  // (4KB)
 (
 	.clock      (clk_sys  ),
@@ -228,10 +228,10 @@ dpram #(8, 12) VRAM  // (4KB)
 );
 
 // PSG RAM 6KB
-wire [ 7:0] psgramDi;
-wire [ 7:0] psgramDo;
-wire [15:0] psgramA;
-wire        psgramWe;
+reg  [ 7:0] psgramDi;
+reg  [ 7:0] psgramDo;
+reg  [15:0] psgramA;
+reg         psgramWe;
 dpram #(8, 13) PSGRAM  // (8KB)
 (
 	.clock      (clk_sys  ),
@@ -247,10 +247,10 @@ dpram #(8, 13) PSGRAM  // (8KB)
 );
 
 // GRAM 48KB
-wire [ 7:0] gramDi;
-wire [ 7:0] gramDo;
-wire [15:0] gramA;
-wire        gramWe;
+reg  [ 7:0] gramDi;
+reg  [ 7:0] gramDo;
+reg  [15:0] gramA;
+reg         gramWe;
 dpram #(8, 16) GRAM  // (64KB)
 (
 	.clock      (clk_sys  ),
@@ -301,9 +301,9 @@ wire pe1M1 = ~ce[0] & ~ce[1] & ~ce[2] & ~ce[3] &  ce[4];
 wire ne1M1 = ~ce[0] & ~ce[1] & ~ce[2] & ~ce[3] & ~ce[4];
 `endif
 
-wire  [ 7:0] di;
-wire  [ 7:0] data_out;
-wire  [15:0] a;
+reg   [ 7:0] di;
+reg   [ 7:0] data_out;
+reg   [15:0] a;
 wire         mreq;
 wire         iorq;
 wire         wr;
@@ -339,7 +339,8 @@ cpu Cpu
   Sub CPU 80C49
 ****************************************************************************/
 
-wire  [ 7:0] subDo;
+reg  [ 7:0] subDo;
+reg  [ 7:0] subDi;
 reg sub_rd;
 reg sub_wr;
 
@@ -352,7 +353,7 @@ x1_sub subCPU
   .I_rd(sub_rd),
   .I_wr(sub_wr),
   .I_M1_n(~m1),
-  .I_D(data_out),
+  .I_D(subDi),
   .O_D(subDo),
   .O_DOE(),
   // Timer IC Timming Port
@@ -478,21 +479,72 @@ x1_adec x1_adec(
   Data & Address Buses
 ****************************************************************************/
 
+always @(posedge clk_sys) begin
+  if(ram_cs) begin
+    if(wr) begin
+      ramDi <= data_out;    
+      ramWe <= 1;
+      //$display("RAM write %h %h", a, data_out);
+    end
+    else if (rd) begin
+      ramWe <= 0;
+      $display("RAM read %h %h", a, ramDo);      
+    end
+    ramA <= a;
+  end
+  else if (gram_cs) begin
+    if(wr) begin
+      gramDi <= data_out;    
+      gramWe <= 1;
+      //$display("GRAM write %h %h", a, data_out);
+    end
+    else if (rd) begin
+      gramWe <= 0;
+      //$display("GRAM read %h %h", a, gramDo);            
+    end
+    gramA <= a;
+  end
+  else if (psgram_cs) begin
+    if(wr) begin
+      psgramDi <= data_out;    
+      psgramWe <= 1;
+      //$display("PSGRAM write %h %h", a, data_out);
+    end
+    else if (rd) begin
+      psgramWe <= 0;
+      //$display("PSGRAM read %h %h", a, psgramDo);         
+    end
+    psgramA <= a;
+  end
+  else if (sub_cs) begin
+    if(wr) begin
+      subDi <= data_out;    
+      sub_wr <= 1;
+      sub_rd <= 0;
+      $display("SUB CPU write %h %h", a, data_out);
+    end
+    else if (rd) begin
+      sub_wr <= 0;
+      sub_rd <= 1;
+      $display("SUB CPU read %h %h", a, subDo);         
+    end
+  end
+end
+
 assign romA = a;
 
-assign ramWe = !(!mreq && !wr);
-assign ramDi = data_out;
-assign ramA  = a;
+//assign ramWe = !(!mreq && !wr);
+//assign ramDi = data_out;
+//assign ramA  = a;
 
-assign gramWe = !(!mreq && !wr);
-assign gramDi = data_out; 
-assign gramA  = a;
+//assign gramWe = !(!mreq && !wr);
+//assign gramDi = data_out; 
+//assign gramA  = a;
 
-assign psgramWe = !(!mreq && !wr);
-assign psgramDi = data_out; 
-assign psgramA  = a;
+//assign psgramWe = !(!mreq && !wr);
+//assign psgramDi = data_out; 
+//assign psgramA  = a;
 
-//assign di = mreq ? ramDo : romDo_SharpX1;
 assign di = ram_cs ? ramDo : 
             ipl_cs ? romDo_SharpX1 :
             sub_cs ? subDo :
