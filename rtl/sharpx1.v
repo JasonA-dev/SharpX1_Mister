@@ -480,6 +480,11 @@ x1_adec x1_adec(
 ****************************************************************************/
 
 always @(posedge clk_sys) begin
+
+  if(ioctl_download == 1'b0) begin
+    $display("A=%h, D=%h wr=%h halt_n=%h mreq=%h iorq=%h rd=%h m1=%h ram_cs=%h sub_cs=%h psgram_cs=%h gram_cs=%h", a, data_out, wr, halt_n, mreq, iorq, rd, m1, ram_cs, sub_cs, psgram_cs, gram_cs);
+  end
+
   if(ram_cs) begin
     if(wr) begin
       ramDi <= data_out;    

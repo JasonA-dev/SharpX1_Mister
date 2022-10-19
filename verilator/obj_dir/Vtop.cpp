@@ -7090,6 +7090,21 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__6(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__gramDo;
     vlTOPp->top__DOT__sharpx1__DOT__PSGRAM__DOT__q_a 
         = vlTOPp->top__DOT__sharpx1__DOT__psgramDo;
+    if (VL_UNLIKELY((1U & (~ (IData)(vlTOPp->ioctl_download))))) {
+        VL_WRITEF("A=%x, D=%x wr=%x halt_n=%x mreq=%x iorq=%x rd=%x m1=%x ram_cs=%x sub_cs=%x psgram_cs=%x gram_cs=%x\n",
+                  16,vlTOPp->top__DOT__sharpx1__DOT__a,
+                  8,(IData)(vlTOPp->top__DOT__sharpx1__DOT__data_out),
+                  1,vlTOPp->top__DOT__sharpx1__DOT__wr,
+                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__halt_n),
+                  1,vlTOPp->top__DOT__sharpx1__DOT__mreq,
+                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__iorq),
+                  1,vlTOPp->top__DOT__sharpx1__DOT__rd,
+                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__m1),
+                  1,vlTOPp->top__DOT__sharpx1__DOT__ram_cs,
+                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_cs),
+                  1,vlTOPp->top__DOT__sharpx1__DOT__psgram_cs,
+                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__gram_cs));
+    }
     if (vlTOPp->top__DOT__sharpx1__DOT__ram_cs) {
         if (vlTOPp->top__DOT__sharpx1__DOT__wr) {
             vlTOPp->top__DOT__sharpx1__DOT__ramDi = vlTOPp->top__DOT__sharpx1__DOT__data_out;
@@ -9029,9 +9044,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_DAM_CLR 
         = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_RD_n)));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io 
-        = ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)) 
-           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r));
     vlTOPp->top__DOT__sharpx1__DOT__gram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
                                                & ((1U 
                                                    == 
@@ -9053,6 +9065,9 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
                                                     & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
                                                        >> 0xeU))) 
                                                   ^ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io 
+        = ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__dout 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__data_out;
     vlTOPp->top__DOT__sharpx1__DOT__IPL__DOT__address_b 
@@ -9129,6 +9144,12 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
              | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc)) 
             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena)) 
            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy)));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRB_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRR_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRG_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
     vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_ATTR_CS 
         = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
            & (2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
@@ -9145,12 +9166,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
         = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
            & (0U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
                            >> 0xdU))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRB_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRR_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRG_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__dout 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__dout;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__A 
