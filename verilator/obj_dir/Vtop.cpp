@@ -278,11 +278,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__5(Vtop__Syms* __restrict vlSymsp) {
         vlTOPp->__Vdlyvdim0__top__DOT__sharpx1__DOT__VRAM__DOT__mem__v1 
             = vlTOPp->top__DOT__sharpx1__DOT__VRAM__DOT__address_b;
     }
-    if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_cycle) 
-         & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_RD_n)))) {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_d_r 
-            = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_D;
-    }
     if (vlTOPp->ioctl_wr) {
         vlTOPp->__Vdlyvval__top__DOT__sharpx1__DOT__IPL__DOT__mem__v0 
             = vlTOPp->ioctl_dout;
@@ -296,6 +291,11 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__5(Vtop__Syms* __restrict vlSymsp) {
         vlTOPp->__Vdlyvset__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1 = 1U;
         vlTOPp->__Vdlyvdim0__top__DOT__sharpx1__DOT__IPL__DOT__mem__v1 
             = (0x1fffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__romA));
+    }
+    if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_cycle) 
+         & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_rd_n)))) {
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_d_r 
+            = vlTOPp->top__DOT__sharpx1__DOT__dma_di;
     }
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs_r 
         = ((IData)(vlTOPp->top__DOT__reset) & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs));
@@ -482,7 +482,7 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__5(Vtop__Syms* __restrict vlSymsp) {
         if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_set) {
             vlTOPp->__Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req = 1U;
         }
-        if ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI) 
+        if ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_iei) 
               & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_SPM1)) 
              & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s))) {
             vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_srv = 1U;
@@ -7075,7 +7075,7 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__6(Vtop__Syms* __restrict vlSymsp) {
         if ((1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__m1)))) {
             vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s 
                 = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req) 
-                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI)) 
+                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_iei)) 
                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_ena));
         }
     } else {
@@ -7090,21 +7090,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__6(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__gramDo;
     vlTOPp->top__DOT__sharpx1__DOT__PSGRAM__DOT__q_a 
         = vlTOPp->top__DOT__sharpx1__DOT__psgramDo;
-    if (VL_UNLIKELY((1U & (~ (IData)(vlTOPp->ioctl_download))))) {
-        VL_WRITEF("A=%x, D=%x wr=%x halt_n=%x mreq=%x iorq=%x rd=%x m1=%x ram_cs=%x sub_cs=%x psgram_cs=%x gram_cs=%x\n",
-                  16,vlTOPp->top__DOT__sharpx1__DOT__a,
-                  8,(IData)(vlTOPp->top__DOT__sharpx1__DOT__data_out),
-                  1,vlTOPp->top__DOT__sharpx1__DOT__wr,
-                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__halt_n),
-                  1,vlTOPp->top__DOT__sharpx1__DOT__mreq,
-                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__iorq),
-                  1,vlTOPp->top__DOT__sharpx1__DOT__rd,
-                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__m1),
-                  1,vlTOPp->top__DOT__sharpx1__DOT__ram_cs,
-                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_cs),
-                  1,vlTOPp->top__DOT__sharpx1__DOT__psgram_cs,
-                  1,(IData)(vlTOPp->top__DOT__sharpx1__DOT__gram_cs));
-    }
     if (vlTOPp->top__DOT__sharpx1__DOT__ram_cs) {
         if (vlTOPp->top__DOT__sharpx1__DOT__wr) {
             vlTOPp->top__DOT__sharpx1__DOT__ramDi = vlTOPp->top__DOT__sharpx1__DOT__data_out;
@@ -7135,15 +7120,11 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__6(Vtop__Syms* __restrict vlSymsp) {
         }
         vlTOPp->top__DOT__sharpx1__DOT__psgramA = vlTOPp->top__DOT__sharpx1__DOT__a;
     } else if (vlTOPp->top__DOT__sharpx1__DOT__sub_cs) {
-        if (VL_UNLIKELY(vlTOPp->top__DOT__sharpx1__DOT__wr)) {
-            VL_WRITEF("SUB CPU write %x %x\n",16,vlTOPp->top__DOT__sharpx1__DOT__a,
-                      8,(IData)(vlTOPp->top__DOT__sharpx1__DOT__data_out));
+        if (vlTOPp->top__DOT__sharpx1__DOT__wr) {
             vlTOPp->top__DOT__sharpx1__DOT__subDi = vlTOPp->top__DOT__sharpx1__DOT__data_out;
             vlTOPp->top__DOT__sharpx1__DOT__sub_wr = 1U;
             vlTOPp->top__DOT__sharpx1__DOT__sub_rd = 0U;
-        } else if (VL_UNLIKELY(vlTOPp->top__DOT__sharpx1__DOT__rd)) {
-            VL_WRITEF("SUB CPU read %x %x\n",16,vlTOPp->top__DOT__sharpx1__DOT__a,
-                      8,(IData)(vlTOPp->top__DOT__sharpx1__DOT__subDo));
+        } else if (vlTOPp->top__DOT__sharpx1__DOT__rd) {
             vlTOPp->top__DOT__sharpx1__DOT__sub_wr = 0U;
             vlTOPp->top__DOT__sharpx1__DOT__sub_rd = 1U;
         }
@@ -7171,13 +7152,13 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__6(Vtop__Syms* __restrict vlSymsp) {
         = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__msel)
             ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__pgm_data)
             : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__wram_data));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_INT_n 
-        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI) 
-                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IEO 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI) 
-            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s))) 
-           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_srv)));
+    vlTOPp->top__DOT__sharpx1__DOT__dma_int_n = (1U 
+                                                 & (~ 
+                                                    ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_iei) 
+                                                     & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s))));
+    vlTOPp->top__DOT__sharpx1__DOT__dma_ieo = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_iei) 
+                                                & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_req_s))) 
+                                               & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_srv)));
     vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__data_a 
         = vlTOPp->top__DOT__sharpx1__DOT__ramDi;
     vlTOPp->top__DOT__sharpx1__DOT__RAM__DOT__wren_a 
@@ -7212,7 +7193,7 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__6(Vtop__Syms* __restrict vlSymsp) {
            & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_rd) 
               | (IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_wr)));
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rw 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_CS) 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_cs) 
            & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_rd) 
               | (IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_wr)));
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__wram_wr 
@@ -7221,9 +7202,13 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__6(Vtop__Syms* __restrict vlSymsp) {
         [vlTOPp->top__DOT__sharpx1__DOT__ramA];
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_D 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rdata;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_INT_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_int_n;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IEO 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_ieo;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_ivec_sel 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_IEI) 
-            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IEO))) 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_iei) 
+            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_ieo))) 
            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_SPM1));
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__wren_a 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__wram_wr;
@@ -7294,6 +7279,11 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F;
     __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR 
         = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR;
+    vlTOPp->top__DOT__sharpx1__DOT__sbank = ((IData)(vlTOPp->top__DOT__reset)
+                                              ? 0U : 
+                                             ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_sel)
+                                               ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_bank)
+                                               : (IData)(vlTOPp->top__DOT__sharpx1__DOT__ice_bank)));
     if (vlTOPp->top__DOT__reset) {
         if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
             vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Oldnmi_n = 1U;
@@ -7301,36 +7291,11 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     } else {
         vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Oldnmi_n = 0U;
     }
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
-            vlTOPp->top__DOT__sharpx1__DOT__wr = 1U;
-            if ((1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mcycle)))) {
-                if ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
-                      >> 1U) & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))) {
-                    vlTOPp->top__DOT__sharpx1__DOT__wr = 0U;
-                }
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__wr = 1U;
-    }
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
-            vlTOPp->top__DOT__sharpx1__DOT__rd = 1U;
-            if ((1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mcycle))) {
-                if ((2U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate))) {
-                    vlTOPp->top__DOT__sharpx1__DOT__rd 
-                        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n)));
-                }
-            } else if ((1U & ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
-                                >> 1U) & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__no_read))) 
-                              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))))) {
-                vlTOPp->top__DOT__sharpx1__DOT__rd = 0U;
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__rd = 1U;
-    }
+    vlTOPp->top__DOT__sharpx1__DOT__swr_n = (1U & ((IData)(vlTOPp->top__DOT__reset) 
+                                                   | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_sel)
+                                                       ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_wr_n)
+                                                       : 
+                                                      (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__wr)))));
     if (vlTOPp->top__DOT__reset) {
         if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_ack) {
             __Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl 
@@ -7348,6 +7313,11 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     } else {
         __Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl = 0U;
     }
+    vlTOPp->top__DOT__sharpx1__DOT__srd_n = (1U & ((IData)(vlTOPp->top__DOT__reset) 
+                                                   | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_sel)
+                                                       ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_rd_n)
+                                                       : 
+                                                      (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__rd)))));
     if (vlTOPp->top__DOT__reset) {
         vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt 
             = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt_load)
@@ -7576,6 +7546,85 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     if (vlTOPp->top__DOT__reset) {
         if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
              & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16))) {
+            if ((1U & (~ ((((((((0U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                >> 1U))) 
+                                | (1U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                  >> 1U)))) 
+                               | (2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                 >> 1U)))) 
+                              | (3U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                >> 1U)))) 
+                             | (4U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                               >> 1U)))) 
+                            | (5U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                              >> 1U)))) 
+                           | (6U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                             >> 1U)))) 
+                          | (7U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                            >> 1U))))))) {
+                if ((8U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                    >> 1U)))) {
+                    if ((9U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                        >> 1U)))) {
+                        if ((0xaU != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                              >> 1U)))) {
+                            if ((0xbU == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                  >> 1U)))) {
+                                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB 
+                                    = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB = 0U;
+    }
+    if (vlTOPp->top__DOT__reset) {
+        if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
+             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16))) {
+            if (((((((((0U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                       >> 1U))) | (1U 
+                                                   == 
+                                                   (0xfU 
+                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                       >> 1U)))) 
+                      | (2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                        >> 1U)))) | 
+                     (3U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                     >> 1U)))) | (4U 
+                                                  == 
+                                                  (0xfU 
+                                                   & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                      >> 1U)))) 
+                   | (5U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                     >> 1U)))) | (6U 
+                                                  == 
+                                                  (0xfU 
+                                                   & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                      >> 1U)))) 
+                 | (7U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                   >> 1U))))) {
+                if ((0U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                    >> 1U)))) {
+                    if ((1U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                        >> 1U)))) {
+                        if ((2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                            >> 1U)))) {
+                            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2 
+                                = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
+                        }
+                    }
+                }
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2 = 0U;
+    }
+    if (vlTOPp->top__DOT__reset) {
+        if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
+             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16))) {
             if (((((((((0U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
                                        >> 1U))) | (1U 
                                                    == 
@@ -7627,44 +7676,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
                                              >> 1U)))) 
                           | (7U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
                                             >> 1U))))))) {
-                if ((8U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                    >> 1U)))) {
-                    if ((9U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                        >> 1U)))) {
-                        if ((0xaU != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                              >> 1U)))) {
-                            if ((0xbU == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                  >> 1U)))) {
-                                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB 
-                                    = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB = 0U;
-    }
-    if (vlTOPp->top__DOT__reset) {
-        if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
-             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16))) {
-            if ((1U & (~ ((((((((0U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                >> 1U))) 
-                                | (1U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                  >> 1U)))) 
-                               | (2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                 >> 1U)))) 
-                              | (3U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                >> 1U)))) 
-                             | (4U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                               >> 1U)))) 
-                            | (5U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                              >> 1U)))) 
-                           | (6U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                             >> 1U)))) 
-                          | (7U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                            >> 1U))))))) {
                 if ((8U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
                                     >> 1U)))) {
                     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8 
@@ -7674,47 +7685,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
         }
     } else {
         vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8 = 0U;
-    }
-    if (vlTOPp->top__DOT__reset) {
-        if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
-             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16))) {
-            if (((((((((0U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                       >> 1U))) | (1U 
-                                                   == 
-                                                   (0xfU 
-                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                       >> 1U)))) 
-                      | (2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                        >> 1U)))) | 
-                     (3U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                     >> 1U)))) | (4U 
-                                                  == 
-                                                  (0xfU 
-                                                   & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                      >> 1U)))) 
-                   | (5U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                     >> 1U)))) | (6U 
-                                                  == 
-                                                  (0xfU 
-                                                   & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                      >> 1U)))) 
-                 | (7U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                   >> 1U))))) {
-                if ((0U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                    >> 1U)))) {
-                    if ((1U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                        >> 1U)))) {
-                        if ((2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                            >> 1U)))) {
-                            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2 
-                                = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
-                        }
-                    }
-                }
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2 = 0U;
     }
     if (vlTOPp->top__DOT__reset) {
         if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
@@ -7821,31 +7791,12 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     } else {
         vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1 = 0U;
     }
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
-            vlTOPp->top__DOT__sharpx1__DOT__mreq = 1U;
-            if ((1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mcycle))) {
-                if ((2U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate))) {
-                    vlTOPp->top__DOT__sharpx1__DOT__mreq 
-                        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n)));
-                }
-            } else {
-                if ((1U & ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
-                             >> 1U) & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__no_read))) 
-                           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))))) {
-                    vlTOPp->top__DOT__sharpx1__DOT__mreq 
-                        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__iorq;
-                }
-                if ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
-                      >> 1U) & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))) {
-                    vlTOPp->top__DOT__sharpx1__DOT__mreq 
-                        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__iorq;
-                }
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__mreq = 1U;
-    }
+    vlTOPp->top__DOT__sharpx1__DOT__smreq_n = (1U & 
+                                               ((IData)(vlTOPp->top__DOT__reset) 
+                                                | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_sel)
+                                                    ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_mreq_n)
+                                                    : 
+                                                   (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__mreq)))));
     if (vlTOPp->top__DOT__reset) {
         if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
              & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__wr16))) {
@@ -7911,16 +7862,19 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
                                             >> 1U))))))) {
                 if ((8U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
                                     >> 1U)))) {
-                    if ((9U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                    if ((9U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
                                         >> 1U)))) {
-                        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9 
-                            = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
+                        if ((0xaU == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                              >> 1U)))) {
+                            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA 
+                                = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
+                        }
                     }
                 }
             }
         }
     } else {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9 = 0U;
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA = 0U;
     }
     if (vlTOPp->top__DOT__reset) {
         if (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__io_cs) 
@@ -7943,19 +7897,16 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
                                             >> 1U))))))) {
                 if ((8U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
                                     >> 1U)))) {
-                    if ((9U != (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                    if ((9U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
                                         >> 1U)))) {
-                        if ((0xaU == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                              >> 1U)))) {
-                            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA 
-                                = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
-                        }
+                        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9 
+                            = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
                     }
                 }
             }
         }
     } else {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA = 0U;
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9 = 0U;
     }
     if (vlTOPp->top__DOT__reset) {
         if ((1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__dirset)))) {
@@ -8015,6 +7966,329 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     } else {
         vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Alternate = 0U;
     }
+    vlTOPp->top__DOT__sharpx1__DOT__sireq_n = (1U & 
+                                               ((IData)(vlTOPp->top__DOT__reset) 
+                                                | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_sel)
+                                                    ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_iorq_n)
+                                                    : 
+                                                   (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__iorq)))));
+    if (vlTOPp->top__DOT__reset) {
+        vlTOPp->top__DOT__sharpx1__DOT__sdo = 0U;
+        vlTOPp->top__DOT__sharpx1__DOT__sa = 0U;
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__sdo = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_sel)
+                                                ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_do)
+                                                : (IData)(vlTOPp->top__DOT__sharpx1__DOT__data_out));
+        vlTOPp->top__DOT__sharpx1__DOT__sa = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_sel)
+                                               ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_a)
+                                               : (IData)(vlTOPp->top__DOT__sharpx1__DOT__a));
+    }
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n) {
+            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
+                = ((0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
+                   | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack) 
+                       << 0xaU) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_cycle) 
+                                    << 9U) | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI) 
+                                              << 8U))));
+            if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_cycle) {
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
+                    = ((0x707U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
+                       | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack)
+                             ? 0xfU : (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__prefix_in) 
+                                               >> 4U))) 
+                           << 4U) | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG) 
+                                       & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
+                                      | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack)) 
+                                     << 3U)));
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
+                    = ((0x7fbU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
+                       | (((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG) 
+                             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
+                            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8))) 
+                           | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack)) 
+                          << 2U));
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
+                    = ((0x7fcU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
+                       | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_FLG) 
+                            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
+                           << 1U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC) 
+                                      & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
+                                     | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack))));
+            } else {
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
+                    = ((0x700U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
+                       | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI)
+                           ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__prefix_in)
+                           : 0U));
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix = 0x701U;
+    }
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n) {
+            if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_flag) {
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
+                    = ((0x10U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
+                       | (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in)));
+            } else if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_load) {
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
+                    = ((0x10U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
+                       | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_flag));
+            } else {
+                if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_CF) {
+                    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
+                        = ((0x1eU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
+                           | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val));
+                }
+                if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_ZF) {
+                    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
+                        = ((0x1dU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
+                           | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val) 
+                              << 1U));
+                }
+            }
+            if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack) {
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
+                    = (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag));
+            } else if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_IF) {
+                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
+                    = ((0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
+                       | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val) 
+                          << 4U));
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag = 0U;
+    }
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux 
+        = ((IData)(vlTOPp->top__DOT__reset) ? ((3U 
+                                                == 
+                                                (3U 
+                                                 & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                    >> 1U)))
+                                                ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP3)
+                                                : (
+                                                   (2U 
+                                                    == 
+                                                    (3U 
+                                                     & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                        >> 1U)))
+                                                    ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP2)
+                                                    : 
+                                                   ((1U 
+                                                     == 
+                                                     (3U 
+                                                      & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
+                                                         >> 1U)))
+                                                     ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP1)
+                                                     : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP0))))
+            : 0U);
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl 
+        = __Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl;
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
+            vlTOPp->top__DOT__sharpx1__DOT__wr = 1U;
+            if ((1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mcycle)))) {
+                if ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
+                      >> 1U) & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))) {
+                    vlTOPp->top__DOT__sharpx1__DOT__wr = 0U;
+                }
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__wr = 1U;
+    }
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_irq 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl));
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
+            vlTOPp->top__DOT__sharpx1__DOT__rd = 1U;
+            if ((1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mcycle))) {
+                if ((2U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate))) {
+                    vlTOPp->top__DOT__sharpx1__DOT__rd 
+                        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n)));
+                }
+            } else if ((1U & ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
+                                >> 1U) & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__no_read))) 
+                              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))))) {
+                vlTOPp->top__DOT__sharpx1__DOT__rd = 0U;
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__rd = 1U;
+    }
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__next_timer 
+        = (0xffffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt) 
+                      - (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl) 
+                               >> 1U))));
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int_load) {
+            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int 
+                = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int = 0U;
+    }
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I8 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA8;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I9 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA9;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IA 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IAA;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IB 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IAB;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_set 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I4 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hwd_clr 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I5 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I6 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_set 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__Arith16 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Arith16_r;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I7 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_clr 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P5 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP5;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__num_7seg 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P7 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_FD_LAMP 
+        = (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP4));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P4 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP4;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PCM 
+        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PB 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2DT 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2CT 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2) 
+                 >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P2 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P0 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP0;
+    vlTOPp->top__DOT__sharpx1__DOT__dma_do = (0xffU 
+                                              & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP0));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P8 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
+    vlTOPp->top__DOT__sharpx1__DOT__dma_a = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P6 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joya_emu 
+        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joyb_emu 
+        = (0xffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6) 
+                    >> 8U));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__di 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__di_reg;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P1 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_KEY_BRK_n 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
+                 >> 2U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_clk1 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
+                 >> 4U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__irq_en 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
+                 >> 3U));
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
+            vlTOPp->top__DOT__sharpx1__DOT__mreq = 1U;
+            if ((1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mcycle))) {
+                if ((2U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate))) {
+                    vlTOPp->top__DOT__sharpx1__DOT__mreq 
+                        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n)));
+                }
+            } else {
+                if ((1U & ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
+                             >> 1U) & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__no_read))) 
+                           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))))) {
+                    vlTOPp->top__DOT__sharpx1__DOT__mreq 
+                        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__iorq;
+                }
+                if ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__tstate) 
+                      >> 1U) & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__write))) {
+                    vlTOPp->top__DOT__sharpx1__DOT__mreq 
+                        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__iorq;
+                }
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__mreq = 1U;
+    }
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P3 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP3 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq) 
+            << 0xaU) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_wprt) 
+                         << 9U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_hlt) 
+                                    << 8U) | (0xffU 
+                                              & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3)))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts 
+        = (0xffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3) 
+                    | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq) 
+                       << 1U)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_res 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_set 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 2U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PA 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_dir 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 3U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 6U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_ena 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
+                 >> 5U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P9 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9;
+    vlTOPp->top__DOT__sharpx1__DOT__dma_bank = (0xfU 
+                                                & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9));
+    vlTOPp->top__DOT__sharpx1__DOT__dma_mreq_n = (1U 
+                                                  & (~ 
+                                                     ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                                                      >> 0xcU)));
+    vlTOPp->top__DOT__sharpx1__DOT__dma_iorq_n = (1U 
+                                                  & (~ 
+                                                     ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                                                      >> 0xdU)));
+    vlTOPp->top__DOT__sharpx1__DOT__dma_rd_n = (1U 
+                                                & (~ 
+                                                   ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                                                    >> 0xeU)));
+    vlTOPp->top__DOT__sharpx1__DOT__dma_wr_n = (1U 
+                                                & ((~ 
+                                                    ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                                                     >> 0xfU)) 
+                                                   | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n) 
+                                                      & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_STB_n))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BUSRQ_n 
+        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                    >> 0xbU)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_req 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
+                 >> 8U));
     if (vlTOPp->top__DOT__reset) {
         if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
             vlTOPp->top__DOT__sharpx1__DOT__iorq = 1U;
@@ -8419,264 +8693,163 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
         vlTOPp->__Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__SP = 0xffffU;
         vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Z16_r = 0U;
     }
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n) {
-            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
-                = ((0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
-                   | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack) 
-                       << 0xaU) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_cycle) 
-                                    << 9U) | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI) 
-                                              << 8U))));
-            if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_cycle) {
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
-                    = ((0x707U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
-                       | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack)
-                             ? 0xfU : (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__prefix_in) 
-                                               >> 4U))) 
-                           << 4U) | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG) 
-                                       & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
-                                      | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack)) 
-                                     << 3U)));
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
-                    = ((0x7fbU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
-                       | (((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG) 
-                             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
-                            & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8))) 
-                           | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack)) 
-                          << 2U));
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
-                    = ((0x7fcU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
-                       | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_FLG) 
-                            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
-                           << 1U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC) 
-                                      & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
-                                     | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack))));
-            } else {
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix 
-                    = ((0x700U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix)) 
-                       | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI)
-                           ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__prefix_in)
-                           : 0U));
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix = 0x701U;
-    }
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n) {
-            if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_flag) {
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
-                    = ((0x10U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
-                       | (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in)));
-            } else if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_load) {
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
-                    = ((0x10U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
-                       | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_flag));
-            } else {
-                if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_CF) {
-                    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
-                        = ((0x1eU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
-                           | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val));
-                }
-                if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_ZF) {
-                    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
-                        = ((0x1dU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
-                           | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val) 
-                              << 1U));
-                }
-            }
-            if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack) {
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
-                    = (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag));
-            } else if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOAD_IF) {
-                vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag 
-                    = ((0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag)) 
-                       | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__flag_val) 
-                          << 4U));
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag = 0U;
-    }
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux 
-        = ((IData)(vlTOPp->top__DOT__reset) ? ((3U 
-                                                == 
-                                                (3U 
-                                                 & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                    >> 1U)))
-                                                ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP3)
-                                                : (
-                                                   (2U 
-                                                    == 
-                                                    (3U 
-                                                     & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                        >> 1U)))
-                                                    ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP2)
-                                                    : 
-                                                   ((1U 
-                                                     == 
-                                                     (3U 
-                                                      & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_addr) 
-                                                         >> 1U)))
-                                                     ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP1)
-                                                     : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP0))))
-            : 0U);
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl 
-        = __Vdly__top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 7U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack2 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 0xaU));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 8U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+                 >> 9U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I1 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__zflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 2U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__nflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 3U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iflag 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
+                 >> 4U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__I0 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem_cs_r)
+            ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rdata)
+            : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__O_INT 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_irq;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_overflow 
+        = (1U & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt) 
+                     >> 0xfU)) & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__next_timer) 
+                                  >> 0xfU)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__drq_set 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_set;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__drq_clr 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_clr) 
+           | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs_r) 
+              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_D 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_do;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_A 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_a;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_A 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joya_emu;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_B 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joyb_emu;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_INT_n 
+        = (1U & (~ (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__irq_en) 
+                     & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_full)) 
+                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_IEI))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P3 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP3;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dot_7seg 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_TX_BSY) 
+            << 3U) | ((4U & ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_RX_BSY)) 
+                             << 2U)) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq) 
+                                         << 1U) | (1U 
+                                                   & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts)))));
+    vlTOPp->top__DOT__sharpx1__DOT__subDo = (0xffU 
+                                             & ((1U 
+                                                 & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_ivec_cycle) 
+                                                    | (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts_cs))))
+                                                 ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_rd)
+                                                 : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BANK 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_bank;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_MREQ_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_mreq_n;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IORQ_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_iorq_n;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_RD_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_rd_n;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_WR_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__dma_wr_n;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n 
+        = (1U & (~ ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BUSRQ_n)) 
+                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_req) 
+           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_rdy) 
+              | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_cyc)));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__TmpAddr 
         = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__TmpAddr;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__XY_State 
         = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__XY_State;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_sel8 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__m_acc 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_flag 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
+           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+              >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regl 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
+           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+              >> 3U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regh 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
+           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
+              >> 2U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_pc 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__C 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_out 
+        = ((0xffffU & vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_out) 
+           | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag) 
+              << 0x10U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack 
+        = (((((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op)) 
+              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack2))) 
+             & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op))) 
+            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iflag)) 
+           & (0U != (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__vector)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_in 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I2 
+        = (0x7fffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in) 
+                      >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__O 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__alu_out_mux__I4 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag) 
+            << 0x10U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__wr = vlTOPp->top__DOT__sharpx1__DOT__wr;
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__rd = vlTOPp->top__DOT__sharpx1__DOT__rd;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_irq 
-        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__next_timer 
-        = (0xffffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt) 
-                      - (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl) 
-                               >> 1U))));
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int_load) {
-            vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int 
-                = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_out;
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_int = 0U;
-    }
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I8 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA8;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I9 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA9;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IA 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IAA;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_IB 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IAB;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_set 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I4 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA4;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hwd_clr 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I5 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA5;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I6 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_set 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA6;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__Arith16 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Arith16_r;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_I7 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_clr 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IA7;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P5 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP5;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__num_7seg 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P7 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP7;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_FD_LAMP 
-        = (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP4));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P4 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP4;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_D 
-        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP0));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P0 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP0;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PCM 
-        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PB 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPB;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_A 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P8 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP8;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2DT 
-        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_PS2CT 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2) 
-                 >> 1U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P2 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP2;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P6 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joya_emu 
-        = (0xffU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joyb_emu 
-        = (0xffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP6) 
-                    >> 8U));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__di 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__di_reg;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P1 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_KEY_BRK_n 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
-                 >> 2U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_clk1 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
-                 >> 4U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__irq_en 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP1) 
-                 >> 3U));
     vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_MREQ_n 
         = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__mreq)));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__mreq 
         = vlTOPp->top__DOT__sharpx1__DOT__mreq;
     vlTOPp->top__DOT__sharpx1__DOT__ram_cs = vlTOPp->top__DOT__sharpx1__DOT__mreq;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P3 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP3 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq) 
-            << 0xaU) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_wprt) 
-                         << 9U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_hlt) 
-                                    << 8U) | (0xffU 
-                                              & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3)))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts 
-        = (0xffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP3) 
-                    | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq) 
-                       << 1U)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BANK 
-        = (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_MREQ_n 
-        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
-                    >> 0xcU)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_IORQ_n 
-        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
-                    >> 0xdU)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_RD_n 
-        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
-                    >> 0xeU)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_P9 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_WR_n 
-        = (1U & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
-                     >> 0xfU)) | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n) 
-                                  & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_STB_n))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BUSRQ_n 
-        = (1U & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
-                    >> 0xbU)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_req 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OP9) 
-                 >> 8U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_res 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
-                 >> 1U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_set 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
-                 >> 2U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_PA 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc 
-        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_dir 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
-                 >> 3U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
-                 >> 6U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_int_ena 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__OPA) 
-                 >> 5U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_D 
+        = vlTOPp->top__DOT__sharpx1__DOT__subDo;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_CLKEN 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_cycle 
+        = (1U & ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n)) 
+                 | ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_n)) 
+                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy 
+        = (((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_RDY) 
+              == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_dir)) 
+             | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc)) 
+            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena)) 
+           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy)));
     vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_IORQ_n 
         = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__iorq)));
     vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__iorq 
@@ -8956,281 +9129,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
         __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t2 = 0U;
         vlTOPp->top__DOT__sharpx1__DOT__m1 = 1U;
     }
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
-                 >> 7U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack2 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
-                 >> 0xaU));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
-                 >> 8U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
-                 >> 9U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I1 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__zflag 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
-                 >> 1U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__vflag 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
-                 >> 2U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__nflag 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
-                 >> 3U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag 
-        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iflag 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_flag) 
-                 >> 4U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__I0 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__mem_cs_r)
-            ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rdata)
-            : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__gpio_in_mux));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__wr_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__wr;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__rd_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__rd;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__O_INT 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_irq;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_overflow 
-        = (1U & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__timer_cnt) 
-                     >> 0xfU)) & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__next_timer) 
-                                  >> 0xfU)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__drq_set 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_set;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__drq_clr 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_drq_clr) 
-           | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs_r) 
-              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_dat_cs))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_A 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joya_emu;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_JOY_B 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__joyb_emu;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_INT_n 
-        = (1U & (~ (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__irq_en) 
-                     & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_full)) 
-                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_IEI))));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mreq_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__mreq;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_RAM_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__ram_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P3 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP3;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dot_7seg 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_TX_BSY) 
-            << 3U) | ((4U & ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_RX_BSY)) 
-                             << 2U)) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_drq) 
-                                         << 1U) | (1U 
-                                                   & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts)))));
-    vlTOPp->top__DOT__sharpx1__DOT__subDo = (0xffU 
-                                             & ((1U 
-                                                 & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_ivec_cycle) 
-                                                    | (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts_cs))))
-                                                 ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_rd)
-                                                 : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fd_sts)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n 
-        = (1U & (~ ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DMA_BUSRQ_n)) 
-                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_req) 
-           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_rdy) 
-              | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_cyc)));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__iorq_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__iorq;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_DAM_CLR 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
-           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_RD_n)));
-    vlTOPp->top__DOT__sharpx1__DOT__gram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
-                                               & ((1U 
-                                                   == 
-                                                   (3U 
-                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                                       >> 0xeU))) 
-                                                  ^ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)));
-    vlTOPp->top__DOT__sharpx1__DOT__gram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
-                                               & ((2U 
-                                                   == 
-                                                   (3U 
-                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                                       >> 0xeU))) 
-                                                  ^ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)));
-    vlTOPp->top__DOT__sharpx1__DOT__gram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
-                                               & ((3U 
-                                                   == 
-                                                   (3U 
-                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                                       >> 0xeU))) 
-                                                  ^ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io 
-        = ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)) 
-           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__dout 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__data_out;
-    vlTOPp->top__DOT__sharpx1__DOT__IPL__DOT__address_b 
-        = (0x1fffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__romA) 
-                      >> 0U));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__A 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__a;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__ipl_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t2 
-        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t2;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF2 
-        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF2;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Pre_XY_F_M 
-        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Pre_XY_F_M;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1 
-        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t1 
-        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t1;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_sel8 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mem_w8;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__m_acc 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_flag 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
-           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
-              >> 1U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regl 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
-           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
-              >> 3U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_regh 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
-           & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix) 
-              >> 2U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_load_pc 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op) 
-           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_prefix));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__C 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_out 
-        = ((0xffffU & vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_out) 
-           | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag) 
-              << 0x10U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack 
-        = (((((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mc2_op)) 
-              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack2))) 
-             & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op))) 
-            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iflag)) 
-           & (0U != (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__vector)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_in 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__next_pc_mux__DOT__I2 
-        = (0x7fffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in) 
-                      >> 1U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__top_din_mux__DOT__O 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__alu_out_mux__I4 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cflag) 
-            << 0x10U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__d_in;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_D 
-        = vlTOPp->top__DOT__sharpx1__DOT__subDo;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_CLKEN 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__scpu_wait_n;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_cycle 
-        = (1U & ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_BUSAK_n)) 
-                 | ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_RFSH_n)) 
-                    & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy 
-        = (((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_RDY) 
-              == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_dir)) 
-             | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_frc)) 
-            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy_ena)) 
-           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__rfsh_busy)));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRB_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRR_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRG_CS 
-        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_ATTR_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
-           & (2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                             >> 0xcU))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_TEXT_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
-           & (6U == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                              >> 0xbU))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_KANJI_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
-           & (7U == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                              >> 0xbU))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
-           & (0U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                           >> 0xdU))));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__dout 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__dout;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__A 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__A;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__ALU_Op 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ALU_Op_r;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ISet 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ISet;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__ISet 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ISet;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__busak_n 
-        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusAck)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_M1_n 
-        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__m1)));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__m1 = vlTOPp->top__DOT__sharpx1__DOT__m1;
-    vlTOPp->top__DOT__sharpx1__DOT__halt_n = (1U & 
-                                              (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Halt_FF)));
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
-            vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusReq_s = 0U;
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusReq_s = 0U;
-    }
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
-            vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__INT_s = 0U;
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__INT_s = 0U;
-    }
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__IntCycle 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntCycle;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n 
-        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntCycle)));
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
-            if (vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMICycle) {
-                vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMI_s = 0U;
-            }
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMI_s = 0U;
-    }
-    if (vlTOPp->top__DOT__reset) {
-        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
-            vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__No_BTR 
-                = ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_BT) 
-                     & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR) 
-                            >> 4U)) | (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F) 
-                                          >> 2U)))) 
-                    | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_BC) 
-                       & (IData)(((0x10U != (0x10U 
-                                             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR))) 
-                                  | (4U != (0x44U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F))))))) 
-                   | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_BTR) 
-                      & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR) 
-                             >> 4U)) | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F) 
-                                        >> 6U))));
-        }
-    } else {
-        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__No_BTR = 0U;
-    }
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__iack 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__iack;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_ack 
@@ -9293,6 +9191,14 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op 
         = (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst) 
                    >> 0xcU));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__wr_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__wr;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__rd_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__rd;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__mreq_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__mreq;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_RAM_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__ram_cs;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__clk_en 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_CLKEN;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP0 
@@ -9303,90 +9209,54 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_irq 
         = ((2U == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_tarp_r)) 
            | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_rdy));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_FM_CS 
-        = (IData)(((1U == (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs))) 
-                   & (0x700U == (0x1f04U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__a)))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_FMO_CTC_CS 
-        = (IData)(((1U == (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs))) 
-                   & (0x704U == (0x1f04U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__a)))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_BMEM_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0xbU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                >> 8U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EMM_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0xdU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                >> 8U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EXTROM_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x1cU == (0x3fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 7U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_KANROM_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x1dU == (0x3fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 7U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PAL_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (4U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                           >> 0xaU))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CG_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (5U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                           >> 0xaU))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CRTC_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x18U == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 8U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PIA_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x1aU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 8U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_SET_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x1dU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 8U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_RES_CS 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x1eU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 8U))));
-    vlTOPp->top__DOT__sharpx1__DOT__miocs = vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs;
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__storage_cs 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x3fU == (0x7fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 6U))));
-    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__io1fxx 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-           & (0x3fU == (0x3fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                 >> 7U))));
-    vlTOPp->top__DOT__sharpx1__DOT__psgram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-                                                 & ((0x1bU 
-                                                     == 
-                                                     (0x1fU 
-                                                      & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                                         >> 8U))) 
-                                                    | (0x1cU 
-                                                       == 
-                                                       (0x1fU 
-                                                        & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                                           >> 8U)))));
-    vlTOPp->top__DOT__sharpx1__DOT__sub_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
-                                              & (0x19U 
-                                                 == 
-                                                 (0x1fU 
-                                                  & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
-                                                     >> 8U))));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__busak_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__busak_n;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__m1_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__m1;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__halt_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__halt_n;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__intcycle_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMICycle 
-        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMICycle;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR 
-        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__iorq_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__iorq;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_DAM_CLR 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
+           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_RD_n)));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io 
+        = ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r));
+    vlTOPp->top__DOT__sharpx1__DOT__gram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
+                                               & ((1U 
+                                                   == 
+                                                   (3U 
+                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                                       >> 0xeU))) 
+                                                  ^ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)));
+    vlTOPp->top__DOT__sharpx1__DOT__gram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
+                                               & ((2U 
+                                                   == 
+                                                   (3U 
+                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                                       >> 0xeU))) 
+                                                  ^ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)));
+    vlTOPp->top__DOT__sharpx1__DOT__gram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__iorq_r) 
+                                               & ((3U 
+                                                   == 
+                                                   (3U 
+                                                    & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                                       >> 0xeU))) 
+                                                  ^ (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__I_DAM)));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__dout 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__data_out;
+    vlTOPp->top__DOT__sharpx1__DOT__IPL__DOT__address_b 
+        = (0x1fffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__romA) 
+                      >> 0U));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__A 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__a;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__ipl_cs;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t2 
+        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t2;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF2 
+        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF2;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Pre_XY_F_M 
+        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Pre_XY_F_M;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1 
+        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t1 
+        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Auto_Wait_t1;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer__DOT__I_IACK 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__timer_ack;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__iack 
@@ -9485,6 +9355,279 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
         = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_irq) 
             << 2U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fdc_irq) 
                        << 1U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__ps2_irq)));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_ATTR_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
+           & (2U == (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                             >> 0xcU))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_TEXT_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
+           & (6U == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                              >> 0xbU))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_KANJI_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
+           & (7U == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                              >> 0xbU))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__sys_io) 
+           & (0U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                           >> 0xdU))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRB_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRR_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRG_CS 
+        = vlTOPp->top__DOT__sharpx1__DOT__gram_cs;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__dout 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__dout;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__A 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__A;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__ALU_Op 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ALU_Op_r;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ISet 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ISet;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_alu__DOT__ISet 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ISet;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntE_FF1;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__busak_n 
+        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusAck)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_M1_n 
+        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__m1)));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__m1 = vlTOPp->top__DOT__sharpx1__DOT__m1;
+    vlTOPp->top__DOT__sharpx1__DOT__halt_n = (1U & 
+                                              (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Halt_FF)));
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
+            vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusReq_s = 0U;
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__BusReq_s = 0U;
+    }
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
+            vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__INT_s = 0U;
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__INT_s = 0U;
+    }
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__IntCycle 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntCycle;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n 
+        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IntCycle)));
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
+            if (vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMICycle) {
+                vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMI_s = 0U;
+            }
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMI_s = 0U;
+    }
+    if (vlTOPp->top__DOT__reset) {
+        if (vlTOPp->top__DOT__sharpx1__DOT__pe4M4) {
+            vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__No_BTR 
+                = ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_BT) 
+                     & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR) 
+                            >> 4U)) | (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F) 
+                                          >> 2U)))) 
+                    | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_BC) 
+                       & (IData)(((0x10U != (0x10U 
+                                             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR))) 
+                                  | (4U != (0x44U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F))))))) 
+                   | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_BTR) 
+                      & ((~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR) 
+                             >> 4U)) | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__F) 
+                                        >> 6U))));
+        }
+    } else {
+        vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__No_BTR = 0U;
+    }
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I2 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__disp16) 
+            << 1U) | 0U);
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_out 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_out) 
+            << 8U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_out));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bh_out) 
+            << 8U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bl_out));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG 
+        = (1U & ((IData)((0U == (3U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op)))) 
+                 & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC) 
+                       | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_FLG)))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_BCC) 
+            & (7U == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cond))) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel 
+        = ((2U & ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
+                  << 1U)) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_BCC) 
+                              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op))) 
+                             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_true)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MEM) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__stack_sel));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__S 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOADF 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg) 
+           & (0U == (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix 
+        = (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg)
+                    ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst)
+                    : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_INT 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT____Vcellinp__sub_cpu__I_INT;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_FM_CS 
+        = (IData)(((1U == (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs))) 
+                   & (0x700U == (0x1f04U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__a)))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_FMO_CTC_CS 
+        = (IData)(((1U == (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs))) 
+                   & (0x704U == (0x1f04U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__a)))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_BMEM_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0xbU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                >> 8U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EMM_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0xdU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                >> 8U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EXTROM_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x1cU == (0x3fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 7U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_KANROM_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x1dU == (0x3fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 7U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PAL_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (4U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                           >> 0xaU))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CG_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (5U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                           >> 0xaU))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CRTC_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x18U == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 8U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PIA_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x1aU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 8U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_SET_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x1dU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 8U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_RES_CS 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x1eU == (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 8U))));
+    vlTOPp->top__DOT__sharpx1__DOT__miocs = vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs;
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__storage_cs 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x3fU == (0x7fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 6U))));
+    vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__io1fxx 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+           & (0x3fU == (0x3fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                 >> 7U))));
+    vlTOPp->top__DOT__sharpx1__DOT__psgram_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+                                                 & ((0x1bU 
+                                                     == 
+                                                     (0x1fU 
+                                                      & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                                         >> 8U))) 
+                                                    | (0x1cU 
+                                                       == 
+                                                       (0x1fU 
+                                                        & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                                           >> 8U)))));
+    vlTOPp->top__DOT__sharpx1__DOT__sub_cs = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__miocs) 
+                                              & (0x19U 
+                                                 == 
+                                                 (0x1fU 
+                                                  & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__a) 
+                                                     >> 8U))));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__busak_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__busak_n;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__m1_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__m1;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_WAIT_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__halt_n;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__halt_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__halt_n;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__intcycle_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__intcycle_n;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMICycle 
+        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__NMICycle;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR 
+        = __Vdly__top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IR;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_a 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_out;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__I1 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I0 
+        = (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out) 
+                    >> 0U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__I0 
+        = (0x7ffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out) 
+                     >> 5U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg)
+            ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out)
+            : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rs_b_mux__I0));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__S 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel;
+    vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__i1 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rel_pc_sel__I1;
+    vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel;
+    vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__Vfuncout 
+        = ((2U == (2U & (IData)(vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel)))
+            ? 0U : ((1U == (IData)(vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel))
+                     ? (IData)(vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__i1)
+                     : 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc 
+        = vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__Vfuncout;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_POP_RET 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP) 
+           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__set_flag 
+        = ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDM) 
+             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC)) 
+            | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOADF)) 
+           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__S 
+        = (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
+                 >> 0U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_TEST 
+        = (3U == (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
+                        >> 2U)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOGICAL 
+        = (1U == (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
+                        >> 2U)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_CMP 
+        = (0xdU == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_ARITHMETIC 
+        = (2U == (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
+                        >> 2U)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MLT 
+        = (7U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
+                        >> 1U)));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_wc 
+        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
+                 >> 1U));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_sub 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_JABS 
+        = ((1U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
+                         >> 1U))) & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg) 
+                                     | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op)));
     vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_MIOCS 
         = vlTOPp->top__DOT__sharpx1__DOT__miocs;
     vlTOPp->top__DOT__sharpx1__DOT__x1_adec__DOT__O_HDD_CS 
@@ -9531,7 +9674,7 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1__DOT__sub_cs;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_cs 
         = ((((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_FDCS) 
-               | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_CS)) 
+               | (IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_cs)) 
               | (IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_cs)) 
              | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_ivec_cycle)) 
             | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fw_wram_cs)) 
@@ -9998,166 +10141,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
             }
         }
     }
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__I2 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__disp16) 
-            << 1U) | 0U);
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_out 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_ah_out) 
-            << 8U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_al_out));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bh_out) 
-            << 8U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_bl_out));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_REG 
-        = (1U & ((IData)((0U == (3U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op)))) 
-                 & (~ ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC) 
-                       | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_FLG)))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDI 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_BCC) 
-            & (7U == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cond))) 
-           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel 
-        = ((2U & ((~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle)) 
-                  << 1U)) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_BCC) 
-                              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op))) 
-                             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__cc_true)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MEM) 
-           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__stack_sel));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__S 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOADF 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg) 
-           & (0U == (0xfU & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix 
-        = (0xfU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg)
-                    ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst)
-                    : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_INT 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT____Vcellinp__sub_cpu__I_INT;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DOE 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_cs;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_a 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_ivec_sel)
-            ? 4U : (0x3ffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__p8255_hs_cs)
-                               ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_wr)
-                               : ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_DMA_CS)
-                                   ? (2U | (IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_wr))
-                                   : ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fw_wram_cs)
-                                       ? ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_fa) 
-                                          >> 1U) : 
-                                      (8U | (7U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_fa))))))));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP1 
-        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_clk1) 
-            << 4U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__irq_en) 
-                       << 3U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_KEY_BRK_n) 
-                                  << 2U) | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hwd_full) 
-                                              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__main_we))) 
-                                             << 1U) 
-                                            | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_full) 
-                                               | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__main_re))))));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__di = vlTOPp->top__DOT__sharpx1__DOT__di;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__halt_n 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__halt_n;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__IMode 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IMode;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__SetDI 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__SetDI;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeRS 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeRS;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__SetEI 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__SetEI;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__I_SCF 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_SCF;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__I_CCF 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_CCF;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeAF 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeAF;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__Special_LD 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Special_LD;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__LDSPHL 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__LDSPHL;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__JumpXY 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__JumpXY;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__Halt 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Halt;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__I_CPL 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_CPL;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__Prefix 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Prefix;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeRp 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeRp;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeDH 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeDH;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_a 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_a_out;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b_mux__DOT__I1 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_l_mux__DOT__I0 
-        = (0x1fU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out) 
-                    >> 0U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_bus_out_h_mux__DOT__I0 
-        = (0x7ffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out) 
-                     >> 5U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_b 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg)
-            ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__reg_b_out)
-            : (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rs_b_mux__I0));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__S 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel;
-    vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__i1 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT____Vcellinp__rel_pc_sel__I1;
-    vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_sel;
-    vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__Vfuncout 
-        = ((2U == (2U & (IData)(vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel)))
-            ? 0U : ((1U == (IData)(vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__sel))
-                     ? (IData)(vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__i1)
-                     : 1U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc 
-        = vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__sel3__33__Vfuncout;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP) 
-           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_POP_RET 
-        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_PUSH_POP) 
-           & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__set_flag 
-        = ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LDM) 
-             & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__LDM_PC)) 
-            | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOADF)) 
-           & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst_cycle));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__S 
-        = (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
-                 >> 0U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_TEST 
-        = (3U == (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
-                        >> 2U)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_LOGICAL 
-        = (1U == (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
-                        >> 2U)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_CMP 
-        = (0xdU == (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_ARITHMETIC 
-        = (2U == (3U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
-                        >> 2U)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MLT 
-        = (7U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
-                        >> 1U)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_wc 
-        = (1U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
-                 >> 1U));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_sub 
-        = (1U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_JABS 
-        = ((1U == (7U & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_mix) 
-                         >> 1U))) & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__op_reg) 
-                                     | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__pfx_op)));
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__address_a 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_a;
-    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P1 
-        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP1;
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__di 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__di;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__A 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__rs_a;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__d_addr_mux__DOT__I1 
@@ -10598,8 +10581,60 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_CALL 
         = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_JABS) 
            & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__inst));
-    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__dinst 
-        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__di;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_DOE 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_cs;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_a 
+        = ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__dma_ivec_sel)
+            ? 4U : (0x3ffU & ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__p8255_hs_cs)
+                               ? (IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_wr)
+                               : ((IData)(vlTOPp->top__DOT__sharpx1__DOT__dma_cs)
+                                   ? (2U | (IData)(vlTOPp->top__DOT__sharpx1__DOT__sub_wr))
+                                   : ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__fw_wram_cs)
+                                       ? ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_fa) 
+                                          >> 1U) : 
+                                      (8U | (7U & (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__I_fa))))))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP1 
+        = (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_clk1) 
+            << 4U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__irq_en) 
+                       << 3U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__O_KEY_BRK_n) 
+                                  << 2U) | ((((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hwd_full) 
+                                              & (~ (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__main_we))) 
+                                             << 1U) 
+                                            | ((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__hrd_full) 
+                                               | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__main_re))))));
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__di = vlTOPp->top__DOT__sharpx1__DOT__di;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__halt_n 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__halt_n;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__IMode 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__IMode;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__SetDI 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__SetDI;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeRS 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeRS;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__SetEI 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__SetEI;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__I_SCF 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_SCF;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__I_CCF 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_CCF;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeAF 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeAF;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__Special_LD 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Special_LD;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__LDSPHL 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__LDSPHL;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__JumpXY 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__JumpXY;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__Halt 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Halt;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__I_CPL 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__I_CPL;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__Prefix 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Prefix;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeRp 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeRp;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__i_mcode__DOT__ExchangeDH 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__ExchangeDH;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_unit__DOT__O 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__logical_out;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I0 
@@ -10691,6 +10726,12 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
             << 3U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_POP_RET) 
                        << 2U) | (((IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__OP_MEM) 
                                   << 1U) | (IData)(vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arith_sub))));
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__address_a 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__h_wram_a;
+    vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__I_P1 
+        = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__IP1;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__di 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__di;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I2 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__mlth_out;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__I1 
@@ -10770,6 +10811,8 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
                                         : vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__i0))));
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_in 
         = vlTOPp->__Vfunc_top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__cpu__DOT__arithmetic_b_mux__DOT__sel5__51__Vfuncout;
+    vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__dinst 
+        = vlTOPp->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__di;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_cpu__DOT__O_WR 
         = vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__mem_we;
     vlTOPp->top__DOT__sharpx1__DOT__subCPU__DOT__sub_w_ram__DOT__wren_b 

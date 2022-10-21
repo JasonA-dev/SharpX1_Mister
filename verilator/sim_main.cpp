@@ -485,6 +485,31 @@ int main(int argc, char** argv, char** env) {
 		//ImGui::Text("iow:     0x%02X", top->top__DOT__sharpx1__DOT__iow);																														
 		ImGui::End();
 
+		// Debug top
+		ImGui::Begin("DMA");
+		ImGui::Text("dma_bank:    0x%04X", top->top__DOT__sharpx1__DOT__dma_bank);
+		ImGui::Text("dma_a:       0x%04X", top->top__DOT__sharpx1__DOT__dma_a);	
+		ImGui::Text("dma_do:      0x%04X", top->top__DOT__sharpx1__DOT__dma_do);	
+		ImGui::Text("dma_di:      0x%04X", top->top__DOT__sharpx1__DOT__dma_di);
+		ImGui::Text("di:          0x%04X", top->top__DOT__sharpx1__DOT__di);
+		ImGui::Text("dma_mreq_n:  0x%04X", top->top__DOT__sharpx1__DOT__dma_mreq_n);
+		ImGui::Text("dma_iorq_n:  0x%04X", top->top__DOT__sharpx1__DOT__dma_iorq_n);	
+		ImGui::Text("dma_rd_n:    0x%04X", top->top__DOT__sharpx1__DOT__dma_rd_n);	
+		ImGui::Text("dma_wr_n:    0x%04X", top->top__DOT__sharpx1__DOT__dma_wr_n);
+		ImGui::Text("dma_sel:     0x%04X", top->top__DOT__sharpx1__DOT__dma_sel);
+		ImGui::Spacing();			
+		ImGui::Text("sdo:         0x%04X", top->top__DOT__sharpx1__DOT__sdo);
+		ImGui::Text("sbank:       0x%04X", top->top__DOT__sharpx1__DOT__sbank);
+		ImGui::Text("sa:          0x%04X", top->top__DOT__sharpx1__DOT__sa);	
+		ImGui::Text("sm1_n:       0x%04X", top->top__DOT__sharpx1__DOT__sm1_n);	
+		ImGui::Text("smreq_n:     0x%04X", top->top__DOT__sharpx1__DOT__smreq_n);		
+		ImGui::Text("sireq_n:     0x%04X", top->top__DOT__sharpx1__DOT__sireq_n);	
+		ImGui::Text("sireq_n:     0x%04X", top->top__DOT__sharpx1__DOT__sireq_n);	
+		ImGui::Text("srd_n:       0x%04X", top->top__DOT__sharpx1__DOT__srd_n);			
+		ImGui::Text("swr_n:       0x%04X", top->top__DOT__sharpx1__DOT__swr_n);	
+		ImGui::Text("sdi:         0x%04X", top->top__DOT__sharpx1__DOT__sdi);																																
+		ImGui::End();
+
 		// Debug RAM
 		ImGui::Begin("RAM ports");
 		ImGui::Text("I address_a: 0x%04X", top->top__DOT__sharpx1__DOT__RAM__DOT__address_a);	

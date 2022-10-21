@@ -365,22 +365,22 @@ x1_sub subCPU
   .I_RFSH_n(),
   .I_RFSH_STB_n(),
   // Z80DMA / FDD memory access
-  .I_DMA_CS(),
-  .O_DMA_BANK(),
-  .O_DMA_A(),
-  .I_DMA_D(),
-  .O_DMA_D(),
-  .O_DMA_MREQ_n(),
-  .O_DMA_IORQ_n(),
-  .O_DMA_RD_n(),
-  .O_DMA_WR_n(),
+  .I_DMA_CS(dma_cs),
+  .O_DMA_BANK(dma_bank),
+  .O_DMA_A(dma_a),
+  .I_DMA_D(dma_di),
+  .O_DMA_D(dma_do),
+  .O_DMA_MREQ_n(dma_mreq_n),
+  .O_DMA_IORQ_n(dma_iorq_n),
+  .O_DMA_RD_n(dma_rd_n),
+  .O_DMA_WR_n(dma_wr_n),
   .O_DMA_BUSRQ_n(),
   .I_DMA_BUSAK_n(),
   .I_DMA_RDY(),
-  .I_DMA_WAIT_n(),
-  .I_DMA_IEI(),
-  .O_DMA_INT_n(),
-  .O_DMA_IEO(),
+  .I_DMA_WAIT_n(halt_n),
+  .I_DMA_IEI(dma_iei),
+  .O_DMA_INT_n(dma_int_n),
+  .O_DMA_IEO(dma_ieo),
   //
   .O_PCM(),
   .O_FD_LAMP(),
@@ -475,15 +475,87 @@ x1_adec x1_adec(
   .O_DAM_CLR()  
 );
 
+//wire [15:0] ZA;
+//wire [7:0] ZDO;
+//wire ZMREQ_n, ZIORQ_n, ZRD_n, ZWR_n;
+wire [3:0] ice_bank;
+/****************************************************************************
+  system bus MUX
+
+  master
+  Z80DMA  (with RFSH hack access for FDD data)
+  Z80 CPU (with Z80 DEBUGGER)
+****************************************************************************/
+wire [3:0]  dma_bank;
+wire [15:0] dma_a;
+wire [7:0] dma_do,dma_di;
+wire dma_mreq_n,dma_iorq_n,dma_rd_n,dma_wr_n;
+wire dma_sel;
+
+wire [7:0] sdi;
+
+// SYNC / ASYNC BUS SIGNAL SELECTOR
+`define SYNC_Z80_BUS
+
+`ifdef  SYNC_Z80_BUS
+// SYNC / LATCHED Z80 BUS
+reg [7:0] sdo;
+reg  [3:0]  sbank;
+reg [15:0] sa;
+reg sm1_n,smreq_n,sireq_n,srd_n,swr_n;
+
+always @(posedge clk_sys or negedge reset)
+begin
+  if(reset)
+  begin
+  sbank <= 0;
+  sa    <= 16'h0000;
+  sdo   <= 8'h00;
+  smreq_n <= 1'b1;
+  sireq_n <= 1'b1;
+  srd_n <= 1'b1;
+  swr_n <= 1'b1;
+  end else begin
+  sbank <= dma_sel ? dma_bank : ice_bank;
+  sa    <= dma_sel ? dma_a    : a; // ZA
+  sdo   <= dma_sel ? dma_do   : data_out;  // ZDO
+  smreq_n <= dma_sel ? dma_mreq_n : ~mreq;  // ZMREQ_n
+  sireq_n <= dma_sel ? dma_iorq_n : ~iorq; // ZIORQ_n
+  srd_n <= dma_sel ? dma_rd_n : ~rd;  // ZRD_n
+  swr_n <= dma_sel ? dma_wr_n : ~wr; // ZWR_n
+  end
+end
+`else
+// ASYNC / NON LATCHED Z80 BUS
+wire [3:0]  sbank;
+wire [15:0] sa;
+wire sm1_n,smreq_n,siorq_n,srd_n,swr_n;
+
+assign sbank   = dma_sel ? dma_bank   : ice_bank;
+assign sa    = dma_sel ? dma_a    : a;  // ZA
+assign smreq_n = dma_sel ? dma_mreq_n : ~mreq; // ZMREQ_n
+assign sireq_n = dma_sel ? dma_iorq_n : ~iorq; // ZIORQ_n
+assign srd_n   = dma_sel ? dma_rd_n   : ~rd; // ZRD_n
+assign swr_n   = dma_sel ? dma_wr_n   : ~wr; // ZWR_n
+
+assign sdo     = dma_sel ? dma_do   : data_out;  // ZDO
+
+`endif
+
+assign ZDI    = sdi;
+assign dma_di = sdi;
+
 /****************************************************************************
   Data & Address Buses
 ****************************************************************************/
 
 always @(posedge clk_sys) begin
-
+  
+  /*
   if(ioctl_download == 1'b0) begin
     $display("A=%h, D=%h wr=%h halt_n=%h mreq=%h iorq=%h rd=%h m1=%h ram_cs=%h sub_cs=%h psgram_cs=%h gram_cs=%h", a, data_out, wr, halt_n, mreq, iorq, rd, m1, ram_cs, sub_cs, psgram_cs, gram_cs);
   end
+  */
 
   if(ram_cs) begin
     if(wr) begin
@@ -526,12 +598,12 @@ always @(posedge clk_sys) begin
       subDi <= data_out;    
       sub_wr <= 1;
       sub_rd <= 0;
-      $display("SUB CPU write %h %h", a, data_out);
+      //$display("SUB CPU write %h %h", a, data_out);
     end
     else if (rd) begin
       sub_wr <= 0;
       sub_rd <= 1;
-      $display("SUB CPU read %h %h", a, subDo);         
+      //$display("SUB CPU read %h %h", a, subDo);         
     end
   end
 end
