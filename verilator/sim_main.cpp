@@ -309,7 +309,7 @@ int main(int argc, char** argv, char** env) {
 		// Debug log window
 		console.Draw(windowTitle_DebugLog, &showDebugLog, ImVec2(500, 700));
 		ImGui::SetWindowPos(windowTitle_DebugLog, ImVec2(0, 160), ImGuiCond_Once);
-
+/*
 		// Memory debug
 		ImGui::Begin("BOOTROM IPL");
 		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__IPL__DOT__mem, 8192, 0);
@@ -329,7 +329,8 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Begin("GRAM");
 		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__GRAM__DOT__mem, 65536, 0);
 		ImGui::End();
-
+*/
+/*
 		// Debug CPU
 		ImGui::Begin("Cpu");
 		ImGui::Text("I reset_n:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__reset_n);	
@@ -350,7 +351,8 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("O a:         0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__a);		
 		ImGui::Spacing();					
 		ImGui::End();
-
+*/
+/*
 		// tv80_core Registers
 		ImGui::Begin("tv80_core Registers");
 		ImGui::Text("reset_n:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__reset_n);		
@@ -378,7 +380,8 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("Alternate:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__Z80CPU__DOT__i_tv80_core__DOT__Alternate);												
 		ImGui::Spacing();														
 		ImGui::End();
-
+*/
+/*
 		// Debug Sub CPU
 		ImGui::Begin("Sub CPU 80C49");
 		ImGui::Text("I reset:     0x%02X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_reset);	
@@ -419,7 +422,7 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("O GRG_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRG_CS);
 		ImGui::Spacing();
 		ImGui::End();
-
+*/
 /*
 		// Debug CPU
 		ImGui::Begin("Cpu");
@@ -466,6 +469,7 @@ int main(int argc, char** argv, char** env) {
 		ImGui::End();
 */
 
+/*
 		// Debug top
 		ImGui::Begin("top");
 		ImGui::Text("romA:    0x%04X", top->top__DOT__sharpx1__DOT__romA);
@@ -536,6 +540,7 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Spacing();														
 		ImGui::End();
 		*/
+/*
 		// Debug ioctl
 		ImGui::Begin("ioctl");
 		ImGui::Text("ioctl_download: 0x%02X", top->top__DOT__sharpx1__DOT__ioctl_download);	
@@ -544,7 +549,7 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("ioctl_dout:     0x%02X", top->top__DOT__sharpx1__DOT__ioctl_dout);		
 		ImGui::Spacing();														
 		ImGui::End();
-
+*/
 		// Trace/VCD window
 		ImGui::Begin(windowTitle_Trace);
 		ImGui::SetWindowPos(windowTitle_Trace, ImVec2(0, 870), ImGuiCond_Once);

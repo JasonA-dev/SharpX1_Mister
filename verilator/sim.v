@@ -78,6 +78,7 @@ module top(
 
 wire reset = ~ioctl_download;
 
+/*
 sharpx1 sharpx1
 (
    .clk_sys(clk_48),
@@ -100,6 +101,104 @@ sharpx1 sharpx1
 	.VSync(VGA_VS),
 
 	.video(rgb)
+);
+*/
+
+sharpx1_legacy sharpx1_legacy(
+// DEBUG
+
+// System RESET , System CLOCKs
+  .I_RESET(sys_reset),
+  .I_CLK32M(clk32M),
+  .I_CLK28M636(clk28M636),
+//  I_CLK4M,
+
+// External CPU Bus (Main RAM)
+  .O_CBUS_BANK(sbank),
+  .O_CBUS_ADDRESS(sa),
+  .O_CBUS_DATA(cbus_wdata),
+  .I_CBUS_DATA(sram_dr),
+  .O_CBUS_RD_n(srd_n),
+  .O_CBUS_WR_n(swr_n),
+  .I_CBUS_WAIT_n(1'b1),
+  .O_CBUS_CS_IPL(ipl_cs),
+  .O_CBUS_CS_MRAM(mram_cs),
+  .O_CBUS_CS_GRAMB(gr_b_cs),
+  .O_CBUS_CS_GRAMR(gr_r_cs),
+  .O_CBUS_CS_GRAMG(gr_g_cs),
+  .O_CBUS_BANK_GRAM_R(gram_rp),
+  .O_CBUS_BANK_GRAM_W(gram_wp),
+// External VIDEO Bus
+  .O_GRAM_A(vaddr),
+  .I_GRAM_D_R(grr_dr),
+  .I_GRAM_D_G(grg_dr),
+  .I_GRAM_D_B(grb_dr),
+// Xilinx Config ROM
+  .O_XCF_CCLK(cclk),
+  .O_XCF_RESET(reset_prom),
+  .I_XCF_DIN(din),
+// SD / MMC Card
+   .O_MMC_CLK(),
+   .O_MMC_CS(),
+   .O_MMC_DOUT(),
+   .I_MMC_DIN(1'b0),
+// PS2
+   .I_PS2_CLK(PS2_CLK),
+   .I_PS2_DAT(PS2_DATA),
+   .O_PS2_CLK_T(ps2_clk_t),
+   .O_PS2_DAT_T(ps2_dat_t),
+// sound
+   .PCM_L(pcm_l),
+   .PCM_R(),
+// NTSC S1 Video out
+`ifdef NTSC_S2
+  .O_VY(VY),
+  .O_VC(VC),
+`endif
+// Front / Back Panel Switches
+  .O_LED_FDD_RED(fd5_lamp),
+  .O_LED_FDD_GREEN(),
+
+  .I_NMI_n(~ext_nmi),
+  .O_LED_POWER(),
+  .O_LED_TIMER(),
+`ifdef X1TURBO
+  .I_IPL_n(~ext_reset),
+  .I_DEFCHR_SW(defchr_disable),
+  .O_LED_HIRESO(),
+  .I_DSW(),
+ `ifdef X1TURBOZ
+  .I_DSW(6'b000000),
+  .O_LED_ANALOG(),
+ `else
+  .I_DSW(4'b0000),
+ `endif
+`endif
+// DIP SW.
+// JOYSTICK
+  .I_JOYA(joy_a_n),
+  .I_JOYB(joy_b_n),
+  .O_JOYA(),
+  .O_JOYB(),
+  .T_JOYA(),
+  .T_JOYB(),
+// VGA / SCART RGB output
+  .O_VGA_R(VGA_R),
+  .O_VGA_G(VGA_G),
+  .O_VGA_B(VGA_B),
+  .O_VGA_HS(hsync),
+  .O_VGA_VS(vsync),
+// debug port : SUB CPU firmware download
+  .I_FIRMWARE_EN(1'b0),
+// debug port : SUB CPU number monitor
+  .O_DBG_NUM4(seg7_num),
+  .O_DBG_DOT4(seg7_dot),
+  .O_DBG_LED8(),
+// debug port : USART
+  .I_USART_CLK(uart_clk),
+  .I_USART_CLKEN16(uart_clk_e),
+  .I_USART_RX(uart_rx),
+  .O_USART_TX(uart_tx)
 );
 
 endmodule

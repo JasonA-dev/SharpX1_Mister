@@ -372,7 +372,7 @@ tv80c Z80(
   .nmi_n(ZNMI_n),
   .di(ZDI),
 `endif
-  .A(ZA), .do(ZDO),
+  .A(ZA), .dout(ZDO),
   .m1_n(ZM1_n), .iorq_n(ZIORQ_n), 
   .rd_n(ZRD_n), .wr_n(ZWR_n),
 `ifdef  DMA_TEST
@@ -829,11 +829,11 @@ ay8910 PSG(
   .clken(1'b1),
   .asel(~sa[8]),
   .cs_n(~psg_cs),
-  .direct_sel(0),
+  //.direct_sel(0),
   .wr_n(swr_n),
   .rd_n(srd_n),
   .di(sdo),
-  .do(psg_dr),
+  .dout(psg_dr),
   .A(PSG_OUT_A) ,
   .B(PSG_OUT_B) ,
   .C(PSG_OUT_C) ,

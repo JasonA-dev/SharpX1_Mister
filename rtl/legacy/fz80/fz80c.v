@@ -95,7 +95,7 @@ module fz80c (/*AUTOARG*/
   wait_window,
 `endif
   A, At,
-  do,dt
+  dout,dt
 );
 
 input reset_n,clk;
@@ -112,7 +112,7 @@ output	rfsh_n;
 output	halt_n; 
 output	busak_n;   // (enable controll : mreq_n,iorq_n,rd_n,wr_n,rfsh_n)
 output [15:0] A;   // Address Bus
-output [7:0]  do;  // Data Bus
+output [7:0]  dout;  // Data Bus
 output dt;		   // tristate controll : do
 output At;		   // tristate controll : A
 
@@ -548,9 +548,9 @@ assign dt	   = dt_r & dt_t4;
 assign busak_n = busack_n_r;
 
 `ifdef DO_VAL_IF_DT
-assign do = dt ? `DO_VAL_IF_DT : do_r;
+assign dout = dt ? `DO_VAL_IF_DT : do_r;
 `else
-assign do = do_r;
+assign dout = do_r;
 `endif
 
 //assign halt_n = halt_r;

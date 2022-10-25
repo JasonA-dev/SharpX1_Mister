@@ -54,6 +54,25 @@ CC_OPT = -O
 
 V_SRC = \
 	sim.v \
+	$(RTL)/sharpx1_legacy.v \	
+	$(RTL)/legacy/noicez80.v \	
+	$(RTL)/legacy/bootrom.v \	
+	$(RTL)/legacy/x1_mode.v \	
+	$(RTL)/legacy/x1t_mode.v \	
+	$(RTL)/legacy/x1_vid.v \	
+	$(RTL)/legacy/crtc/crtc6845s.v \
+	$(RTL)/legacy/pcg_wait.v \			
+	$(RTL)/legacy/z80/z80ctc.v \	
+	$(RTL)/legacy/dpram2k.v \	
+	$(RTL)/legacy/x1_cg8.v \		
+	$(RTL)/legacy/video/dbl_scan.v \	
+	$(RTL)/legacy/uart_rx.v \	
+	$(RTL)/legacy/uart_tx.v \	
+	$(RTL)/legacy/fz80/fz80c.v \
+	$(RTL)/legacy/fz80/fz80_110.v \		
+	$(RTL)/legacy/z80/z80reti.v \	
+	$(RTL)/legacy/PIA8255.v \		
+	$(RTL)/legacy/sound/ay8910.v \											
 	$(RTL)/sharpx1.v \
 	$(RTL)/cpu.v \		
 	$(RTL)/tv80/tv80e.v \	

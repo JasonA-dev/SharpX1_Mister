@@ -283,10 +283,10 @@ mreq, iorq, rd, wr, data_out, busack_out, intack_out, mr,
 	wire arith8_notcp = al & ~i[5];
 	wire i_cp = al & im[7];
 	wire arith8 = arith8_notcp | i_cp;
-	wire logic = al & i[5] & (~i[4] | ~i[3]);
-	wire i_and = logic & im[4];
-	wire i_xor = logic & im[5];
-	wire i_or = logic & im[6];
+	wire logicc = al & i[5] & (~i[4] | ~i[3]);
+	wire i_and = logicc & im[4];
+	wire i_xor = logicc & im[5];
+	wire i_or = logicc & im[6];
 	wire incdec8 = i0 & ih[0] & i[2] & ~i[1];
 	wire dec8 = incdec8 & i[0];
 	wire incdec_hl = incdec8 & im[6];
@@ -693,7 +693,7 @@ mreq, iorq, rd, wr, data_out, busack_out, intack_out, mr,
 	wire cv2 = i_scf;
 	wire cv3 = l;
 	wire cv4 = r;
-	wire cv5 = logic;
+	wire cv5 = logicc;
 	assign d_f[0] = data_in[0] & load_f
 		| (alu_c[7] ^ sub) & cv0
 		| ~q_f[0] & cv1
@@ -703,7 +703,7 @@ mreq, iorq, rd, wr, data_out, busack_out, intack_out, mr,
 		| q_f[0] & ~(load_f | cv0 | cv1 | cv2 | cv3 | cv4 | cv5);
 	wire nv0 = i_ioblock;
 	wire nv1 = (arith8 | incdec8 | arith16) & subf | i_cpblock | i_cpl | i_neg;
-	wire nv2 = (arith8 | incdec8 | add16 | arith16) & ~subf | ldair | i_inrc | i_rd | i_ccf | i_scf | i_ldblock | logic | rs | ibit;
+	wire nv2 = (arith8 | incdec8 | add16 | arith16) & ~subf | ldair | i_inrc | i_rd | i_ccf | i_scf | i_ldblock | logicc | rs | ibit;
 	assign d_f[1] = data_in[1] & load_f
 		| alu_b[7] & nv0
 		| nv1
@@ -711,7 +711,7 @@ mreq, iorq, rd, wr, data_out, busack_out, intack_out, mr,
 	wire pv0 = ldair;
 	wire pv1 = i_ldblock | i_cpblock;
 	wire pv2 = arith8 | arith16 | i_neg | incdec8;
-	wire pv3 = logic | i_daa | i_rotate2 | shift | i_rd | i_inrc;
+	wire pv3 = logicc | i_daa | i_rotate2 | shift | i_rd | i_inrc;
 	wire pv4 = ibit;
 	assign d_f[2] = data_in[2] & load_f
 		| iff2 & pv0
@@ -747,7 +747,7 @@ mreq, iorq, rd, wr, data_out, busack_out, intack_out, mr,
 		| q_b[5] & xy3
 		| alu_z[1] & i_ldblock
 		| q_f[5] & ~(load_f | xy0 | xy1 | xy2 | xy3 | i_ldblock);
-	wire zs0 = arith8 | arith16 | i_daa | i_neg | i_cpblock | incdec8 | ldair | i_inrc | i_rd | i_rotate2 | shift | logic;
+	wire zs0 = arith8 | arith16 | i_daa | i_neg | i_cpblock | incdec8 | ldair | i_inrc | i_rd | i_rotate2 | shift | logicc;
 	wire zs1 = ibit;
 	wire zl = ~| alu_z[7:0];
 	wire zu = ~| asu_z[7:0];

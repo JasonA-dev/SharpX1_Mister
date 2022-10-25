@@ -27,7 +27,7 @@
 
 //`define AY_SLICE_OUT
 
-module ay8910(rst_n,clk,clken,asel,cs_n,wr_n,rd_n,di,do,A,B,C,pa_i,pb_i,pa_o,pa_t,pb_o,pb_t);
+module ay8910(rst_n,clk,clken,asel,cs_n,wr_n,rd_n,di,dout,A,B,C,pa_i,pb_i,pa_o,pa_t,pb_o,pb_t);
 
 input rst_n;
 input clk;
@@ -37,7 +37,7 @@ input cs_n;
 input wr_n;
 input rd_n;
 input [7:0] di;
-output [7:0] do;
+output [7:0] dout;
 output [7:0] A,B,C; // 8bit sound output
 input [7:0] pa_i,pb_i;
 output [7:0] pa_o,pb_o;
@@ -149,7 +149,7 @@ end
 /////////////////////////////////////////////////////////////////////////////
 // Read Register
 /////////////////////////////////////////////////////////////////////////////
-assign do = (cs_n|rd_n) ? 8'h00:       // no read
+assign dout = (cs_n|rd_n) ? 8'h00:       // no read
             asel       ? {4'h0,addr}: // addr reg
             addr==4'h0 ? period_a[7:0] :
             addr==4'h1 ? {4'h0,period_a[11:8]} :
