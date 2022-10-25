@@ -98,9 +98,8 @@ VL_MODULE(Vtop) {
     CData/*7:0*/ top__DOT__sw2;
     CData/*0:0*/ top__DOT__ce_pix;
     CData/*0:0*/ top__DOT__reset;
-    CData/*0:0*/ top__DOT__sys_reset;
-    CData/*0:0*/ top__DOT__clk32M;
-    CData/*0:0*/ top__DOT__clk28M636;
+    CData/*0:0*/ top__DOT__hsync;
+    CData/*0:0*/ top__DOT__vsync;
     CData/*0:0*/ top__DOT__sbank;
     CData/*0:0*/ top__DOT__sa;
     CData/*0:0*/ top__DOT__cbus_wdata;
@@ -130,8 +129,6 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__ext_nmi;
     CData/*0:0*/ top__DOT__joy_a_n;
     CData/*0:0*/ top__DOT__joy_b_n;
-    CData/*0:0*/ top__DOT__hsync;
-    CData/*0:0*/ top__DOT__vsync;
     CData/*0:0*/ top__DOT__seg7_num;
     CData/*0:0*/ top__DOT__seg7_dot;
     CData/*0:0*/ top__DOT__uart_clk_e;
@@ -2430,9 +2427,9 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__m1_fin;
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__rfsh_set;
     CData/*0:0*/ __Vclklast__TOP__clk_48;
+    CData/*0:0*/ __Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk28M636;
     CData/*0:0*/ __Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk32M;
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__sub_reset;
-    CData/*0:0*/ __Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk28M636;
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__clk_reset;
     CData/*0:0*/ __Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__vclk;
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__sys_reset;

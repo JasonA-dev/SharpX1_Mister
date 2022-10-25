@@ -118,8 +118,6 @@ VL_INLINE_OPT void Vtop::_combo__TOP__3(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__sys_reset;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_reset 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__sub_reset;
-    vlTOPp->top__DOT__clk_48 = vlTOPp->clk_48;
-    vlTOPp->top__DOT__clk_12 = vlTOPp->clk_12;
     vlTOPp->top__DOT__inputs = vlTOPp->inputs;
     vlTOPp->top__DOT__ioctl_download = vlTOPp->ioctl_download;
     vlTOPp->top__DOT__ioctl_upload = vlTOPp->ioctl_upload;
@@ -191,7 +189,12 @@ VL_INLINE_OPT void Vtop::_combo__TOP__3(Vtop__Syms* __restrict vlSymsp) {
                                                   >> 3U)))))));
     vlTOPp->top__DOT__pause = (1U & ((IData)(vlTOPp->inputs) 
                                      >> 0xbU));
+    vlTOPp->top__DOT__clk_48 = vlTOPp->clk_48;
+    vlTOPp->top__DOT__clk_12 = vlTOPp->clk_12;
     vlTOPp->top__DOT__reset = (1U & (~ (IData)(vlTOPp->ioctl_download)));
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__clk28M636 
+        = vlTOPp->clk_12;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__clk32M = vlTOPp->clk_48;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__crtc6845s__DOT__crtc_gen__DOT__I_RSTn 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__crtc6845s__DOT__I_RSTn;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__z80ctc__DOT__ch0__DOT__I_RESET 
@@ -202,10 +205,47 @@ VL_INLINE_OPT void Vtop::_combo__TOP__3(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__z80ctc__DOT__I_RESET;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__I_RESET 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_reset;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CLK32M 
+        = vlTOPp->top__DOT__clk_48;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CLK28M636 
+        = vlTOPp->top__DOT__clk_12;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_RESET 
+        = vlTOPp->top__DOT__reset;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__I_CLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__clk28M636;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk = vlTOPp->top__DOT__sharpx1_legacy__DOT__clk28M636;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__I_CLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__clk32M;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_clk 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__clk32M;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__cpu__DOT__reset 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__I_RESET;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__timer__DOT__I_RESET 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__I_RESET;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_VCLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__text_ram__DOT__VCLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__att_ram__DOT__VCLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_cg8__DOT__I_CLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__pcg_b_ram__DOT__VCLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__pcg_r_ram__DOT__VCLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__pcg_g_ram__DOT__VCLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_rom__DOT__CLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_clk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_w_ram__DOT__clock 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_clk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__I_CLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_clk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__cpu__DOT__clk 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__I_CLK;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__timer__DOT__I_CLK 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__I_CLK;
 }
 
 VL_INLINE_OPT void Vtop::_sequent__TOP__4(Vtop__Syms* __restrict vlSymsp) {
@@ -327,6 +367,118 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__7(Vtop__Syms* __restrict vlSymsp) {
 
 VL_INLINE_OPT void Vtop::_sequent__TOP__8(Vtop__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__8\n"); );
+    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
+    // Variables
+    CData/*3:0*/ __Vdlyvval__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
+    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
+    SData/*10:0*/ __Vdlyvdim0__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
+    SData/*9:0*/ __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
+    SData/*9:0*/ __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o;
+    // Body
+    __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o;
+    __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
+    __Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 = 0U;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram
+        [((0x400U & ((~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page)) 
+                     << 0xaU)) | (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o))];
+    __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o 
+        = (0x3ffU & ((IData)(1U) + (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o)));
+    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__dscan_return) {
+        __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o = 0U;
+    }
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hsync_r 
+        = (0x6dU > (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o));
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_sync 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old;
+    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__pclk_en) {
+        __Vdlyvval__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 
+            = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_di;
+        __Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 = 1U;
+        __Vdlyvdim0__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 
+            = (((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page) 
+                << 0xaU) | (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i));
+        __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i 
+            = (0x3ffU & ((IData)(1U) + (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i)));
+        if (((~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old)) 
+             & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__hsync))) {
+            vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page 
+                = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page)));
+            vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hnum 
+                = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
+            __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i = 0U;
+        }
+    }
+    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__dscan_return) {
+        vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__vsync_r 
+            = ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__vsync)
+                ? (3U & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__vsync_r) 
+                         >> 1U)) : 6U);
+    }
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o 
+        = __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i 
+        = __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
+    if (__Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0) {
+        vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram[__Vdlyvdim0__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0] 
+            = __Vdlyvval__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
+    }
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_hsync 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hsync_r;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r = (1U 
+                                                   & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do) 
+                                                      >> 3U));
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g = (1U 
+                                                   & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do) 
+                                                      >> 2U));
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b = (1U 
+                                                   & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do) 
+                                                      >> 1U));
+    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__pclk_en) {
+        vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old 
+            = vlTOPp->top__DOT__sharpx1_legacy__DOT__hsync;
+    }
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_vsync 
+        = (1U & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__vsync_r));
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_HSYNC 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_hsync;
+    vlTOPp->top__DOT__hsync = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_hsync;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_R 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_R 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r;
+    vlTOPp->top__DOT__VGA_R = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_G 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_G 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g;
+    vlTOPp->top__DOT__VGA_G = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_B 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_B 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b;
+    vlTOPp->top__DOT__VGA_B = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_VSYNC 
+        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_vsync;
+    vlTOPp->top__DOT__vsync = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_vsync;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_HS 
+        = vlTOPp->top__DOT__hsync;
+    vlTOPp->VGA_R = vlTOPp->top__DOT__VGA_R;
+    vlTOPp->VGA_G = vlTOPp->top__DOT__VGA_G;
+    vlTOPp->VGA_B = vlTOPp->top__DOT__VGA_B;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__dscan_return 
+        = (((~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_sync)) 
+            & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old)) 
+           | ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o) 
+              == (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hnum)));
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_VS 
+        = vlTOPp->top__DOT__vsync;
+}
+
+VL_INLINE_OPT void Vtop::_sequent__TOP__9(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__9\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
     CData/*5:0*/ __Vtableidx1;
@@ -6777,8 +6929,8 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__8(Vtop__Syms* __restrict vlSymsp) {
                                                     : 0x112U)))))))))));
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__9(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__9\n"); );
+VL_INLINE_OPT void Vtop::_sequent__TOP__10(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__10\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
     CData/*7:0*/ __Vdlyvval__top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_w_ram__DOT__mem__v0;
@@ -6981,8 +7133,8 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__9(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__ctc_iei;
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__10(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__10\n"); );
+VL_INLINE_OPT void Vtop::_sequent__TOP__11(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__11\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
     CData/*3:0*/ __Vdly__top__DOT__sharpx1_legacy__DOT__spi_cnt;
@@ -7098,8 +7250,8 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__10(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__cclk;
 }
 
-VL_INLINE_OPT void Vtop::_sequent__TOP__11(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__11\n"); );
+VL_INLINE_OPT void Vtop::_sequent__TOP__12(Vtop__Syms* __restrict vlSymsp) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__12\n"); );
     Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Variables
     CData/*2:0*/ __Vdly__top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__timer__DOT__timer_ctrl;
@@ -8955,118 +9107,6 @@ VL_INLINE_OPT void Vtop::_sequent__TOP__11(Vtop__Syms* __restrict vlSymsp) {
                                         ^ (0x7fffcU 
                                            & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__cpu__DOT__rs_a) 
                                               >> 0xdU))))));
-}
-
-VL_INLINE_OPT void Vtop::_sequent__TOP__12(Vtop__Syms* __restrict vlSymsp) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vtop::_sequent__TOP__12\n"); );
-    Vtop* const __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
-    // Variables
-    CData/*3:0*/ __Vdlyvval__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
-    CData/*0:0*/ __Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
-    SData/*10:0*/ __Vdlyvdim0__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
-    SData/*9:0*/ __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
-    SData/*9:0*/ __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o;
-    // Body
-    __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o;
-    __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
-    __Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 = 0U;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram
-        [((0x400U & ((~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page)) 
-                     << 0xaU)) | (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o))];
-    __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o 
-        = (0x3ffU & ((IData)(1U) + (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o)));
-    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__dscan_return) {
-        __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o = 0U;
-    }
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hsync_r 
-        = (0x6dU > (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o));
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_sync 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old;
-    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__pclk_en) {
-        __Vdlyvval__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 
-            = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_di;
-        __Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 = 1U;
-        __Vdlyvdim0__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0 
-            = (((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page) 
-                << 0xaU) | (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i));
-        __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i 
-            = (0x3ffU & ((IData)(1U) + (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i)));
-        if (((~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old)) 
-             & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__hsync))) {
-            vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page 
-                = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__page)));
-            vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hnum 
-                = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
-            __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i = 0U;
-        }
-    }
-    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__dscan_return) {
-        vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__vsync_r 
-            = ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__vsync)
-                ? (3U & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__vsync_r) 
-                         >> 1U)) : 6U);
-    }
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o 
-        = __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i 
-        = __Vdly__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_i;
-    if (__Vdlyvset__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0) {
-        vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram[__Vdlyvdim0__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0] 
-            = __Vdlyvval__top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__line_ram__v0;
-    }
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_hsync 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hsync_r;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r = (1U 
-                                                   & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do) 
-                                                      >> 3U));
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g = (1U 
-                                                   & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do) 
-                                                      >> 2U));
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b = (1U 
-                                                   & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__lram_do) 
-                                                      >> 1U));
-    if (vlTOPp->top__DOT__sharpx1_legacy__DOT__pclk_en) {
-        vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old 
-            = vlTOPp->top__DOT__sharpx1_legacy__DOT__hsync;
-    }
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_vsync 
-        = (1U & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__vsync_r));
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_HSYNC 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_hsync;
-    vlTOPp->top__DOT__hsync = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_hsync;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_R 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_R 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r;
-    vlTOPp->top__DOT__VGA_R = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_r;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_G 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_G 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g;
-    vlTOPp->top__DOT__VGA_G = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_g;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_B 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_B 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b;
-    vlTOPp->top__DOT__VGA_B = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_b;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__O_VSYNC 
-        = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_vsync;
-    vlTOPp->top__DOT__vsync = vlTOPp->top__DOT__sharpx1_legacy__DOT__vc_vsync;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_HS 
-        = vlTOPp->top__DOT__hsync;
-    vlTOPp->VGA_R = vlTOPp->top__DOT__VGA_R;
-    vlTOPp->VGA_G = vlTOPp->top__DOT__VGA_G;
-    vlTOPp->VGA_B = vlTOPp->top__DOT__VGA_B;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__dscan_return 
-        = (((~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_sync)) 
-            & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hs_old)) 
-           | ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hpos_o) 
-              == (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__hnum)));
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__O_VGA_VS 
-        = vlTOPp->top__DOT__vsync;
 }
 
 VL_INLINE_OPT void Vtop::_sequent__TOP__13(Vtop__Syms* __restrict vlSymsp) {

@@ -104,13 +104,23 @@ sharpx1 sharpx1
 );
 */
 
+/****************************************************************************
+  video converter
+****************************************************************************/
+
+wire hsync,vsync;
+
+// VIDEO SYNC
+assign VGA_HS = hsync ? 1'b0 : 1'bz;
+assign VGA_VS = vsync ? 1'b0 : 1'bz;
+
 sharpx1_legacy sharpx1_legacy(
 // DEBUG
 
 // System RESET , System CLOCKs
-  .I_RESET(sys_reset),
-  .I_CLK32M(clk32M),
-  .I_CLK28M636(clk28M636),
+  .I_RESET(reset), // sys_reset
+  .I_CLK32M(clk_48),   // clk32M
+  .I_CLK28M636(clk_12),  // clk28M636
 //  I_CLK4M,
 
 // External CPU Bus (Main RAM)
