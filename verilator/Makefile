@@ -72,7 +72,8 @@ V_SRC = \
 	$(RTL)/legacy/fz80/fz80_110.v \		
 	$(RTL)/legacy/z80/z80reti.v \	
 	$(RTL)/legacy/PIA8255.v \		
-	$(RTL)/legacy/sound/ay8910.v \											
+	$(RTL)/legacy/sound/ay8910.v \		
+	$(RTL)/legacy/spartan3/xc3_sram.v \												
 	$(RTL)/sharpx1.v \
 	$(RTL)/cpu.v \		
 	$(RTL)/tv80/tv80e.v \	

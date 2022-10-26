@@ -1,0 +1,171 @@
+#
+# I/O constraints for Spartan-3 Starter Board.
+#
+# soldered 50MHz Clock
+#
+NET "clk" LOC = "T9";
+#
+# PS/2 Keyboard / Mouse I/F
+#
+NET "PS2_CLK"  LOC = "M16" | DRIVE=2 | SLEW = SLOW;
+NET "PS2_DATA" LOC = "M15" | DRIVE=2 | SLEW = SLOW;
+#
+# VGA output
+#
+NET "VGA_R" LOC = "R12" | DRIVE=12 | SLEW = FAST;
+NET "VGA_G" LOC = "T12" | DRIVE=12 | SLEW = FAST;
+NET "VGA_B" LOC = "R11" | DRIVE=12 | SLEW = FAST;
+NET "VGA_HS" LOC = "R9"  | PULLUP | DRIVE=8 | SLEW = FAST;
+NET "VGA_VS" LOC = "T10" | PULLUP | DRIVE=8 | SLEW = FAST;
+#
+# Simple LEDs
+#
+NET "led<0>" LOC = "K12";
+NET "led<1>" LOC = "P14";
+NET "led<2>" LOC = "L12";
+NET "led<3>" LOC = "N14";
+NET "led<4>" LOC = "P13";
+NET "led<5>" LOC = "N12";
+NET "led<6>" LOC = "P12";
+NET "led<7>" LOC = "P11";
+#
+# Simple switches
+#
+NET "switch<0>" LOC = "F12";
+NET "switch<1>" LOC = "G12";
+NET "switch<2>" LOC = "H14";
+NET "switch<3>" LOC = "H13";
+NET "switch<4>" LOC = "J14";
+NET "switch<5>" LOC = "J13";
+NET "switch<6>" LOC = "K14";
+NET "switch<7>" LOC = "K13";
+#
+# Press buttons
+#
+NET "button<0>" LOC = "M13";
+NET "button<1>" LOC = "M14";
+NET "button<2>" LOC = "L13";
+NET "button<3>" LOC = "L14";
+#
+# UART connections to female DB9 connector J2
+#
+NET "uart_tx" LOC = "R13" | DRIVE=2 | SLEW = SLOW;
+NET "uart_rx" LOC = "T13";
+#
+# 7-segement x4digit dynamic display
+#
+NET "led7com<0>" LOC = "D14" | DRIVE=2 | SLEW = SLOW;
+NET "led7com<1>" LOC = "G14" | DRIVE=2 | SLEW = SLOW;
+NET "led7com<2>" LOC = "F14" | DRIVE=2 | SLEW = SLOW;
+NET "led7com<3>" LOC = "E13" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<0>" LOC = "E14" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<1>" LOC = "G13" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<2>" LOC = "N15" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<3>" LOC = "P15" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<4>" LOC = "R16" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<5>" LOC = "F13" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<6>" LOC = "N16" | DRIVE=2 | SLEW = SLOW;
+NET "led7seg<7>" LOC = "P16" | DRIVE=2 | SLEW = SLOW;
+#
+# hispeed Static RAM
+#
+NET "ram_addr<0>" LOC = "L5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<1>" LOC = "N3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<2>" LOC = "M4" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<3>" LOC = "M3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<4>" LOC = "L4" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<5>" LOC = "G4" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<6>" LOC = "F3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<7>" LOC = "F4" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<8>" LOC = "E3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<9>" LOC = "E4" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<10>" LOC = "G5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<11>" LOC = "H3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<12>" LOC = "H4" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<13>" LOC = "J4" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<14>" LOC = "J3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<15>" LOC = "K3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<16>" LOC = "K5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_addr<17>" LOC = "L3" | DRIVE=2 | SLEW = SLOW;
+#
+NET "ram_we" LOC = "G3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_oe" LOC = "K4" | DRIVE=2 | SLEW = SLOW;
+#
+NET "ram_a_data<0>" LOC = "N7" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<1>" LOC = "T8" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<2>" LOC = "R6" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<3>" LOC = "T5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<4>" LOC = "R5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<5>" LOC = "C2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<6>" LOC = "C1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<7>" LOC = "B1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<8>" LOC = "D3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<9>" LOC = "P8" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<10>" LOC = "F2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<11>" LOC = "H1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<12>" LOC = "J2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<13>" LOC = "L2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<14>" LOC = "P1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_data<15>" LOC = "R1" | DRIVE=2 | SLEW = SLOW;
+#
+NET "ram_a_ce" LOC = "P7" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_lb" LOC = "P6" | DRIVE=2 | SLEW = SLOW;
+NET "ram_a_ub" LOC = "T4" | DRIVE=2 | SLEW = SLOW;
+#
+NET "ram_b_data<0>" LOC = "P2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<1>" LOC = "N2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<2>" LOC = "M2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<3>" LOC = "K1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<4>" LOC = "J1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<5>" LOC = "G2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<6>" LOC = "E1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<7>" LOC = "D1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<8>" LOC = "D2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<9>" LOC = "E2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<10>" LOC = "G1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<11>" LOC = "F5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<12>" LOC = "C3" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<13>" LOC = "K2" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<14>" LOC = "M1" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_data<15>" LOC = "N1" | DRIVE=2 | SLEW = SLOW;
+#
+NET "ram_b_ce" LOC = "N5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_lb" LOC = "P5" | DRIVE=2 | SLEW = SLOW;
+NET "ram_b_ub" LOC = "R4" | DRIVE=2 | SLEW = SLOW;
+
+#
+# XCF02S Serial PROM connections
+#
+NET "din" LOC = "M11";
+NET "reset_prom" LOC = "N9";
+NET "cclk" LOC = "A14";
+#
+# additional sound circuit
+#
+NET "DAC" LOC = "D9" | DRIVE=16 | SLEW = SLOW;
+#NET "DAC" LOC = "E6" | DRIVE=2 | SLEW = SLOW;
+#NET "DAC<1>" LOC = "D5" | DRIVE=2 | SLEW = SLOW;
+#NET "DAC<2>" LOC = "C5" | DRIVE=2 | SLEW = SLOW;
+#NET "DAC<3>" LOC = "D6" | DRIVE=2 | SLEW = SLOW;
+#NET "DAC<4>" LOC = "C6" | DRIVE=2 | SLEW = SLOW;
+#NET "DAC<5>" LOC = "E7" | DRIVE=2 | SLEW = SLOW;
+#NET "DAC<6>" LOC = "C7" | DRIVE=2 | SLEW = SLOW;
+#NET "DAC<7>" LOC = "D7" | DRIVE=2 | SLEW = SLOW;
+#
+
+
+#
+# additional NTSC S2 out
+#
+NET "VY<3>" LOC = "D5" | DRIVE=4 | SLEW = SLOW;
+NET "VY<2>" LOC = "D6" | DRIVE=4 | SLEW = SLOW;
+NET "VY<1>" LOC = "E7" | DRIVE=4 | SLEW = SLOW;
+NET "VY<0>" LOC = "D7" | DRIVE=4 | SLEW = SLOW;
+NET "VC<3>" LOC = "D8" | DRIVE=4 | SLEW = SLOW;
+NET "VC<2>" LOC = "D10" | DRIVE=4 | SLEW = SLOW;
+NET "VC<1>" LOC = "B4" | DRIVE=4 | SLEW = SLOW;
+NET "VC<0>" LOC = "B5" | DRIVE=4 | SLEW = SLOW;
+
+
+NET "clk" TNM_NET = "clk";
+TIMESPEC "TS_clk" = PERIOD "clk" 50 MHz HIGH 50 %;

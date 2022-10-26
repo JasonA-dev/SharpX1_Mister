@@ -24,6 +24,7 @@ verilator \
 ../rtl/legacy/z80/z80reti.v \
 ../rtl/legacy/PIA8255.v \
 ../rtl/legacy/sound/ay8910.v \
+../rtl/legacy/spartan3/xc3_sram.v \
 ../rtl/sharpx1.v \
 ../rtl/cpu.v \
 ../rtl/tv80/tv80e.v \

@@ -5,6 +5,8 @@ module top(
 
    input clk_48 /*verilator public_flat*/,
    input clk_12 /*verilator public_flat*/,
+   input reset,
+	 input soft_reset,   
    input [11:0]  inputs/*verilator public_flat*/,
 
    output [7:0] VGA_R/*verilator public_flat*/,
@@ -76,7 +78,7 @@ module top(
       ce_pix <= old_clk & ~clk_12;
    end
 
-wire reset = ~ioctl_download;
+//wire reset = ~ioctl_download;
 
 /*
 sharpx1 sharpx1
@@ -104,6 +106,8 @@ sharpx1 sharpx1
 );
 */
 
+assign clk_reset = reset;
+
 /****************************************************************************
   video converter
 ****************************************************************************/
@@ -113,6 +117,87 @@ wire hsync,vsync;
 // VIDEO SYNC
 assign VGA_HS = hsync ? 1'b0 : 1'bz;
 assign VGA_VS = vsync ? 1'b0 : 1'bz;
+
+/****************************************************************************
+  external SRAM
+****************************************************************************/
+
+// CPU BUS
+wire [3:0]  sbank;
+wire [15:0] sa;
+wire [7:0] sram_dr , cbus_wdata;
+wire srd_n,swr_n;
+wire ipl_cs;
+wire mram_cs;
+wire gr_b_cs;
+wire gr_r_cs;
+wire gr_g_cs;
+
+// GRAM BUS
+wire [13:0] vaddr;
+wire [7:0]  grb_dr,grr_dr,grg_dr;
+
+// SRAM BUS
+wire [17:0] sram_a;
+wire [7:0]  sram_dw;
+wire sram_wc;
+wire sram_we;
+wire sram_oe;
+wire [3:0] sram_bw;
+
+//wire sys_reset = ext_reset | clk_reset;
+
+xc3_sram xc3_sram(
+  .I_RESET(reset),
+  .I_CLK(clk_48),
+// SRAM
+  .O_SRAM_A(sram_a),
+  .O_SRAM_D(sram_dw),
+  .I_SRAM_D({ram_b_data,ram_a_data}),
+  .O_SRAM_WC(sram_wc),
+  .O_SRAM_WE(sram_we),
+  .O_SRAM_OE(sram_oe),
+  .O_SRAM_BW(sram_bw),
+// CPU BUS
+  .I_CB(sbank),
+  .I_CA(sa),
+  .I_CD(cbus_wdata),
+  .O_CD(sram_dr),
+  .I_CRD(~srd_n),
+  .I_CWR(~swr_n),
+  .I_IPL_CS(ipl_cs),
+  .I_RAM_CS(mram_cs),
+  .I_GB_CS(gr_b_cs),
+  .I_GR_CS(gr_r_cs),
+  .I_GG_CS(gr_g_cs),
+`ifdef X1TURBO
+// GRAM BANK
+  .I_GRP(gram_rp),
+  .I_GWP(gram_wp),
+`endif
+// VIDEO BUS
+  .I_GA(vaddr),
+  .O_GB_D(grb_dr),
+  .O_GR_D(grr_dr),
+  .O_GG_D(grg_dr)
+);
+
+// SRAM
+assign ram_addr   = sram_a;
+assign ram_we   = ~sram_wc;
+assign ram_oe   = ~sram_oe;
+assign ram_a_data = sram_wc ? {sram_dw,sram_dw} : 16'bzzzzzzzzzzzzzzzz;
+assign ram_b_data = sram_wc ? {sram_dw,sram_dw} : 16'bzzzzzzzzzzzzzzzz;
+assign ram_a_ce = reset;  // sys_reset
+assign ram_b_ce = reset;  // sys_reset
+assign ram_a_lb = ~sram_bw[0];
+assign ram_a_ub = ~sram_bw[1];
+assign ram_b_lb = ~sram_bw[2];
+assign ram_b_ub = ~sram_bw[3];
+
+/****************************************************************************
+  sharpx1_legacy
+****************************************************************************/
 
 sharpx1_legacy sharpx1_legacy(
 // DEBUG

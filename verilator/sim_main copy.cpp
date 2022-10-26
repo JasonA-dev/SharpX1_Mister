@@ -89,10 +89,7 @@ double sc_time_stamp() {	// Called by $time in Verilog.
 
 int clk_sys_freq = 48000000;
 SimClock clk_48(1); // 48mhz
-SimClock clk_12(2); // 12mhz
-
-int soft_reset = 0;
-vluint64_t soft_reset_time = 0;
+SimClock clk_12(4); // 12mhz
 
 // VCD trace logging
 // -----------------
@@ -136,26 +133,11 @@ void resetSim() {
 int verilate() {
 
 	if (!Verilated::gotFinish()) {
-		if (soft_reset) {
-			fprintf(stderr, "soft_reset.. in gotFinish\n");
-			top->soft_reset = 1;
-			soft_reset = 0;
-			soft_reset_time = 0;
-			fprintf(stderr, "turning on %x\n", top->soft_reset);
-		}
-		if (clk_48.IsRising()) {
-			soft_reset_time++;
-		}
-		if (soft_reset_time == initialReset) {
-			top->soft_reset = 0;
-			fprintf(stderr, "turning off %x\n", top->soft_reset);
-			fprintf(stderr, "soft_reset_time %d initialReset %x\n", soft_reset_time, initialReset);
-		}
 
 		// Assert reset during startup
-		if (main_time < initialReset) { top->reset = 1; }
+		//if (main_time < initialReset) { top->reset = 1; }
 		// Deassert reset after startup
-		if (main_time == initialReset) { top->reset = 0; }
+		//if (main_time == initialReset) { top->reset = 0; }
 
 		// Clock dividers
 		clk_48.Tick();
@@ -269,7 +251,7 @@ int main(int argc, char** argv, char** env) {
 	// Setup video output
 	if (video.Initialise(windowTitle) == 1) { return 1; }
 
-	//bus.QueueDownload("./ipl_x1.rom", 0, true);
+	bus.QueueDownload("./ipl_x1.rom", 0, true);
 	//bus.QueueDownload("./boot.hex", 0, true);
 
 #ifdef WIN32
@@ -348,35 +330,28 @@ int main(int argc, char** argv, char** env) {
 		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__GRAM__DOT__mem, 65536, 0);
 		ImGui::End();
 */
-
-		// Debug noicez80 CPU
-		ImGui::Begin("noicez80 CPU");
-		ImGui::Text("I_RESET_n:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_RESET_n);	
-		ImGui::Text("I_REM_CLKE:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_REM_CLKE);
-		ImGui::Text("I_REM_RXD:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_REM_RXD);
-		ImGui::Text("O_REM_TXD:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__O_REM_TXD);
-		ImGui::Text("O_REM_MODE:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__O_REM_MODE);
-		ImGui::Text("I_TRAP_ENABLE: 0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_TRAP_ENABLE);
-		ImGui::Text("O_BANK:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__O_BANK);
+/*
+		// Debug CPU
+		ImGui::Begin("Cpu");
+		ImGui::Text("I reset_n:   0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__reset_n);	
+		ImGui::Text("I cep:       0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cep);
+		ImGui::Text("I cen:       0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__cen);
+		ImGui::Text("I int_n:     0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__int_n);
+		ImGui::Text("I di:        0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__di);
+		ImGui::Text("I dir:       0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__dir);
+		ImGui::Text("I dirset:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__dirset);
 		ImGui::Spacing();
-		ImGui::Text("I_INT_n:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_INT_n);		
-		ImGui::Text("I_NMI_n:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_NMI_n);		
-		ImGui::Text("I_M1_n:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_M1_n);		
-		ImGui::Text("I_MREQ_n:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_MREQ_n);	
-		ImGui::Text("I_IORQ_n:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_IORQ_n);	
-		ImGui::Text("I_RD_n:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_RD_n);						
-		ImGui::Text("I_WR_n:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_WR_n);		
-		ImGui::Text("I_HALT_n:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_HALT_n);		
-		ImGui::Spacing();	
-		ImGui::Text("I_A:           0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_A);	
-		ImGui::Text("I_DR:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_DR);	
-		ImGui::Text("I_DW:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__I_DW);	
-		ImGui::Text("O_MREQ_n:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__O_MREQ_n);	
-		ImGui::Text("O_NMI_n:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__O_NMI_n);	
-		ImGui::Text("O_INT_n:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__O_INT_n);	
-		ImGui::Text("O_DR:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__O_DR);	
+		ImGui::Text("O halt_n:    0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__halt_n);		
+		ImGui::Text("O mreq:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__mreq);		
+		ImGui::Text("O iorq:      0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__iorq);		
+		ImGui::Text("O wr:        0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__wr);	
+		ImGui::Text("O rd:        0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__rd);	
+		ImGui::Text("O m1:        0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__m1);						
+		ImGui::Text("O data_out:  0x%02X", top->top__DOT__sharpx1__DOT__Cpu__DOT__data_out);		
+		ImGui::Text("O a:         0x%04X", top->top__DOT__sharpx1__DOT__Cpu__DOT__a);		
+		ImGui::Spacing();					
 		ImGui::End();
-
+*/
 /*
 		// tv80_core Registers
 		ImGui::Begin("tv80_core Registers");
