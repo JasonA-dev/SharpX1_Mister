@@ -169,7 +169,7 @@ int verilate() {
 		if (clk_48.clk != clk_48.old) {
 
 			// System clock simulates HPS functions
-			if (clk_12.clk) {
+			if (clk_12.clk) {  // clk_12
 				input.BeforeEval();
 				bus.BeforeEval();
 			}
@@ -180,7 +180,7 @@ int verilate() {
 			}
 
 			// System clock simulates HPS functions
-			if (clk_12.clk) { bus.AfterEval(); }
+			if (clk_12.clk) { bus.AfterEval(); }  // clk_12
 		}
 
 #ifndef DISABLE_AUDIO
@@ -327,27 +327,26 @@ int main(int argc, char** argv, char** env) {
 		// Debug log window
 		console.Draw(windowTitle_DebugLog, &showDebugLog, ImVec2(500, 700));
 		ImGui::SetWindowPos(windowTitle_DebugLog, ImVec2(0, 160), ImGuiCond_Once);
-/*
+
 		// Memory debug
-		ImGui::Begin("BOOTROM IPL");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__IPL__DOT__mem, 8192, 0);
-		ImGui::End();		
+		//ImGui::Begin("BOOTROM IPL");
+		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__IPL__DOT__mem, 8192, 0);
+		//ImGui::End();		
 		//ImGui::Begin("BOOTROM CHARGEN");
 		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__bios_fw_spi__DOT__d, 8192, 0);
 		//ImGui::End();		
 		ImGui::Begin("RAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__RAM__DOT__mem, 65536, 0);
+		mem_edit.DrawContents(&top->top__DOT__RAM__DOT__mem, 65536, 0);
 		ImGui::End();	
-		ImGui::Begin("VRAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__VRAM__DOT__mem, 4096, 0);
-		ImGui::End();
-		ImGui::Begin("PSG RAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PSGRAM__DOT__mem, 8192, 0);
-		ImGui::End();
-		ImGui::Begin("GRAM");
-		mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__GRAM__DOT__mem, 65536, 0);
-		ImGui::End();
-*/
+		//ImGui::Begin("VRAM");
+		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__VRAM__DOT__mem, 4096, 0);
+		//ImGui::End();
+		//ImGui::Begin("PSG RAM");
+		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__PSGRAM__DOT__mem, 8192, 0);
+		//ImGui::End();
+		//ImGui::Begin("GRAM");
+		//mem_edit.DrawContents(&top->top__DOT__sharpx1__DOT__GRAM__DOT__mem, 65536, 0);
+		//ImGui::End();
 
 		// Debug noicez80 CPU
 		ImGui::Begin("noicez80 CPU");
@@ -406,48 +405,120 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Spacing();														
 		ImGui::End();
 */
-/*
+
 		// Debug Sub CPU
 		ImGui::Begin("Sub CPU 80C49");
-		ImGui::Text("I reset:     0x%02X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_reset);	
-		ImGui::Text("I cs:        0x%02X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_cs);
-		ImGui::Text("I rd:        0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_rd);
-		ImGui::Text("I wr:        0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_wr);
-		ImGui::Text("I M1_n:      0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_M1_n);
-		ImGui::Text("I D:         0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__I_D);
-		ImGui::Text("O D:         0x%04X", top->top__DOT__sharpx1__DOT__subCPU__DOT__O_D);
+		ImGui::Text("I_cs:           0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_cs);			
+		ImGui::Text("I_rd:           0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_rd);	
+		ImGui::Text("I_wr:           0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_wr);
+		ImGui::Text("I_M1_n:         0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_M1_n);
+		ImGui::Text("I_D:            0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_D);
+		ImGui::Text("O_D:            0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_D);
+		ImGui::Text("O_DOE:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DOE);
+		ImGui::Text("O D:            0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_D);
 		ImGui::Spacing();
+		ImGui::Text("I_DMA_CS:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_DMA_CS);	
+		ImGui::Text("O_DMA_BANK:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_BANK);
+		ImGui::Text("O_DMA_A:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_A);
+		ImGui::Text("I_DMA_D:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_DMA_D);
+		ImGui::Text("O_DMA_D:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_D);
+		ImGui::Text("O_DMA_MREQ_n:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_MREQ_n);
+		ImGui::Text("O_DMA_IORQ_n:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_IORQ_n);
+		ImGui::Text("O_DMA_RD_n:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_RD_n);	
+		ImGui::Text("O_DMA_WR_n:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_WR_n);
+		ImGui::Text("O_DMA_BUSRQ_n:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_BUSRQ_n);
+		ImGui::Text("I_DMA_BUSAK_n:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_DMA_BUSAK_n);
+		ImGui::Text("I_DMA_RDY:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_DMA_RDY);
+		ImGui::Text("I_DMA_WAIT_n:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_DMA_WAIT_n);
+		ImGui::Text("I_DMA_IEI:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_DMA_IEI);	
+		ImGui::Text("O_DMA_INT_n:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_INT_n);	
+		ImGui::Text("O_DMA_IEO:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_IEO);								
+		ImGui::Spacing();		
+		ImGui::End();
+/*
+//
+  O_PCM,
+
+// SUBCPU Firmware Access Port
+  I_fa,
+  I_fcs,
+
+// communication handshake signal 
+  O_TX_BSY,
+  O_RX_BSY,
+  O_KEY_BRK_n,
+// subcpu int controll
+  I_SPM1,
+  I_RETI,
+  I_IEI,
+  O_INT_n,
+*/
+
+		// Debug SRAM Controller
+		ImGui::Begin("SRAM Controller");
+		ImGui::Text("O_SRAM_A:   0x%04X", top->top__DOT__xc3_sram__DOT__O_SRAM_A);			
+		ImGui::Text("O_SRAM_D:   0x%04X", top->top__DOT__xc3_sram__DOT__O_SRAM_D);	
+		ImGui::Text("I_SRAM_D:   0x%04X", top->top__DOT__xc3_sram__DOT__I_SRAM_D);
+		ImGui::Text("O_SRAM_WC:  0x%04X", top->top__DOT__xc3_sram__DOT__O_SRAM_WC);
+		ImGui::Text("O_SRAM_WE:  0x%04X", top->top__DOT__xc3_sram__DOT__O_SRAM_WE);
+		ImGui::Text("O_SRAM_OE:  0x%04X", top->top__DOT__xc3_sram__DOT__O_SRAM_OE);
+		ImGui::Text("O_SRAM_BW:  0x%04X", top->top__DOT__xc3_sram__DOT__O_SRAM_BW);
+		ImGui::Spacing();
+		ImGui::Text("I_CB:       0x%04X", top->top__DOT__xc3_sram__DOT__I_CB);			
+		ImGui::Text("I_CA:       0x%04X", top->top__DOT__xc3_sram__DOT__I_CA);	
+		ImGui::Text("I_CD:       0x%04X", top->top__DOT__xc3_sram__DOT__I_CD);
+		ImGui::Text("O_CD:       0x%04X", top->top__DOT__xc3_sram__DOT__O_CD);
+		ImGui::Text("I_CRD:      0x%04X", top->top__DOT__xc3_sram__DOT__I_CRD);
+		ImGui::Text("I_CWR:      0x%04X", top->top__DOT__xc3_sram__DOT__I_CWR);
+		ImGui::Text("I_IPL_CS:   0x%04X", top->top__DOT__xc3_sram__DOT__I_IPL_CS);	
+		ImGui::Text("I_RAM_CS:   0x%04X", top->top__DOT__xc3_sram__DOT__I_RAM_CS);
+		ImGui::Text("I_GB_CS:    0x%04X", top->top__DOT__xc3_sram__DOT__I_GB_CS);
+		ImGui::Text("I_GR_CS:    0x%04X", top->top__DOT__xc3_sram__DOT__I_GR_CS);
+		ImGui::Text("I_GG_CS:    0x%04X", top->top__DOT__xc3_sram__DOT__I_GG_CS);									
+		ImGui::Spacing();	
+		ImGui::Text("I_GA:       0x%04X", top->top__DOT__xc3_sram__DOT__I_GA);
+		ImGui::Text("O_GB_D:     0x%04X", top->top__DOT__xc3_sram__DOT__O_GB_D);
+		ImGui::Text("O_GR_D:     0x%04X", top->top__DOT__xc3_sram__DOT__O_GR_D);
+		ImGui::Text("O_GG_D:     0x%04X", top->top__DOT__xc3_sram__DOT__O_GG_D);		
+		ImGui::Spacing();			
 		ImGui::End();
 
 		// Debug Address Decoder
 		ImGui::Begin("Address Decoder");
-		ImGui::Text("I reset:      0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__I_RESET);	
-		ImGui::Text("I A:          0x%04X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__I_A);
-		ImGui::Text("I MREQ_n:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__I_MREQ_n);
+		ImGui::Text("I reset:      0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__I_RESET);	
+		ImGui::Text("I A:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__I_A);
+		ImGui::Text("I MREQ_n:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__I_MREQ_n);
 		ImGui::Spacing();	
-		ImGui::Text("O IPL_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_CS);
-		ImGui::Text("O RAM_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_RAM_CS);
-		ImGui::Text("O MIOCS:      0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_MIOCS);
-		ImGui::Text("O EMM_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EMM_CS);
-		ImGui::Text("O EXTROM_CS:  0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_EXTROM_CS);
-		ImGui::Text("O KANROM_CS:  0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_KANROM_CS);
-		ImGui::Text("O FD5_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_FD5_CS);
-		ImGui::Text("O PAL_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PAL_CS);
-		ImGui::Text("O CG_CS:      0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CG_CS);
-		ImGui::Text("O CRTC_CS:    0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_CRTC_CS);																		
-		ImGui::Text("O SUB_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_SUB_CS);
-		ImGui::Text("O PIA_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PIA_CS);
-		ImGui::Text("O PSG_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_PSG_CS);
-		ImGui::Text("O IPL_SET_CS: 0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_SET_CS);
-		ImGui::Text("O IPL_RES_CS: 0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_IPL_RES_CS);
-		ImGui::Text("O ATTR_CS:    0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_ATTR_CS);
-		ImGui::Text("O TEXT_CS:    0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_TEXT_CS);
-		ImGui::Text("O GRB_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRB_CS);
-		ImGui::Text("O GRR_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRR_CS);
-		ImGui::Text("O GRG_CS:     0x%02X", top->top__DOT__sharpx1__DOT__x1_adec__DOT__O_GRG_CS);
+		ImGui::Text("O IPL_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_IPL_CS);
+		ImGui::Text("O RAM_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_RAM_CS);
+		ImGui::Text("O MIOCS:      0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_MIOCS);
+		ImGui::Text("O EMM_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_EMM_CS);
+		ImGui::Text("O EXTROM_CS:  0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_EXTROM_CS);
+		ImGui::Text("O KANROM_CS:  0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_KANROM_CS);
+		ImGui::Text("O FD5_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_FD5_CS);
+		ImGui::Text("O PAL_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_PAL_CS);
+		ImGui::Text("O CG_CS:      0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_CG_CS);
+		ImGui::Text("O CRTC_CS:    0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_CRTC_CS);																		
+		ImGui::Text("O SUB_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_SUB_CS);
+		ImGui::Text("O PIA_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_PIA_CS);
+		ImGui::Text("O PSG_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_PSG_CS);
+		ImGui::Text("O IPL_SET_CS: 0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_IPL_SET_CS);
+		ImGui::Text("O IPL_RES_CS: 0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_IPL_RES_CS);
+		ImGui::Text("O ATTR_CS:    0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_ATTR_CS);
+		ImGui::Text("O TEXT_CS:    0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_TEXT_CS);
+		ImGui::Text("O GRB_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_GRB_CS);
+		ImGui::Text("O GRR_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_GRR_CS);
+		ImGui::Text("O GRG_CS:     0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__O_GRG_CS);
 		ImGui::Spacing();
 		ImGui::End();
-*/
+
+		// Sub ROM
+		ImGui::Begin("Sub ROM");
+		ImGui::Text("A:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_rom__DOT__A);
+		ImGui::Text("DO:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_rom__DOT__DO);		
+		ImGui::Spacing();
+		ImGui::End();
+
 /*
 		// Debug CPU
 		ImGui::Begin("Cpu");

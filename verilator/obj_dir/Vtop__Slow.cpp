@@ -10,6 +10,8 @@
 //==========
 VlUnpacked<CData/*3:0*/, 64> Vtop::__Vtable1_top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__vector;
 
+const IData Vtop::var_top__DOT__RAM__DOT__data_width_g(8U);
+const IData Vtop::var_top__DOT__RAM__DOT__addr_width_g(0x10U);
 const IData Vtop::var_top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IF1(0U);
 const IData Vtop::var_top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IF2(1U);
 const IData Vtop::var_top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IMM1(2U);
@@ -63,7 +65,7 @@ Vtop::~Vtop() {
 
 // Savable
 void Vtop::__Vserialize(VerilatedSerialize& os) {
-    vluint64_t __Vcheckval = 0x38e0b7903053cd68ULL;
+    vluint64_t __Vcheckval = 0x7bb8633bec41c858ULL;
     os << __Vcheckval;
     os << __VlSymsp->_vm_contextp__;
     os<<clk_48;
@@ -144,6 +146,11 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     os<<top__DOT__sram_oe;
     os<<top__DOT__sram_bw;
     os<<top__DOT____Vcellinp__xc3_sram__I_SRAM_D;
+    os<<top__DOT__ramDi;
+    os<<top__DOT__ramDo;
+    os<<top__DOT__ramA;
+    os<<top__DOT__ramWe;
+    os<<top__DOT____Vcellout__RAM__q_b;
     os<<top__DOT____Vcellout__sharpx1_legacy__O_DBG_DOT4;
     os<<top__DOT__clk_reset;
     os<<top__DOT__ram_b_data;
@@ -224,6 +231,20 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     os<<top__DOT__xc3_sram__DOT__cbw2;
     os<<top__DOT__xc3_sram__DOT__cbw3;
     os<<top__DOT__xc3_sram__DOT__wr_setup;
+    os<<top__DOT__RAM__DOT__clock;
+    os<<top__DOT__RAM__DOT__ram_cs;
+    os<<top__DOT__RAM__DOT__wren_a;
+    os<<top__DOT__RAM__DOT__address_a;
+    os<<top__DOT__RAM__DOT__data_a;
+    os<<top__DOT__RAM__DOT__q_a;
+    os<<top__DOT__RAM__DOT__ram_cs_b;
+    os<<top__DOT__RAM__DOT__wren_b;
+    os<<top__DOT__RAM__DOT__address_b;
+    os<<top__DOT__RAM__DOT__data_b;
+    os<<top__DOT__RAM__DOT__q_b;
+    for (int __Vi0=0; __Vi0<65536; ++__Vi0) {
+        os<<top__DOT__RAM__DOT__mem[__Vi0];
+    }
     os<<top__DOT__sharpx1_legacy__DOT__I_RESET;
     os<<top__DOT__sharpx1_legacy__DOT__I_CLK32M;
     os<<top__DOT__sharpx1_legacy__DOT__I_CLK28M636;
@@ -2601,7 +2622,7 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     os<<__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__ZRESET_n;
     os<<__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__m1_fin;
     os<<__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__rfsh_set;
-    os<<__Vclklast__TOP__clk_48;
+    os<<__Vclklast__TOP__clk_12;
     os<<__Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk28M636;
     os<<__Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk32M;
     os<<__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__sub_reset;
@@ -2649,7 +2670,7 @@ void Vtop::__Vserialize(VerilatedSerialize& os) {
     __VlSymsp->__Vserialize(os);
 }
 void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
-    vluint64_t __Vcheckval = 0x38e0b7903053cd68ULL;
+    vluint64_t __Vcheckval = 0x7bb8633bec41c858ULL;
     os.readAssert(__Vcheckval);
     os >> __VlSymsp->_vm_contextp__;
     os>>clk_48;
@@ -2730,6 +2751,11 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
     os>>top__DOT__sram_oe;
     os>>top__DOT__sram_bw;
     os>>top__DOT____Vcellinp__xc3_sram__I_SRAM_D;
+    os>>top__DOT__ramDi;
+    os>>top__DOT__ramDo;
+    os>>top__DOT__ramA;
+    os>>top__DOT__ramWe;
+    os>>top__DOT____Vcellout__RAM__q_b;
     os>>top__DOT____Vcellout__sharpx1_legacy__O_DBG_DOT4;
     os>>top__DOT__clk_reset;
     os>>top__DOT__ram_b_data;
@@ -2810,6 +2836,20 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
     os>>top__DOT__xc3_sram__DOT__cbw2;
     os>>top__DOT__xc3_sram__DOT__cbw3;
     os>>top__DOT__xc3_sram__DOT__wr_setup;
+    os>>top__DOT__RAM__DOT__clock;
+    os>>top__DOT__RAM__DOT__ram_cs;
+    os>>top__DOT__RAM__DOT__wren_a;
+    os>>top__DOT__RAM__DOT__address_a;
+    os>>top__DOT__RAM__DOT__data_a;
+    os>>top__DOT__RAM__DOT__q_a;
+    os>>top__DOT__RAM__DOT__ram_cs_b;
+    os>>top__DOT__RAM__DOT__wren_b;
+    os>>top__DOT__RAM__DOT__address_b;
+    os>>top__DOT__RAM__DOT__data_b;
+    os>>top__DOT__RAM__DOT__q_b;
+    for (int __Vi0=0; __Vi0<65536; ++__Vi0) {
+        os>>top__DOT__RAM__DOT__mem[__Vi0];
+    }
     os>>top__DOT__sharpx1_legacy__DOT__I_RESET;
     os>>top__DOT__sharpx1_legacy__DOT__I_CLK32M;
     os>>top__DOT__sharpx1_legacy__DOT__I_CLK28M636;
@@ -5187,7 +5227,7 @@ void Vtop::__Vdeserialize(VerilatedDeserialize& os) {
     os>>__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__ZRESET_n;
     os>>__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__m1_fin;
     os>>__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__rfsh_set;
-    os>>__Vclklast__TOP__clk_48;
+    os>>__Vclklast__TOP__clk_12;
     os>>__Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk28M636;
     os>>__Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk32M;
     os>>__Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__sub_reset;
@@ -5257,7 +5297,7 @@ void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_GRG_WE = 0U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CBUS_WAIT_n = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__I_MMC_DIN = 0U;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_FIRMWARE_EN = 0U;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_FIRMWARE_EN = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__I_CLKEN = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I0 = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__cpu__DOT__rel_pc_sel__DOT__I2 = 0U;
@@ -5291,7 +5331,7 @@ void Vtop::_initial__TOP__1(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1_legacy__DOT__slot1_int_n = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__slot2_int_n = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__sio_int_n = 1U;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__firm_en = 0U;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__firm_en = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__mem16_cs = 1U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__sio_doe = 0U;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__sio_rd = 0U;
@@ -5347,6 +5387,10 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__VGA_HB = vlTOPp->VGA_HB;
     vlTOPp->top__DOT__VGA_VB = vlTOPp->VGA_VB;
     vlTOPp->top__DOT__xc3_sram__DOT__O_SRAM_WE = vlTOPp->top__DOT__sram_we;
+    vlTOPp->top__DOT__RAM__DOT__wren_a = vlTOPp->top__DOT__ramWe;
+    vlTOPp->top__DOT__RAM__DOT__address_a = vlTOPp->top__DOT__ramA;
+    vlTOPp->top__DOT__RAM__DOT__data_a = vlTOPp->top__DOT__ramDi;
+    vlTOPp->top__DOT__RAM__DOT__wren_b = vlTOPp->top__DOT__sram_we;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__I_NMI_n 
         = (1U & (~ (IData)(vlTOPp->top__DOT__ext_nmi)));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__I_JOYA = vlTOPp->top__DOT__joy_a_n;
@@ -5436,6 +5480,7 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__I_DEFCHR_SW)));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__ZNMI_n = 
         (1U & (~ (IData)(vlTOPp->top__DOT__ext_nmi)));
+    vlTOPp->top__DOT__clk_48 = vlTOPp->clk_48;
     vlTOPp->top__DOT__soft_reset = vlTOPp->soft_reset;
     vlTOPp->top__DOT__inputs = vlTOPp->inputs;
     vlTOPp->top__DOT__ioctl_download = vlTOPp->ioctl_download;
@@ -5511,12 +5556,11 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__clk_reset = vlTOPp->reset;
     vlTOPp->top__DOT__ram_a_ce = vlTOPp->reset;
     vlTOPp->top__DOT__ram_b_ce = vlTOPp->reset;
-    vlTOPp->top__DOT__clk_12 = vlTOPp->clk_12;
-    vlTOPp->top__DOT__clk_48 = vlTOPp->clk_48;
     vlTOPp->top__DOT__reset = vlTOPp->reset;
+    vlTOPp->top__DOT__clk_12 = vlTOPp->clk_12;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__clk28M636 
         = vlTOPp->clk_12;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__clk32M = vlTOPp->clk_48;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__clk32M = vlTOPp->clk_12;
     vlTOPp->top__DOT__xc3_sram__DOT__grp = vlTOPp->top__DOT__xc3_sram__DOT__I_GRP;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__uart_rx__DOT__rx_data 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__rxd_data;
@@ -5530,17 +5574,19 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__uart_tx = (1U & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__uart_tx__DOT__tx_shift));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__clk_reset 
         = vlTOPp->reset;
+    vlTOPp->top__DOT__RAM__DOT__q_a = vlTOPp->top__DOT__ramDo;
+    vlTOPp->top__DOT__RAM__DOT__q_b = vlTOPp->top__DOT____Vcellout__RAM__q_b;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__IP2 
         = (((IData)(vlTOPp->top__DOT__PS2_CLK) << 1U) 
            | (IData)(vlTOPp->top__DOT__PS2_DATA));
-    vlTOPp->top__DOT__sram_a = vlTOPp->top__DOT__xc3_sram__DOT__sram_a;
     vlTOPp->top__DOT__sram_oe = (1U & (~ (IData)(vlTOPp->top__DOT__xc3_sram__DOT__sram_oe_n)));
+    vlTOPp->top__DOT__sram_a = vlTOPp->top__DOT__xc3_sram__DOT__sram_a;
     vlTOPp->top__DOT__sram_bw = vlTOPp->top__DOT__xc3_sram__DOT__sram_bw;
     vlTOPp->top__DOT__grb_dr = vlTOPp->top__DOT__xc3_sram__DOT__gr_b_dr;
     vlTOPp->top__DOT__grr_dr = vlTOPp->top__DOT__xc3_sram__DOT__gr_r_dr;
     vlTOPp->top__DOT__grg_dr = vlTOPp->top__DOT__xc3_sram__DOT__gr_g_dr;
-    vlTOPp->top__DOT__sram_dw = vlTOPp->top__DOT__xc3_sram__DOT__sram_wd;
     vlTOPp->top__DOT__sram_wc = (1U & (~ (IData)(vlTOPp->top__DOT__xc3_sram__DOT__sram_wc_n)));
+    vlTOPp->top__DOT__sram_dw = vlTOPp->top__DOT__xc3_sram__DOT__sram_wd;
     vlTOPp->top__DOT__sram_dr = vlTOPp->top__DOT__xc3_sram__DOT__sram_cpu_d;
     vlTOPp->top__DOT__seg7_num = (1U & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__OP7));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__O_MMC_CS 
@@ -5746,6 +5792,8 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         (1U & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__pris32m) 
                >> 3U));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__ZCLK = vlTOPp->top__DOT__sharpx1_legacy__DOT__cpu_clk;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__sub_reset 
+        = vlTOPp->reset;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__dma_int_res 
         = (1U & ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__OPA) 
                  >> 1U));
@@ -6254,7 +6302,7 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
                                                 << 1U) 
                                                | (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__pia__DOT__pch_dir))))));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__ZRESET_n 
-        = (1U & (~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__sys_reset)));
+        = (1U & (~ (IData)(vlTOPp->reset)));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__dma_do = 
         (0xffU & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__OP0));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__dma_a = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__OP8;
@@ -6365,9 +6413,6 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
                          << 9U) | (((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__fdc_hlt) 
                                     << 8U) | (0xffU 
                                               & (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__OP3)))));
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__sub_reset 
-        = ((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__sys_reset) 
-           | (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__firm_en));
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_mode__DOT__O_IPL_SEL 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__ipl_sel;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__dma_iei 
@@ -6426,14 +6471,15 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         = (((IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__ZNMI_n) 
             & (~ (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__user_trap))) 
            | (IData)(vlTOPp->top__DOT__sharpx1_legacy__DOT__noicez80__DOT__debug_enable));
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CLK28M636 
-        = vlTOPp->top__DOT__clk_12;
-    vlTOPp->top__DOT__xc3_sram__DOT__I_CLK = vlTOPp->top__DOT__clk_48;
-    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CLK32M 
-        = vlTOPp->top__DOT__clk_48;
     vlTOPp->top__DOT__xc3_sram__DOT__I_RESET = vlTOPp->top__DOT__reset;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__I_RESET 
         = vlTOPp->top__DOT__reset;
+    vlTOPp->top__DOT__xc3_sram__DOT__I_CLK = vlTOPp->top__DOT__clk_12;
+    vlTOPp->top__DOT__RAM__DOT__clock = vlTOPp->top__DOT__clk_12;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CLK32M 
+        = vlTOPp->top__DOT__clk_12;
+    vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CLK28M636 
+        = vlTOPp->top__DOT__clk_12;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__dbl_scan__DOT__I_CLK 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__clk28M636;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__vclk = vlTOPp->top__DOT__sharpx1_legacy__DOT__clk28M636;
@@ -6449,10 +6495,13 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__IP2;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__I_P2 
         = vlTOPp->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__IP2;
-    vlTOPp->top__DOT__ram_addr = (1U & vlTOPp->top__DOT__sram_a);
-    vlTOPp->top__DOT__xc3_sram__DOT__O_SRAM_A = vlTOPp->top__DOT__sram_a;
     vlTOPp->top__DOT__ram_oe = (1U & (~ (IData)(vlTOPp->top__DOT__sram_oe)));
     vlTOPp->top__DOT__xc3_sram__DOT__O_SRAM_OE = vlTOPp->top__DOT__sram_oe;
+    vlTOPp->top__DOT__ram_addr = (1U & vlTOPp->top__DOT__sram_a);
+    vlTOPp->top__DOT__xc3_sram__DOT__O_SRAM_A = vlTOPp->top__DOT__sram_a;
+    vlTOPp->top__DOT__RAM__DOT__address_b = (0xffffU 
+                                             & (vlTOPp->top__DOT__sram_a 
+                                                >> 0U));
     vlTOPp->top__DOT__ram_a_lb = (1U & (~ (IData)(vlTOPp->top__DOT__sram_bw)));
     vlTOPp->top__DOT__ram_a_ub = (1U & (~ ((IData)(vlTOPp->top__DOT__sram_bw) 
                                            >> 1U)));
@@ -6473,18 +6522,10 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
     vlTOPp->top__DOT__sharpx1_legacy__DOT__I_GRAM_D_G 
         = vlTOPp->top__DOT__grg_dr;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__grg_dr = vlTOPp->top__DOT__grg_dr;
-    vlTOPp->top__DOT__xc3_sram__DOT__O_SRAM_D = vlTOPp->top__DOT__sram_dw;
     vlTOPp->top__DOT__ram_we = (1U & (~ (IData)(vlTOPp->top__DOT__sram_wc)));
     vlTOPp->top__DOT__xc3_sram__DOT__O_SRAM_WC = vlTOPp->top__DOT__sram_wc;
-    vlTOPp->top__DOT__ram_b_data = (1U & (((IData)(vlTOPp->top__DOT__sram_wc)
-                                            ? (0xffffU 
-                                               & (((IData)(vlTOPp->top__DOT__sram_dw) 
-                                                   << 8U) 
-                                                  | (IData)(vlTOPp->top__DOT__sram_dw)))
-                                            : 0U) & 
-                                          ((IData)(vlTOPp->top__DOT__sram_wc)
-                                            ? 0xffffU
-                                            : 0U)));
+    vlTOPp->top__DOT__xc3_sram__DOT__O_SRAM_D = vlTOPp->top__DOT__sram_dw;
+    vlTOPp->top__DOT__RAM__DOT__data_b = vlTOPp->top__DOT__sram_dw;
     vlTOPp->top__DOT__ram_a_data = (1U & (((IData)(vlTOPp->top__DOT__sram_wc)
                                             ? (0xffffU 
                                                & (((IData)(vlTOPp->top__DOT__sram_dw) 
@@ -6494,6 +6535,16 @@ void Vtop::_settle__TOP__2(Vtop__Syms* __restrict vlSymsp) {
                                           ((IData)(vlTOPp->top__DOT__sram_wc)
                                             ? 0xffffU
                                             : 0U)));
+    vlTOPp->top__DOT__ram_b_data = (1U & ((((IData)(vlTOPp->top__DOT__sram_wc)
+                                             ? (0xffffU 
+                                                & (((IData)(vlTOPp->top__DOT__sram_dw) 
+                                                    << 8U) 
+                                                   | (IData)(vlTOPp->top__DOT__sram_dw)))
+                                             : 0U) 
+                                           & ((IData)(vlTOPp->top__DOT__sram_wc)
+                                               ? 0xffffU
+                                               : 0U)) 
+                                          | (IData)(vlTOPp->top__DOT____Vcellout__RAM__q_b)));
     vlTOPp->top__DOT__xc3_sram__DOT__O_CD = vlTOPp->top__DOT__sram_dr;
     vlTOPp->top__DOT__sharpx1_legacy__DOT__I_CBUS_DATA 
         = vlTOPp->top__DOT__sram_dr;

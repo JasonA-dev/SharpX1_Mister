@@ -26,8 +26,8 @@ VL_MODULE(Vtop) {
     // PORTS
     // The application code writes and reads these signals to
     // propagate new values into/out from the Verilated model.
-    VL_IN8(clk_48,0,0);
     VL_IN8(clk_12,0,0);
+    VL_IN8(clk_48,0,0);
     VL_IN8(reset,0,0);
     VL_IN8(soft_reset,0,0);
     VL_OUT8(VGA_R,7,0);
@@ -121,6 +121,9 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__sram_we;
     CData/*0:0*/ top__DOT__sram_oe;
     CData/*3:0*/ top__DOT__sram_bw;
+    CData/*7:0*/ top__DOT__ramDi;
+    CData/*7:0*/ top__DOT__ramDo;
+    CData/*0:0*/ top__DOT__ramWe;
     CData/*0:0*/ top__DOT__clk_reset;
     CData/*0:0*/ top__DOT__ram_b_data;
     CData/*0:0*/ top__DOT__ram_a_data;
@@ -191,6 +194,15 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__xc3_sram__DOT__cbw2;
     CData/*0:0*/ top__DOT__xc3_sram__DOT__cbw3;
     CData/*0:0*/ top__DOT__xc3_sram__DOT__wr_setup;
+    CData/*0:0*/ top__DOT__RAM__DOT__clock;
+    CData/*0:0*/ top__DOT__RAM__DOT__ram_cs;
+    CData/*0:0*/ top__DOT__RAM__DOT__wren_a;
+    CData/*7:0*/ top__DOT__RAM__DOT__data_a;
+    CData/*7:0*/ top__DOT__RAM__DOT__q_a;
+    CData/*0:0*/ top__DOT__RAM__DOT__ram_cs_b;
+    CData/*0:0*/ top__DOT__RAM__DOT__wren_b;
+    CData/*7:0*/ top__DOT__RAM__DOT__data_b;
+    CData/*7:0*/ top__DOT__RAM__DOT__q_b;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT__I_RESET;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT__I_CLK32M;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT__I_CLK28M636;
@@ -2058,8 +2070,11 @@ VL_MODULE(Vtop) {
     SData/*9:0*/ top__DOT__playerinput;
     SData/*15:0*/ top__DOT__sa;
     SData/*13:0*/ top__DOT__vaddr;
+    SData/*15:0*/ top__DOT__ramA;
     SData/*15:0*/ top__DOT__xc3_sram__DOT__I_CA;
     SData/*13:0*/ top__DOT__xc3_sram__DOT__I_GA;
+    SData/*15:0*/ top__DOT__RAM__DOT__address_a;
+    SData/*15:0*/ top__DOT__RAM__DOT__address_b;
     SData/*15:0*/ top__DOT__sharpx1_legacy__DOT__O_CBUS_ADDRESS;
     SData/*13:0*/ top__DOT__sharpx1_legacy__DOT__O_GRAM_A;
     SData/*15:0*/ top__DOT__sharpx1_legacy__DOT__PCM_L;
@@ -2274,6 +2289,7 @@ VL_MODULE(Vtop) {
     IData/*16:0*/ top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__cpu__DOT__alu_out_mux__DOT__O;
     IData/*16:0*/ top__DOT__sharpx1_legacy__DOT__PSG__DOT__shift_n;
     QData/*32:0*/ top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_cpu__DOT__cpu__DOT__mlt32c;
+    VlUnpacked<CData/*7:0*/, 65536> top__DOT__RAM__DOT__mem;
     VlUnpacked<CData/*7:0*/, 512> top__DOT__sharpx1_legacy__DOT__noicez80__DOT__ram;
     VlUnpacked<CData/*7:0*/, 2> top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__reg_b__DOT__r;
     VlUnpacked<CData/*7:0*/, 2> top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__reg_c__DOT__r;
@@ -2296,6 +2312,7 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT____Vcellinp__pcg_wait__I_QD;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT__x1_vid__DOT____Vcellinp__crtc6845s__I_RSTn;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT__x1_vid__DOT____Vcellinp__crtc6845s__I_CLK;
+    CData/*7:0*/ top__DOT____Vcellout__RAM__q_b;
     CData/*3:0*/ top__DOT____Vcellout__sharpx1_legacy__O_DBG_DOT4;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT____Vcellinp__x1_adec__I_DAM;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT____Vcellinp__x1_adec__I_IPL_SEL;
@@ -2493,7 +2510,7 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__ZRESET_n;
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__m1_fin;
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__Z80__DOT__rfsh_set;
-    CData/*0:0*/ __Vclklast__TOP__clk_48;
+    CData/*0:0*/ __Vclklast__TOP__clk_12;
     CData/*0:0*/ __Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk28M636;
     CData/*0:0*/ __Vclklast__TOP__top__DOT__sharpx1_legacy__DOT__clk32M;
     CData/*0:0*/ __Vclklast__TOP____VinpClk__TOP__top__DOT__sharpx1_legacy__DOT__sub_reset;
@@ -2582,6 +2599,10 @@ VL_MODULE(Vtop) {
 
     // PARAMETERS
     // Parameters marked /*verilator public*/ for use by application code
+    enum _IDatatop__DOT__RAM__DOT__data_width_g { top__DOT__RAM__DOT__data_width_g = 8U};
+    static const IData var_top__DOT__RAM__DOT__data_width_g;
+    enum _IDatatop__DOT__RAM__DOT__addr_width_g { top__DOT__RAM__DOT__addr_width_g = 0x10U};
+    static const IData var_top__DOT__RAM__DOT__addr_width_g;
     enum _IDatatop__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IF1 { top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IF1 = 0U};
     static const IData var_top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IF1;
     enum _IDatatop__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IF2 { top__DOT__sharpx1_legacy__DOT__Z80__DOT__fz80__DOT__seq__DOT__S_IF2 = 1U};

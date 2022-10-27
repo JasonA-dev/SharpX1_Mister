@@ -31,7 +31,7 @@ module top(
    output  reg  ioctl_wait=1'b0
    
 );
-   
+
    // Core inputs/outputs
    wire       pause;
    wire [7:0] audio;
@@ -71,11 +71,11 @@ module top(
    assign AUDIO_R = AUDIO_L;
 
    reg ce_pix;
-   always @(posedge clk_48) begin
+   always @(posedge clk_12) begin  // clk_48
       reg old_clk;
       
-      old_clk <= clk_12;
-      ce_pix <= old_clk & ~clk_12;
+      old_clk <= clk_12;  // clk_12
+      ce_pix <= old_clk & ~clk_12;  // clk_12
    end
 
 //wire reset = ~ioctl_download;
@@ -119,7 +119,7 @@ assign VGA_HS = hsync ? 1'b0 : 1'bz;
 assign VGA_VS = vsync ? 1'b0 : 1'bz;
 
 /****************************************************************************
-  external SRAM
+  SRAM Controller
 ****************************************************************************/
 
 // CPU BUS
@@ -146,10 +146,9 @@ wire sram_oe;
 wire [3:0] sram_bw;
 
 //wire sys_reset = ext_reset | clk_reset;
-
 xc3_sram xc3_sram(
   .I_RESET(reset),
-  .I_CLK(clk_48),
+  .I_CLK(clk_12),  // clk_48
 // SRAM
   .O_SRAM_A(sram_a),
   .O_SRAM_D(sram_dw),
@@ -182,7 +181,6 @@ xc3_sram xc3_sram(
   .O_GG_D(grg_dr)
 );
 
-// SRAM
 assign ram_addr   = sram_a;
 assign ram_we   = ~sram_wc;
 assign ram_oe   = ~sram_oe;
@@ -196,6 +194,29 @@ assign ram_b_lb = ~sram_bw[2];
 assign ram_b_ub = ~sram_bw[3];
 
 /****************************************************************************
+  RAM 64KB
+****************************************************************************/
+
+reg  [ 7:0] ramDi;
+reg  [ 7:0] ramDo;
+reg  [15:0] ramA;
+reg         ramWe;
+
+dpram #(8, 16) RAM  // (64KB)
+(
+	.clock      (clk_12), // clk_48
+	.address_a  (ramA  ),
+	.wren_a     (ramWe ),
+	.data_a     (ramDi ),
+	.q_a        (ramDo ),
+
+	.wren_b     (sram_we      ),
+	.address_b  (sram_a      ),
+	.data_b     (sram_dw      ),
+	.q_b        (ram_b_data      )
+);
+
+/****************************************************************************
   sharpx1_legacy
 ****************************************************************************/
 
@@ -204,8 +225,8 @@ sharpx1_legacy sharpx1_legacy(
 
 // System RESET , System CLOCKs
   .I_RESET(reset), // sys_reset
-  .I_CLK32M(clk_48),   // clk32M
-  .I_CLK28M636(clk_12),  // clk28M636
+  .I_CLK32M(clk_12),   // clk32M
+  .I_CLK28M636(clk_12),  // clk28M636  // clk_12
 //  I_CLK4M,
 
 // External CPU Bus (Main RAM)
@@ -284,7 +305,7 @@ sharpx1_legacy sharpx1_legacy(
   .O_VGA_HS(hsync),
   .O_VGA_VS(vsync),
 // debug port : SUB CPU firmware download
-  .I_FIRMWARE_EN(1'b0),
+  .I_FIRMWARE_EN(1'b1),  // 1'b0
 // debug port : SUB CPU number monitor
   .O_DBG_NUM4(seg7_num),
   .O_DBG_DOT4(seg7_dot),

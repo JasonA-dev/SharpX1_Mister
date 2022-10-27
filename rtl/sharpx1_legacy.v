@@ -387,7 +387,7 @@ tv80c Z80(
 assign ZNMI_n = I_NMI_n;
 assign ZCLK   = cpu_clk;
 assign ZWAIT_n  = cg_wait_n & I_CBUS_WAIT_n;
-assign ZRESET_n = ~sys_reset;
+assign ZRESET_n = ~I_RESET; // ~sys_reset
 
 /****************************************************************************
   Z80 daisychain INT
@@ -689,7 +689,7 @@ wire [7:0] pcm_out; // SEEK SOUND
 wire clk1;   // for text Blink
 
 // firmware download
-wire sub_reset = sys_reset | firm_en;
+wire sub_reset = I_RESET; // | firm_en;  // sys_reset
 
 // DMA / fdd emu
 assign dma_sel = (~ZRFSH_n | ~ZBUSAK_n) & ~firm_en;
