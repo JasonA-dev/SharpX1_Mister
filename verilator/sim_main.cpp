@@ -89,7 +89,7 @@ double sc_time_stamp() {	// Called by $time in Verilog.
 
 int clk_sys_freq = 48000000;
 SimClock clk_48(1); // 48mhz
-SimClock clk_12(2); // 12mhz
+SimClock clk_12(1); // 12mhz
 
 int soft_reset = 0;
 vluint64_t soft_reset_time = 0;
@@ -433,26 +433,18 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("I_DMA_IEI:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_DMA_IEI);	
 		ImGui::Text("O_DMA_INT_n:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_INT_n);	
 		ImGui::Text("O_DMA_IEO:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_DMA_IEO);								
-		ImGui::Spacing();		
+		ImGui::Spacing();	
+		ImGui::Text("O_PCM:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_PCM);	
+		ImGui::Text("I_fa:           0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_fa);	
+		ImGui::Text("I_fcs:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_fcs);	
+		ImGui::Text("O_TX_BSY:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_TX_BSY);	
+		ImGui::Text("O_RX_BSY:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_RX_BSY);	
+		ImGui::Text("O_KEY_BRK_n:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_KEY_BRK_n);	
+		ImGui::Text("I_SPM1:         0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_SPM1);	
+		ImGui::Text("I_RETI:         0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_RETI);	
+		ImGui::Text("I_IEI:          0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__I_IEI);		
+		ImGui::Text("O_INT_n:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__O_INT_n);																						
 		ImGui::End();
-/*
-//
-  O_PCM,
-
-// SUBCPU Firmware Access Port
-  I_fa,
-  I_fcs,
-
-// communication handshake signal 
-  O_TX_BSY,
-  O_RX_BSY,
-  O_KEY_BRK_n,
-// subcpu int controll
-  I_SPM1,
-  I_RETI,
-  I_IEI,
-  O_INT_n,
-*/
 
 		// Debug SRAM Controller
 		ImGui::Begin("SRAM Controller");
@@ -517,6 +509,19 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Text("A:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_rom__DOT__A);
 		ImGui::Text("DO:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_sub__DOT__sub_rom__DOT__DO);		
 		ImGui::Spacing();
+		ImGui::End();
+
+		// Debug Z80 RETI
+		ImGui::Begin("Z80 RETI");
+		ImGui::Text("I_RESET:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__I_RESET);			
+		ImGui::Text("I_M1_n:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__I_M1_n);	
+		ImGui::Text("I_MREQ_n:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__I_MREQ_n);
+		ImGui::Text("I_IORQ_n:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__I_IORQ_n);
+		ImGui::Text("I_D:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__I_D);
+		ImGui::Spacing();		
+		ImGui::Text("O_RETI:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__O_RETI);
+		ImGui::Text("O_SPM1:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__z80_reti__DOT__O_SPM1);
+		ImGui::Spacing();			
 		ImGui::End();
 
 /*
