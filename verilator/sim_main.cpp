@@ -524,6 +524,76 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Spacing();			
 		ImGui::End();
 
+		// Debug PIA
+		ImGui::Begin("PIA");
+		ImGui::Text("I_RESET:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_RESET);	
+		ImGui::Text("I_A:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_A);	
+		ImGui::Text("I_CS:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_CS);	
+		ImGui::Text("I_RD:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_RD);	
+		ImGui::Text("I_WR:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_WR);	
+		ImGui::Text("I_D:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_D);
+		ImGui::Spacing();	
+		ImGui::Text("I_PA:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_PA);	
+		ImGui::Text("O_PA:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__O_PA);	
+		ImGui::Text("I_PB:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_PB);	
+		ImGui::Text("O_PB:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__O_PB);	
+		ImGui::Text("I_PC:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__I_PC);
+		ImGui::Text("O_PC:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__pia__DOT__O_PC);		
+		ImGui::Spacing();			
+		ImGui::End();
+
+		// Debug PSG
+		ImGui::Begin("PSG");
+		ImGui::Text("rst_n:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__rst_n);	
+		ImGui::Text("clken:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__clken);	
+		ImGui::Text("asel:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__asel);	
+		ImGui::Text("cs_n:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__cs_n);	
+		ImGui::Text("wr_n:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__wr_n);	
+		ImGui::Text("rd_n:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__rd_n);	
+		ImGui::Text("di:     0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__di);	
+		ImGui::Text("A:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__A);	
+		ImGui::Text("B:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__B);	
+		ImGui::Text("C:      0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__C);	
+		ImGui::Text("pa_i:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__pa_i);	
+		ImGui::Text("pb_i:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__pb_i);	
+		ImGui::Text("pa_o:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__pa_o);	
+		ImGui::Text("pa_t:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__pa_t);							
+		ImGui::Text("pb_o:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__pb_o);
+		ImGui::Text("pb_t:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__PSG__DOT__pb_t);																	
+		ImGui::Spacing();			
+		ImGui::End();
+
+		// Debug X1_vid
+		ImGui::Begin("X1_vid");
+		ImGui::Text("I_RESET:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_RESET);	
+		ImGui::Text("I_A:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_A);	
+		ImGui::Text("I_D:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_D);	
+		ImGui::Text("O_D:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_D);	
+		ImGui::Text("O_DE:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_DE);	
+		ImGui::Text("I_WR:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_WR);	
+		ImGui::Text("I_RD:       0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_RD);	
+		ImGui::Text("O_VWAIT:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_VWAIT);																														
+		ImGui::Spacing();			
+		ImGui::Text("I_CRTC_CS:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_CRTC_CS);	
+		ImGui::Text("I_CRTC_CS:  0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_CRTC_CS);	
+		ImGui::Text("I_CG_CS:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_CG_CS);	
+		ImGui::Text("I_PAL_CS:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_PAL_CS);	
+		ImGui::Text("I_TXT_CS:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_TXT_CS);	
+		ImGui::Text("I_ATT_CS:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_ATT_CS);	
+		ImGui::Text("I_KAN_CS:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_KAN_CS);	
+		ImGui::Text("I_GRB_CS:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_GRB_CS);	
+		ImGui::Text("I_GRR_CS:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_GRR_CS);	
+		ImGui::Text("I_GRG_CS:   0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__I_GRG_CS);																				
+		ImGui::Spacing();			
+		ImGui::Text("O_R:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_R);																				
+		ImGui::Text("O_G:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_G);			
+		ImGui::Text("O_B:        0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_B);			
+		ImGui::Text("O_HSYNC:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_HSYNC);			
+		ImGui::Text("O_VSYNC:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_VSYNC);			
+		ImGui::Text("O_VDISP:    0x%04X", top->top__DOT__sharpx1_legacy__DOT__x1_vid__DOT__O_VDISP);									
+		ImGui::Spacing();			
+		ImGui::End();
+
 /*
 		// Debug CPU
 		ImGui::Begin("Cpu");
