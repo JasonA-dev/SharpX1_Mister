@@ -121,6 +121,20 @@ assign VGA_VS = vsync ? 1'b0 : 1'bz;
 /****************************************************************************
   SRAM Controller
 ****************************************************************************/
+/*
+// SRAM
+output [17:0] ram_addr;
+output ram_we;
+output ram_oe;
+inout [15:0] ram_a_data;
+output ram_a_ce;
+output ram_a_lb;
+output ram_a_ub;
+inout [15:0] ram_b_data;
+output ram_b_ce;
+output ram_b_lb;
+output ram_b_ub;
+*/
 
 // CPU BUS
 wire [3:0]  sbank;
@@ -205,15 +219,15 @@ reg         ramWe;
 dpram #(8, 16) RAM  // (64KB)
 (
 	.clock      (clk_12), // clk_48
-	.address_a  (ramA  ),
-	.wren_a     (ramWe ),
-	.data_a     (ramDi ),
-	.q_a        (ramDo ),
+	.address_a  (ram_addr  ),
+	.wren_a     (sram_a ),
+	.data_a     (ram_a_data ),
+	.q_a        (ram_a_data ),
 
-	.wren_b     (sram_we      ),
-	.address_b  (sram_a      ),
-	.data_b     (sram_dw      ),
-	.q_b        (ram_b_data      )
+	.wren_b     (      ),
+	.address_b  (ram_addr      ),
+	.data_b     (ram_b_data      ),
+	.q_b        (ram_b_data)
 );
 
 /****************************************************************************

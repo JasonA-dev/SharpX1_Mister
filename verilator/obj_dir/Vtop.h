@@ -2312,7 +2312,7 @@ VL_MODULE(Vtop) {
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT____Vcellinp__pcg_wait__I_QD;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT__x1_vid__DOT____Vcellinp__crtc6845s__I_RSTn;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT__x1_vid__DOT____Vcellinp__crtc6845s__I_CLK;
-    CData/*7:0*/ top__DOT____Vcellout__RAM__q_b;
+    CData/*7:0*/ top__DOT____Vcellout__RAM__q_a;
     CData/*3:0*/ top__DOT____Vcellout__sharpx1_legacy__O_DBG_DOT4;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT____Vcellinp__x1_adec__I_DAM;
     CData/*0:0*/ top__DOT__sharpx1_legacy__DOT____Vcellinp__x1_adec__I_IPL_SEL;

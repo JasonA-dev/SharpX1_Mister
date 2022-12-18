@@ -475,6 +475,20 @@ int main(int argc, char** argv, char** env) {
 		ImGui::Spacing();			
 		ImGui::End();
 
+		// Debug DPRAM
+		ImGui::Begin("DPRAM");
+		ImGui::Text("address_a:  0x%04X", top->top__DOT__RAM__DOT__address_a);			
+		ImGui::Text("wren_a:     0x%04X", top->top__DOT__RAM__DOT__wren_a);	
+		ImGui::Text("data_a:     0x%04X", top->top__DOT__RAM__DOT__data_a);
+		ImGui::Text("q_a:        0x%04X", top->top__DOT__RAM__DOT__q_a);
+		ImGui::Spacing();
+		ImGui::Text("wren_b:     0x%04X", top->top__DOT__RAM__DOT__wren_b);			
+		ImGui::Text("address_b:  0x%04X", top->top__DOT__RAM__DOT__address_b);	
+		ImGui::Text("data_b:     0x%04X", top->top__DOT__RAM__DOT__data_b);
+		ImGui::Text("q_b:        0x%04X", top->top__DOT__RAM__DOT__q_b);
+		ImGui::Spacing();			
+		ImGui::End();
+
 		// Debug Address Decoder
 		ImGui::Begin("Address Decoder");
 		ImGui::Text("I reset:      0x%02X", top->top__DOT__sharpx1_legacy__DOT__x1_adec__DOT__I_RESET);	
